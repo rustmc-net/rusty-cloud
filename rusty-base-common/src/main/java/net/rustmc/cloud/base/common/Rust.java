@@ -29,10 +29,10 @@ public final class Rust {
 
     private final ICloudConsoleFactory consoleFactory = new DefaultCloudConsoleFactoryImpl();
     private final IThreadPool threadPool = new DefaultCloudThreadPool();
-    private final String operatingSystem = System.getProperty("os.name");
     private final ICloudConfigurationHandler configurationHandler = new DefaultCloudConfigurationHandler();
     private final ICloudEventRegistry eventRegistry = new CloudEventRegistryImpl();
     private final ICloudEventPerformer eventPerformer = new CloudEventPerformerImpl();
     private final ExecutorService asynchronousExecutor = Executors.newSingleThreadExecutor();
+    private final String operatingSystem = System.getProperty("os.name");
 
 }

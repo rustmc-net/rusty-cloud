@@ -1,4 +1,5 @@
 import net.rustmc.cloud.base.common.Rust;
+import net.rustmc.cloud.base.console.CloudConsoleColor;
 import net.rustmc.cloud.base.console.ICloudConsole;
 
 /**
@@ -13,7 +14,7 @@ public class Main {
 
         ICloudConsole console = Rust.getInstance().getConsoleFactory().newConsole();
         console.run();
-        console.send("Hello World!");
+        console.send("Hello World" + CloudConsoleColor.RESET +  "!", ICloudConsole.Output.ERROR);
 
     }
 

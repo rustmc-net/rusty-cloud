@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="rusty-base-common" />
         <module name="rusty-base" />
+        <module name="rusty-api" />
       </profile>
     </annotationProcessing>
   </component>
