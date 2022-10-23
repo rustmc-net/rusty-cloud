@@ -97,4 +97,8 @@ public enum CloudConsoleColor {
         return index;
     }
 
+    @Override
+    public String toString() {
+        return this.getAnsiCode();
+    }
 }
