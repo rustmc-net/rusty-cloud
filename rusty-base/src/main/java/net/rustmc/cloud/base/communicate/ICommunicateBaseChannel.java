@@ -14,4 +14,6 @@ public interface ICommunicateBaseChannel extends ICommunicateChannel {
 
     public <T extends CommunicatePacket<?>> void dispatch(final T packet, final String uniqueID);
 
+    public boolean isClient();
+
 }

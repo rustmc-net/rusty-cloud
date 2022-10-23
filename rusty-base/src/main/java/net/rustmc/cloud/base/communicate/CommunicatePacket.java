@@ -10,10 +10,8 @@ import io.netty.buffer.ByteBuf;
  */
 public abstract class CommunicatePacket<T extends CommunicatePacket<?>> {
 
-    public abstract void read(final ByteBuf buf);
+    public abstract void decode(final ByteBuf buf);
 
     public abstract void write(final ByteBuf buf);
-
-    public abstract char getIdentifier();
 
 }
