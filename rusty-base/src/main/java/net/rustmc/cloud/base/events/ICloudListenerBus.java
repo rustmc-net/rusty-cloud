@@ -10,7 +10,7 @@ import java.util.function.Consumer;
  * @since 23.10.2022
  */
 @SuppressWarnings("rawtypes")
-public interface ICloudEventRegistry {
+public interface ICloudListenerBus {
 
     public <T extends CloudEvent> int register(Class<? extends T> type, Consumer<T> listener);
 

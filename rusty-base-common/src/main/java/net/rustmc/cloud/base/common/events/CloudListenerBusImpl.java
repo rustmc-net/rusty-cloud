@@ -1,7 +1,7 @@
 package net.rustmc.cloud.base.common.events;
 
 import net.rustmc.cloud.base.events.CloudEvent;
-import net.rustmc.cloud.base.events.ICloudEventRegistry;
+import net.rustmc.cloud.base.events.ICloudListenerBus;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -13,7 +13,7 @@ import java.util.function.Consumer;
  * @since 23.10.2022
  */
 @SuppressWarnings("rawtypes")
-public final class CloudEventRegistryImpl implements ICloudEventRegistry {
+public final class CloudListenerBusImpl implements ICloudListenerBus {
 
     private final Map<Class<? extends CloudEvent>, List<Consumer>> register = new HashMap<>();
 

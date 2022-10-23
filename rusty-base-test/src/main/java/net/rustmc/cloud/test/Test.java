@@ -19,7 +19,7 @@ public class Test {
 
         console.send("Hello");
 
-        Rust.getInstance().getEventRegistry().register(CloudNativeConsoleInputEvent.class, event -> {
+        Rust.getInstance().getListenerBus().register(CloudNativeConsoleInputEvent.class, event -> {
             console.send("Hello");
         });
 

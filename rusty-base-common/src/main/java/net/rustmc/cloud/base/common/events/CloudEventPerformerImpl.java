@@ -24,12 +24,12 @@ public final class CloudEventPerformerImpl implements ICloudEventPerformer {
             if (eventDescriptor.async()) sync = false;
         }
         if (sync) {
-            for (Consumer handler : Rust.getInstance().getEventRegistry().collect(event.getClass())) {
+            for (Consumer handler : Rust.getInstance().getListenerBus().collect(event.getClass())) {
                 handler.accept(event);
             }
         } else {
             Rust.getInstance().getAsynchronousExecutor().submit(() -> {
-                for (Consumer handler : Rust.getInstance().getEventRegistry().collect(event.getClass())) {
+                for (Consumer handler : Rust.getInstance().getListenerBus().collect(event.getClass())) {
                     handler.accept(event);
                 }
             });
