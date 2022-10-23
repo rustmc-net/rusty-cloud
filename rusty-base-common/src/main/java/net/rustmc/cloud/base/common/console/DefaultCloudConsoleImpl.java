@@ -1,6 +1,7 @@
 package net.rustmc.cloud.base.common.console;
 
 import net.rustmc.cloud.base.common.Rust;
+import net.rustmc.cloud.base.common.events.natives.CloudNativeConsoleInputEvent;
 import net.rustmc.cloud.base.console.CloudConsoleColor;
 import net.rustmc.cloud.base.console.ICloudConsole;
 import net.rustmc.cloud.base.threads.IThread;
@@ -30,9 +31,8 @@ public final class DefaultCloudConsoleImpl implements ICloudConsole {
         String readLine;
         while (thread.isRunning()) {
             readLine = Rust.getInstance().getConsoleFactory().getCloudLineReader().readLine(prompt);
-            for (Consumer<String> handler : handlers) {
-                handler.accept(readLine);
-            }
+            for (Consumer<String> handler : handlers) handler.accept(readLine);
+            Rust.getInstance().getEventPerformer().perform(new CloudNativeConsoleInputEvent(readLine));
         }
 
     });
