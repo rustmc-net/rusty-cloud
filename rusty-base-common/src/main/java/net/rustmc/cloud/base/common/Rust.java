@@ -1,8 +1,10 @@
 package net.rustmc.cloud.base.common;
 
 import lombok.Getter;
+import net.rustmc.cloud.base.common.configuration.DefaultCloudConfigurationHandler;
 import net.rustmc.cloud.base.common.console.DefaultCloudConsoleFactoryImpl;
 import net.rustmc.cloud.base.common.threads.DefaultCloudThreadPool;
+import net.rustmc.cloud.base.configuration.ICloudConfigurationHandler;
 import net.rustmc.cloud.base.console.ICloudConsoleFactory;
 import net.rustmc.cloud.base.threads.IThreadPool;
 
@@ -21,5 +23,6 @@ public final class Rust {
     private final ICloudConsoleFactory consoleFactory = new DefaultCloudConsoleFactoryImpl();
     private final IThreadPool threadPool = new DefaultCloudThreadPool();
     private final String operatingSystem = System.getProperty("os.name");
+    private final ICloudConfigurationHandler configurationHandler = new DefaultCloudConfigurationHandler();
 
 }

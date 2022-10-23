@@ -14,6 +14,6 @@ public interface ICloudConfigurationHandler {
 
     public void close();
 
-    public void close(Class<? extends CloudConfiguration> tClass);
+    public void close(String name);
 
 }
