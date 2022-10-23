@@ -14,6 +14,8 @@ public interface ICloudConsole {
 
     public ICloudConsole send(final String output);
 
+    public ICloudConsole send(String service, String output);
+
     public void clear();
 
     public ICloudConsole run();

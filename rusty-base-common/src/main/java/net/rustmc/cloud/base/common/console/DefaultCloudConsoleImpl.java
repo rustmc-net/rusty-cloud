@@ -41,11 +41,11 @@ public final class DefaultCloudConsoleImpl implements ICloudConsole {
     public ICloudConsole send(String output, Output level) {
         switch (level) {
             case INFO ->
-                    output = "[" + dateTimeFormatter.format(LocalDateTime.now()) + "] (" + CloudConsoleColor.GREEN.getAnsiCode() + "INFO" + CloudConsoleColor.RESET.getAnsiCode() + ") - " + output + CloudConsoleColor.RESET.getAnsiCode();
+                    output = dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.GREEN.getAnsiCode() + "INFO" + CloudConsoleColor.RESET + " » " + output + CloudConsoleColor.RESET;
             case ERROR ->
-                    output = "[" + dateTimeFormatter.format(LocalDateTime.now()) + "] (" + CloudConsoleColor.RED.getAnsiCode() + "ERROR" + CloudConsoleColor.RESET.getAnsiCode() + ") - " + CloudConsoleColor.RED.getAnsiCode() + output + CloudConsoleColor.RESET.getAnsiCode();
+                    output = dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.RED.getAnsiCode() + "ERROR" + CloudConsoleColor.RESET + " » " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
             case WARN ->
-                    output = "[" + dateTimeFormatter.format(LocalDateTime.now()) + "] (" + CloudConsoleColor.YELLOW.getAnsiCode() + "WARN" + CloudConsoleColor.RESET.getAnsiCode() + ") - " + CloudConsoleColor.YELLOW.getAnsiCode() + output + CloudConsoleColor.RESET.getAnsiCode();
+                    output = dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.YELLOW.getAnsiCode() + "WARN" + CloudConsoleColor.RESET + " » " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
         }
         Rust.getInstance().getConsoleFactory().getCloudLineReader().getTerminal().puts(InfoCmp.Capability.carriage_return);
         Rust.getInstance().getConsoleFactory().getCloudLineReader().getTerminal().writer().println(output);
@@ -60,6 +60,11 @@ public final class DefaultCloudConsoleImpl implements ICloudConsole {
     @Override
     public ICloudConsole send(String output) {
         return send(output, Output.INFO);
+    }
+
+    @Override
+    public ICloudConsole send(String service, String output) {
+        return this;
     }
 
     @Override
