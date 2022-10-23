@@ -1,6 +1,7 @@
 package net.rustmc.cloud.base.dependencies;
 
 import java.io.File;
+import java.net.URLClassLoader;
 import java.util.Map;
 
 /**
@@ -14,5 +15,7 @@ public interface IDependencyHandler {
     public IDependencyHandler throwIn(final Dependency dependency);
 
     public Map<Dependency, File> getRunning();
+
+    public URLClassLoader getClassLoader();
 
 }

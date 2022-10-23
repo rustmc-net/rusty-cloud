@@ -1,6 +1,7 @@
 package net.rustmc.cloud.master.bootstrap;
 
 import net.rustmc.cloud.master.RustCloud;
+import org.fusesource.jansi.AnsiConsole;
 
 /**
  * This class belongs to the rusty-cloud project
@@ -11,6 +12,8 @@ import net.rustmc.cloud.master.RustCloud;
 public final class Bootstrap {
 
     public static void main(String[] args) {
+
+        AnsiConsole.systemInstall();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> RustCloud.getCloud().onShutdown()));
 

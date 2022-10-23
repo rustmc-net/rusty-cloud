@@ -7,11 +7,12 @@ import net.rustmc.cloud.base.dependencies.IDependencyHandler;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,12 +26,16 @@ public final class DependencyHandlerImpl implements IDependencyHandler {
 
     private final File directory = new File("dependencies");
     private final Map<Dependency, File> running = new HashMap<>();
+    private final DynamicClassLoader loader = (DynamicClassLoader) ClassLoader.getSystemClassLoader();
+    private final List<Class<?>> loaded = new ArrayList<>();
 
     public DependencyHandlerImpl() {
-        try {
-            Files.createDirectory(this.directory.toPath());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (!directory.exists()) {
+            try {
+                Files.createDirectory(this.directory.toPath());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -49,14 +54,25 @@ public final class DependencyHandlerImpl implements IDependencyHandler {
             }
         }
         try {
-            val method = this.getClass().getClassLoader().getClass().getMethod("addURL", URL.class);
-            method.setAccessible(true);
-            method.invoke(this.getClass().getClassLoader(), file.toURI().toURL());
-        } catch (NoSuchMethodException | MalformedURLException | InvocationTargetException | IllegalAccessException e) {
-            e.printStackTrace();
+            loader.add(file.toURI().toURL());
+            ArrayList<String> classNames = loader.getClassNamesFromJar(file.getPath());
+            for (String name : classNames) {
+                if (!name.contains("META")) {
+                    System.out.println(name);
+                    final var output = loader.loadClass(name);
+                    loaded.add(output);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         this.running.put(dependency, file);
         return this;
+    }
+
+    @Override
+    public URLClassLoader getClassLoader() {
+        return this.loader;
     }
 
 }
