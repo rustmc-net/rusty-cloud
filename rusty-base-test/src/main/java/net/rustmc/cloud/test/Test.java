@@ -15,10 +15,13 @@ public class Test {
     public static void main(String[] args) {
 
         ICloudConsole console = Rust.getInstance().getConsoleFactory().newConsole();
-
-        Rust.getInstance().getEventRegistry().register(CloudNativeConsoleInputEvent.class);
-
         console.run();
+
+        console.send("Hello");
+
+        Rust.getInstance().getEventRegistry().register(CloudNativeConsoleInputEvent.class, event -> {
+            console.send("Hello");
+        });
 
     }
 

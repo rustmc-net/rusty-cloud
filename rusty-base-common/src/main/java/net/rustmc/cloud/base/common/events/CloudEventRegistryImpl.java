@@ -33,7 +33,9 @@ public final class CloudEventRegistryImpl implements ICloudEventRegistry {
 
     @Override
     public Collection<Consumer> collect(Class<? extends CloudEvent> type) {
-        return this.register.get(type);
+        if (this.register.containsKey(type))
+            return this.register.get(type);
+        return Collections.emptyList();
     }
 
 }
