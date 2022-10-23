@@ -10,7 +10,7 @@ import net.rustmc.cloud.base.events.CloudEvent;
  * @since 23.10.2022
  */
 @Getter
-public class CloudConsoleInputEvent extends CloudEvent {
+public final class CloudConsoleInputEvent extends CloudEvent {
 
     private final String input;
     private final String[] arguments;

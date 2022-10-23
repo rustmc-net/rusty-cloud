@@ -1,5 +1,7 @@
 package net.rustmc.cloud.base.common.console;
 
+import net.rustmc.cloud.base.common.Rust;
+import net.rustmc.cloud.base.common.events.natives.CloudNativeTabCompleteEvent;
 import org.jline.reader.Candidate;
 import org.jline.reader.Completer;
 import org.jline.reader.LineReader;
@@ -17,7 +19,8 @@ public class DefaultConsoleCompleter implements Completer {
 
     @Override
     public void complete(LineReader lineReader, ParsedLine parsedLine, List<Candidate> list) {
-
+        Rust.getInstance().getEventPerformer().perform(new CloudNativeTabCompleteEvent(parsedLine.words(), parsedLine.wordIndex(), parsedLine.line()));
+        CloudNativeTabCompleteEvent.flush();
     }
 
 }
