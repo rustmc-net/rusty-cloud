@@ -2,6 +2,8 @@ package net.rustmc.cloud.api.objects;
 
 import lombok.Getter;
 
+import java.util.Random;
+
 /**
  * this file belongs to the rusty-cloud project.
  *
@@ -10,6 +12,8 @@ import lombok.Getter;
  */
 @Getter
 public final class SimpleCloudGroup {
+
+    private static final Random random = new Random();
 
     private final String name;
     private final boolean proxy;
@@ -20,6 +24,7 @@ public final class SimpleCloudGroup {
     private final int minServers = 0;
     private final int priority = 0;
     private final String permission = "null";
+    private final int nodeKey = random.nextInt();
 
     public SimpleCloudGroup(String name, boolean proxy, int version, int maxPlayersPer, int maxServers) {
         this.name = name;
