@@ -6,11 +6,9 @@
       <list>
         <option value="$PROJECT_DIR$/rusty-base/pom.xml" />
         <option value="$PROJECT_DIR$/rusty-base-common/pom.xml" />
-        <option value="$PROJECT_DIR$/rusty-api/pom.xml" />
         <option value="$PROJECT_DIR$/rusty-base-test/pom.xml" />
-        <option value="$PROJECT_DIR$/rusty-master/pom.xml" />
-        <option value="$PROJECT_DIR$/rusty-wrapper/pom.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/rusty-wrapper/pom.xml" />
       </list>
     </option>
   </component>
