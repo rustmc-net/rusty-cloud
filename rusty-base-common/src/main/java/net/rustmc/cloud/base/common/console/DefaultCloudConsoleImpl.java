@@ -4,18 +4,14 @@ import net.rustmc.cloud.base.common.Rust;
 import net.rustmc.cloud.base.common.events.natives.CloudNativeConsoleInputEvent;
 import net.rustmc.cloud.base.console.CloudConsoleColor;
 import net.rustmc.cloud.base.console.ICloudConsole;
-import net.rustmc.cloud.base.threads.IThread;
-import org.jline.reader.*;
-import org.jline.terminal.Terminal;
-import org.jline.terminal.TerminalBuilder;
+import org.jline.reader.LineReader;
+import org.jline.reader.LineReaderBuilder;
 import org.jline.utils.InfoCmp;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -27,50 +23,29 @@ import java.util.function.Consumer;
 @SuppressWarnings("FieldCanBeLocal")
 public class DefaultCloudConsoleImpl implements ICloudConsole {
 
-    private final Terminal terminal = TerminalBuilder.builder()
-            .system(true)
-            .streams(System.in, System.out)
-            .encoding(StandardCharsets.UTF_8)
-            .dumb(true)
-            .build();
-    private final LineReader lineReader = LineReaderBuilder.builder()
-            .completer(new DefaultConsoleCompleter())
-            .terminal(terminal)
-            .option(LineReader.Option.DISABLE_EVENT_EXPANSION, true)
-            .option(LineReader.Option.AUTO_REMOVE_SLASH, false)
-            .option(LineReader.Option.INSERT_TAB, false).build();
+    private final LineReader lineReader = LineReaderBuilder.builder().completer(new DefaultConsoleCompleter()).build();
     private final String prompt = "» ";
     private final LinkedList<Consumer<String>> handlers = new LinkedList<>();
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm");
     private final Thread thread = new Thread(() -> {
-        String readLine;
-        while (!DefaultCloudConsoleImpl.this.thread.isInterrupted()) {
-            readLine = lineReader.readLine(prompt);
-            for (Consumer<String> handler : handlers) handler.accept(readLine);
-            Rust.getInstance().getEventPerformer().perform(new CloudNativeConsoleInputEvent(readLine));
+        String line;
+        while ((line = lineReader.readLine(this.prompt)) != null) {
+            for (Consumer<String> handler : handlers) handler.accept(line);
+            Rust.getInstance().getEventPerformer().perform(new CloudNativeConsoleInputEvent(line));
         }
     });
 
-    public DefaultCloudConsoleImpl() throws IOException {
-        this.clear();
+    public DefaultCloudConsoleImpl() {
+        lineReader.setAutosuggestion(LineReader.SuggestionType.COMPLETER);
     }
 
     @Override
     public ICloudConsole send(String output, Output level) {
         output = this._color(output);
         switch (level) {
-            case INFO : {
-                output = dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.GREEN.getAnsiCode() + "INFO" + CloudConsoleColor.RESET + " | " + output + CloudConsoleColor.RESET;
-                break;
-            }
-            case ERROR : {
-                output = dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.RED.getAnsiCode() + "ERROR" + CloudConsoleColor.RESET + " | " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
-                break;
-            }
-            case WARN : {
-                output = dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.YELLOW.getAnsiCode() + "WARN" + CloudConsoleColor.RESET + " | " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
-                break;
-            }
+            case INFO -> output = dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.GREEN.getAnsiCode() + "INFO" + CloudConsoleColor.RESET + " » " + output + CloudConsoleColor.RESET;
+            case ERROR -> output = dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.RED.getAnsiCode() + "ERROR" + CloudConsoleColor.RESET + " » " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
+            case WARN -> output = dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.YELLOW.getAnsiCode() + "WARN" + CloudConsoleColor.RESET + " » " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
         }
         lineReader.getTerminal().puts(InfoCmp.Capability.carriage_return);
         lineReader.getTerminal().writer().println(output);
