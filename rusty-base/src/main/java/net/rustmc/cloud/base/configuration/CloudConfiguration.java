@@ -1,5 +1,7 @@
 package net.rustmc.cloud.base.configuration;
 
+import lombok.Getter;
+
 /**
  * This class belongs to the rusty-cloud project
  *
