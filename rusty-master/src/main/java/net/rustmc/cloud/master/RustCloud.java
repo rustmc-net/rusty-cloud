@@ -76,6 +76,7 @@ public final class RustCloud {
         this.getCommandManager().register(new CloseCommand());
         this.getCloudConsole().send("loaded commands: " + this.getCommandManager().getCommands().size() + "§r.");
 
+        FileHelper.create(nodeFile);
         for (final File tempNodeFile : Arrays
                 .stream(Objects.requireNonNull(this.nodeFile.listFiles()))
                 .filter(file -> file.getName().endsWith(".json"))
