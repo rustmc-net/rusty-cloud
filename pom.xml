@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion/>
+    <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.rustmc</groupId>
     <artifactId>rustycloud</artifactId>
@@ -13,6 +13,7 @@
         <module>rusty-base-common</module>
         <module>rusty-api</module>
         <module>rusty-master</module>
+        <module>rusty-node</module>
     </modules>
 
     <dependencyManagement>
