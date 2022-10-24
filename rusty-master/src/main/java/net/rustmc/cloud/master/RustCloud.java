@@ -9,7 +9,6 @@ import net.rustmc.cloud.base.communicate.IChannelBootstrap;
 import net.rustmc.cloud.base.communicate.ICommunicateBaseChannel;
 import net.rustmc.cloud.base.console.ICloudConsole;
 import net.rustmc.cloud.base.util.FileHelper;
-import net.rustmc.cloud.console.RustConsole;
 import net.rustmc.cloud.master.commands.CloseCommand;
 import net.rustmc.cloud.master.commands.ProduceCommand;
 import net.rustmc.cloud.master.configurations.RustyGroupsConfiguration;
@@ -56,14 +55,14 @@ public final class RustCloud {
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
             RustCloud.this
                     .getCloudConsole()
-                    .log(
+                    .send(
                             "caught an unexpected error (§c" + e.getClass().getSimpleName() + "§r).",
-                            RustConsole.Output.ERROR
+                            ICloudConsole.Output.ERROR
                     );
 
             for (StackTraceElement element : e.getStackTrace()) {
                 if (element.getModuleName() != null) {
-                    this.getCloudConsole().log(
+                    this.getCloudConsole().send(
                             "at " +
                                     element.getModuleName() +
                                     "/" + element.getClass().getPackageName() +
@@ -72,9 +71,9 @@ public final class RustCloud {
                                     element.getClass().getSimpleName() + ":" +
                                     element.getLineNumber() +
                                     ")"
-                            , RustConsole.Output.ERROR);
+                            , ICloudConsole.Output.ERROR);
                 } else {
-                    this.getCloudConsole().log(
+                    this.getCloudConsole().send(
                             "at " +
                                     element.getClass().getPackageName() +
                                     "." + element.getClassName() + "." +
@@ -82,7 +81,7 @@ public final class RustCloud {
                                     element.getClass().getSimpleName() + ":" +
                                     element.getLineNumber() +
                                     ")"
-                            , RustConsole.Output.ERROR);
+                            , ICloudConsole.Output.ERROR);
                 }
             }
 
@@ -95,7 +94,7 @@ public final class RustCloud {
 
         this.getCommandManager().register(new CloseCommand());
         this.getCommandManager().register(new ProduceCommand());
-        this.getCloudConsole().log("loaded commands: " + this.getCommandManager().getCommands().size() + "§r.");
+        this.getCloudConsole().send("loaded commands: " + this.getCommandManager().getCommands().size() + "§r.");
 
         FileHelper.create(nodeFile);
         for (final File tempNodeFile : Arrays
@@ -110,7 +109,7 @@ public final class RustCloud {
                             RustyNodeConfiguration.class
                     );
             this.nodeConfigurations.add(nodeConfiguraion);
-            this.cloudConsole.log("Waiting for node: §6" + nodeConfiguraion.getNode().getName() + " §ron: §6" + nodeConfiguraion.getNode().getHost() + "§r.");
+            this.cloudConsole.send("Waiting for node: §6" + nodeConfiguraion.getNode().getName() + " §ron: §6" + nodeConfiguraion.getNode().getHost() + "§r.");
         }
 
         communicateBaseChannel = this.bootstrap.port(this.configuration.getPort()).open();
@@ -119,8 +118,8 @@ public final class RustCloud {
 
     public void onBoot() {
 
-        this.getCloudConsole().log("The cloud started on port §a" + this.configuration.getPort() + "§r.");
-        if (this.nodeConfigurations.isEmpty()) this.cloudConsole.log("the master could not locate a registered node!", RustConsole.Output.WARN);
+        this.getCloudConsole().send("The cloud started on port §a" + this.configuration.getPort() + "§r.");
+        if (this.nodeConfigurations.isEmpty()) this.cloudConsole.send("the master could not locate a registered node!", ICloudConsole.Output.WARN);
 
     }
 
@@ -128,7 +127,7 @@ public final class RustCloud {
         this.getCloudConsole().close();
         Rust.getInstance().getChannelFactory().close();
         Rust.getInstance().getConfigurationHandler().close();
-        this.getCloudConsole().log("Successfully shutdown the cloudsystem.");
+        this.getCloudConsole().send("Successfully shutdown the cloudsystem.");
     }
 
     public static void boot() {

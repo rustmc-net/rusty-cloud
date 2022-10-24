@@ -3,7 +3,6 @@ package net.rustmc.cloud.master.commands;
 import net.rustmc.cloud.api.commands.Command;
 import net.rustmc.cloud.api.objects.SimpleCloudNode;
 import net.rustmc.cloud.base.console.ICloudConsole;
-import net.rustmc.cloud.console.RustConsole;
 import net.rustmc.cloud.master.RustCloud;
 
 import java.util.List;
@@ -30,18 +29,18 @@ public class ProduceCommand extends Command {
                         if (args.length == 4) {
                             final var node = new SimpleCloudNode(args[1], args[2], Integer.parseInt(args[3]));
                             RustCloud.getCloud().getNodeManager().register(node);
-                            RustCloud.getCloud().getCloudConsole().log("The node §a" + node.getName() + " §ris successfully created");
-                        } else RustCloud.getCloud().getCloudConsole().log("this arguments can not be handled", RustConsole.Output.ERROR);
+                            RustCloud.getCloud().getCloudConsole().send("The node §a" + node.getName() + " §ris successfully created");
+                        } else RustCloud.getCloud().getCloudConsole().send("this arguments can not be handled", ICloudConsole.Output.ERROR);
                     }
                     default -> {
-                        RustCloud.getCloud().getCloudConsole().log("this arguments can not be handled", RustConsole.Output.ERROR);
+                        RustCloud.getCloud().getCloudConsole().send("this arguments can not be handled", ICloudConsole.Output.ERROR);
                     }
                 }
             } else {
-                RustCloud.getCloud().getCloudConsole().log("this arguments can not be handled", RustConsole.Output.ERROR);
+                RustCloud.getCloud().getCloudConsole().send("this arguments can not be handled", ICloudConsole.Output.ERROR);
             }
         } else {
-            RustCloud.getCloud().getCloudConsole().log("this arguments can not be handled", RustConsole.Output.ERROR);
+            RustCloud.getCloud().getCloudConsole().send("this arguments can not be handled", ICloudConsole.Output.ERROR);
         }
     }
 
