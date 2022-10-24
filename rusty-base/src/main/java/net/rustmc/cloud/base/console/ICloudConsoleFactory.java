@@ -1,7 +1,5 @@
 package net.rustmc.cloud.base.console;
 
-import org.jline.reader.LineReader;
-
 /**
  * This class belongs to the rusty-cloud project
  *
@@ -10,10 +8,6 @@ import org.jline.reader.LineReader;
  */
 public interface ICloudConsoleFactory {
 
-    public LineReader getCloudLineReader();
-
     public ICloudConsole newConsole();
-
-    public LineReader newLineReader();
 
 }
