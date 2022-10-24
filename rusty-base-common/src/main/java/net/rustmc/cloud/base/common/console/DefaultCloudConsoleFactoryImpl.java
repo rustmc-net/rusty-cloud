@@ -1,5 +1,6 @@
 package net.rustmc.cloud.base.common.console;
 
+import lombok.SneakyThrows;
 import net.rustmc.cloud.base.console.ICloudConsole;
 import net.rustmc.cloud.base.console.ICloudConsoleFactory;
 import org.jline.reader.LineReader;
@@ -18,26 +19,23 @@ import java.nio.charset.StandardCharsets;
  */
 public final class DefaultCloudConsoleFactoryImpl implements ICloudConsoleFactory {
 
-    private final Terminal terminal;
-    {
-        try {
-            terminal = TerminalBuilder.builder()
-                    .system(true)
-                    .streams(System.in, System.out)
-                    .encoding(StandardCharsets.UTF_8)
-                    .dumb(true)
-                    .build();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    private final LineReader reader = LineReaderBuilder.builder()
-            .completer(new DefaultConsoleCompleter())
-            .terminal(terminal)
-            .option(LineReader.Option.DISABLE_EVENT_EXPANSION, true)
-            .option(LineReader.Option.AUTO_REMOVE_SLASH, false)
-            .option(LineReader.Option.INSERT_TAB, false).build();
+    private final LineReader reader;
 
+    @SneakyThrows
+    public DefaultCloudConsoleFactoryImpl() {
+         final var terminal = TerminalBuilder.builder()
+                .system(true)
+                .streams(System.in, System.out)
+                .encoding(StandardCharsets.UTF_8)
+                .dumb(true)
+                .build();
+        this.reader = LineReaderBuilder.builder()
+                .completer(new DefaultConsoleCompleter())
+                .terminal(terminal)
+                .option(LineReader.Option.DISABLE_EVENT_EXPANSION, true)
+                .option(LineReader.Option.AUTO_REMOVE_SLASH, false)
+                .option(LineReader.Option.INSERT_TAB, false).build();
+    }
 
     @Override
     public LineReader getCloudLineReader() {

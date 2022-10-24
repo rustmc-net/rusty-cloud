@@ -82,7 +82,7 @@ public class DefaultCommunicateBaseChannelImpl implements ICommunicateBaseChanne
 
     @Override
     public void decline() {
-
+        this.core.close();
     }
 
     @Override

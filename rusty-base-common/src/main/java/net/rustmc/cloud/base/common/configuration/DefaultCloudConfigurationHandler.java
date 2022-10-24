@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -25,6 +27,7 @@ import java.util.LinkedHashMap;
  * @author Alexander Jilge
  * @since 23.10.2022, So.
  */
+@SuppressWarnings({"DuplicatedCode", "unchecked"})
 public final class DefaultCloudConfigurationHandler implements ICloudConfigurationHandler {
 
     private final LinkedHashMap<String, Pair<URI, CloudConfiguration>> configurations = new LinkedHashMap<>();
@@ -41,7 +44,7 @@ public final class DefaultCloudConfigurationHandler implements ICloudConfigurati
                     final FileInputStream inputStream = new FileInputStream(uri.getPath());
                     int character;
                     while ((character = inputStream.read()) != -1) {
-                        stringBuilder.append(character);
+                        stringBuilder.append((char) character);
                     }
                     inputStream.close();
                 } catch (IOException e) {
@@ -51,7 +54,13 @@ public final class DefaultCloudConfigurationHandler implements ICloudConfigurati
                 this.configurations.put(name, new Pair<>(uri, object));
                 return (T) this.configurations.get(name).getSecond();
             } else {
-                final T object = UnsafeInstanceOperations.construct(tClass);
+                final T object;
+                try {
+                    object = tClass.getConstructor().newInstance();
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                         NoSuchMethodException e) {
+                    throw new RuntimeException(e);
+                }
                 final File file = new File(uri);
                 try {
                     file.createNewFile();
@@ -66,6 +75,54 @@ public final class DefaultCloudConfigurationHandler implements ICloudConfigurati
     }
 
     @Override
+    public <T extends CloudConfiguration> T open(String name, URI uri, Class<? extends T> tClass) {
+        if (Files.exists(Paths.get(uri))) {
+            final StringBuilder stringBuilder = new StringBuilder();
+            try {
+                final FileInputStream inputStream = new FileInputStream(uri.getPath());
+                int character;
+                while ((character = inputStream.read()) != -1) {
+                    stringBuilder.append((char) character);
+                }
+                inputStream.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            T object = this.gson.fromJson(stringBuilder.toString(), tClass);
+            this.configurations.put(name, new Pair<>(uri, object));
+            return object;
+        } else {
+            T object;
+            try {
+                object = tClass.getConstructor().newInstance();
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                     NoSuchMethodException e) {
+                object = UnsafeInstanceOperations.construct(tClass);
+            }
+            final File file = new File(uri);
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            this.configurations.put(name, new Pair<>(uri, object));
+            return object;
+        }
+    }
+
+    @Override
+    public <T extends CloudConfiguration> T open(String name, URI uri, T object) {
+        final File file = new File(uri);
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        this.configurations.put(name, new Pair<>(uri, object));
+        return object;
+    }
+
+    @Override
     public void close() {
         for (val entry : this.configurations.entrySet())
             this.close(entry.getKey());
@@ -74,7 +131,7 @@ public final class DefaultCloudConfigurationHandler implements ICloudConfigurati
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public void close(String name) {
-        val pair = this.configurations.get(name);
+        final var pair = this.configurations.get(name);
         final File file = new File(pair.getFirst());
         if (file.exists()) {
             try {
