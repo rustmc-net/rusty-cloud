@@ -18,18 +18,18 @@ import java.util.List;
  */
 public class ConsoleTabListener {
 
-    public ConsoleTabListener() {
+    public ConsoleTabListener(final CommandManager commandManager) {
         Rust.getInstance().getListenerBus().register(CloudNativeTabCompleteEvent.class, event -> {
             int pos = event.getWords().size();
             if(pos == 1){
-                for (Command command : CommandManager.getCommands()){
+                for (Command command : commandManager.getCommands()){
                     event.prompt(command.getName());
                     if (command.getAliases() != null)
                         for (String alias : command.getAliases())
                             event.prompt(alias);
                 }
             }else {
-                for (Command command : CommandManager.getCommands()){
+                for (Command command : commandManager.getCommands()){
                     if(command.getName().equalsIgnoreCase(event.getWords().get(0))){
                         List<String> tab = command.onTab(pos-1);
                         if(tab != null) tab.forEach(event::prompt);

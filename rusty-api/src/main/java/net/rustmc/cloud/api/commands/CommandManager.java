@@ -16,19 +16,19 @@ import java.util.List;
 public class CommandManager {
 
     @Getter
-    private static final List<Command> commands = new LinkedList<>();
+    private final List<Command> commands = new LinkedList<>();
 
-    public static void register(Command command) {
+    public void register(Command command) {
         if(!commands.contains(command)){
             commands.add(command);
         }
     }
 
-    public static void unregister(Command command) {
+    public void unregister(Command command) {
         commands.remove(command);
     }
 
-    public static Command getCommand(String name){
+    public Command getCommand(String name){
         for (Command command : commands) {
             if(command.getName().equalsIgnoreCase(name)){
                 return command;

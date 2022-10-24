@@ -18,11 +18,11 @@ import java.util.List;
  */
 public class ConsoleInputListener {
 
-    public ConsoleInputListener() {
+    public ConsoleInputListener(final CommandManager commandManager) {
         Rust.getInstance().getListenerBus().register(CloudNativeConsoleInputEvent.class, event -> {
             String cmd = event.getInput().split(" ")[0];
 
-            for (Command command : CommandManager.getCommands()) {
+            for (Command command : commandManager.getCommands()) {
                 if(command.getName().equalsIgnoreCase(cmd)) {
                     command.execute(event.getArguments());
                     return;
