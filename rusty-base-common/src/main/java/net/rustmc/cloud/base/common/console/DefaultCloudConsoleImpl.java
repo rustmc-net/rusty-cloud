@@ -26,19 +26,18 @@ public final class DefaultCloudConsoleImpl implements ICloudConsole {
     private final String prompt = "» ";
     private final LinkedList<Consumer<String>> handlers = new LinkedList<>();
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-    private final IThread thread = Rust.getInstance().getThreadPool().produce((thread) -> {
-
+    private final Thread thread = new Thread(() -> {
         String readLine;
-        while (thread.isRunning()) {
+        while (!DefaultCloudConsoleImpl.this.thread.isInterrupted()) {
             readLine = Rust.getInstance().getConsoleFactory().getCloudLineReader().readLine(prompt);
             for (Consumer<String> handler : handlers) handler.accept(readLine);
             Rust.getInstance().getEventPerformer().perform(new CloudNativeConsoleInputEvent(readLine));
         }
-
     });
 
     @Override
     public ICloudConsole send(String output, Output level) {
+        output = this._color(output);
         switch (level) {
             case INFO ->
                     output = dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.GREEN.getAnsiCode() + "INFO" + CloudConsoleColor.RESET + " » " + output + CloudConsoleColor.RESET;
@@ -92,17 +91,28 @@ public final class DefaultCloudConsoleImpl implements ICloudConsole {
         }
     }
 
+    private String _color(String code) {
+        return code
+                .replace("§c", CloudConsoleColor.RED.getAnsiCode())
+                .replace("§a", CloudConsoleColor.GREEN.getAnsiCode())
+                .replace("§e", CloudConsoleColor.YELLOW.getAnsiCode())
+                .replace("§6", CloudConsoleColor.ORANGE.getAnsiCode())
+                .replace("§r", CloudConsoleColor.RESET.getAnsiCode())
+                .replace("§7", CloudConsoleColor.RESET.getAnsiCode())
+                .replace("§b", CloudConsoleColor.CYAN.getAnsiCode()
+                );
+    }
+
     @Override
-    public ICloudConsole run() {
-        this.thread.run();
-        return this;
+    public void run() {
+        this.thread.start();
     }
 
     @Override
     public void close() {
         Rust.getInstance().getConsoleFactory().getCloudLineReader().getTerminal().reader().shutdown();
         Rust.getInstance().getConsoleFactory().getCloudLineReader().getTerminal().pause();
-        this.thread.close();
+        this.thread.interrupt();
     }
 
     @Override

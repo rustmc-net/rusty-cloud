@@ -18,7 +18,7 @@ public interface ICloudConsole {
 
     public void clear();
 
-    public ICloudConsole run();
+    public void run();
 
     public void close();
 
