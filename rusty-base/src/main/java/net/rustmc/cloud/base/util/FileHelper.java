@@ -21,7 +21,7 @@ public final class FileHelper {
         rbc.close();
     }
 
-    private static void copyFile(String sourceFile, String destination)
+    public static void copyFile(String sourceFile, String destination)
             throws IOException {
         try (InputStream in = new FileInputStream(sourceFile);
              OutputStream out = new FileOutputStream(destination)) {
@@ -29,6 +29,24 @@ public final class FileHelper {
             int length;
             while ((length = in.read(buf)) > 0) {
                 out.write(buf, 0, length);
+            }
+        }
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public static void create(final File file) {
+        if (!file.exists()) {
+            if (!file.getName().contains(".")) file.mkdirs();
+                else {
+                try {
+                    final var parent = file.getParentFile();
+                    if (parent.isDirectory())
+                        if (!parent.exists())
+                            parent.mkdirs();
+                    file.createNewFile();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
