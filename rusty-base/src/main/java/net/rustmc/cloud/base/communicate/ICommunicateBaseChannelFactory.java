@@ -1,5 +1,6 @@
 package net.rustmc.cloud.base.communicate;
 
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.group.ChannelGroup;
 
 import java.util.LinkedHashMap;
@@ -19,5 +20,11 @@ public interface ICommunicateBaseChannelFactory {
     public LinkedHashMap<Integer, ChannelGroup> getGroups();
 
     public ICommunicateBaseChannel of(final int localID);
+
+    public EventLoopGroup getEventLoopGroup(final int localID);
+
+    public IChannelBootstrap bootstrap();
+
+    public void close();
 
 }

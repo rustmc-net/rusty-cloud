@@ -12,6 +12,10 @@ public interface ICloudConfigurationHandler {
 
     public <T extends CloudConfiguration> T open(final URI uri, Class<? extends T> tClass);
 
+    public <T extends CloudConfiguration> T open(final String name, final URI uri, Class<? extends T> tClass);
+
+    public <T extends CloudConfiguration> T open(final String name, final URI uri, T object);
+
     public void close();
 
     public void close(String name);

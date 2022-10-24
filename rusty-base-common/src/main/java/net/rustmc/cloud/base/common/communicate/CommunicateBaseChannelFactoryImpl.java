@@ -13,12 +13,15 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.SneakyThrows;
+import net.rustmc.cloud.base.communicate.IChannelBootstrap;
 import net.rustmc.cloud.base.communicate.ICommunicateBaseChannel;
 import net.rustmc.cloud.base.communicate.ICommunicateBaseChannelFactory;
 import net.rustmc.cloud.base.communicate.ICommunicateBaseHandlerPool;
+import net.rustmc.cloud.base.util.Pair;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * This class belongs to the rusty-cloud project
@@ -30,7 +33,7 @@ public class CommunicateBaseChannelFactoryImpl implements ICommunicateBaseChanne
 
     private final LinkedHashMap<Integer, ChannelGroup> _groups = new LinkedHashMap<Integer, ChannelGroup>();
 
-    private final HashMap<Integer, ICommunicateBaseChannel> channels = new HashMap<>();
+    private final HashMap<Integer, Pair<EventLoopGroup, ICommunicateBaseChannel>> channels = new HashMap<>();
 
     @SneakyThrows
     @Override
@@ -44,7 +47,7 @@ public class CommunicateBaseChannelFactoryImpl implements ICommunicateBaseChanne
                 .channel(Epoll.isAvailable() ? EpollSocketChannel.class : NioSocketChannel.class)
                 .connect(host, port).sync().channel();
         final DefaultCommunicateBaseChannelImpl defaultCommunicateBaseChannel = new DefaultCommunicateBaseChannelImpl(channel, handlerPool, true, localID);
-        this.channels.put(localID, defaultCommunicateBaseChannel);
+        this.channels.put(localID, new Pair<>(eventLoopGroup, defaultCommunicateBaseChannel));
         return defaultCommunicateBaseChannel;
     }
 
@@ -60,7 +63,7 @@ public class CommunicateBaseChannelFactoryImpl implements ICommunicateBaseChanne
                 .channel(Epoll.isAvailable() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
                 .bind(port).sync().channel();
         final DefaultCommunicateBaseChannelImpl defaultCommunicateBaseChannel = new DefaultCommunicateBaseChannelImpl(channel, handlerPool, false, localID);
-        this.channels.put(localID, defaultCommunicateBaseChannel);
+        this.channels.put(localID, new Pair<>(eventLoopGroup, defaultCommunicateBaseChannel));
         return defaultCommunicateBaseChannel;
     }
 
@@ -71,7 +74,25 @@ public class CommunicateBaseChannelFactoryImpl implements ICommunicateBaseChanne
 
     @Override
     public ICommunicateBaseChannel of(int localID) {
-        return this.channels.get(localID);
+        return this.channels.get(localID).getSecond();
+    }
+
+    @Override
+    public EventLoopGroup getEventLoopGroup(int localID) {
+        return this.channels.get(localID).getFirst();
+    }
+
+    @Override
+    public IChannelBootstrap bootstrap() {
+        return new SimpleChannelBootstrap();
+    }
+
+    @Override
+    public void close() {
+        for (final var entry : this.channels.entrySet()) {
+            entry.getValue().getFirst().shutdownGracefully();
+            entry.getValue().getSecond().decline();
+        }
     }
 
 }
