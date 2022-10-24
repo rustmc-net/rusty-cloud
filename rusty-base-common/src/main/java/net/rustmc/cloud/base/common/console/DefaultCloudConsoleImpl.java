@@ -28,12 +28,17 @@ import java.util.function.Consumer;
 public class DefaultCloudConsoleImpl implements ICloudConsole {
 
     private final Terminal terminal = TerminalBuilder.builder()
+            .system(true)
+            .streams(System.in, System.out)
             .encoding(StandardCharsets.UTF_8)
+            .dumb(true)
             .build();
     private final LineReader lineReader = LineReaderBuilder.builder()
-            .terminal(terminal)
             .completer(new DefaultConsoleCompleter())
-            .build();
+            .terminal(terminal)
+            .option(LineReader.Option.DISABLE_EVENT_EXPANSION, true)
+            .option(LineReader.Option.AUTO_REMOVE_SLASH, false)
+            .option(LineReader.Option.INSERT_TAB, false).build();
     private final String prompt = "» ";
     private final LinkedList<Consumer<String>> handlers = new LinkedList<>();
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm");
