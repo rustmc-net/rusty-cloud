@@ -14,4 +14,6 @@ public interface ICloudConsoleFactory {
 
     public ICloudConsole newConsole();
 
+    public LineReader newLineReader();
+
 }

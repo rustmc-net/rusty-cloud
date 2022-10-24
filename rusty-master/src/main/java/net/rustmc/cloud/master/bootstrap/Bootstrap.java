@@ -1,6 +1,7 @@
 package net.rustmc.cloud.master.bootstrap;
 
 import net.rustmc.cloud.master.RustCloud;
+import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 
 /**

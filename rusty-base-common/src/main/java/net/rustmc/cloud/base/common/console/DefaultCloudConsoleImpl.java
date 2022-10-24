@@ -21,7 +21,7 @@ import java.util.function.Consumer;
  * @since 23.10.2022
  */
 @SuppressWarnings("FieldCanBeLocal")
-public final class DefaultCloudConsoleImpl implements ICloudConsole {
+public class DefaultCloudConsoleImpl implements ICloudConsole {
 
     private final String prompt = "» ";
     private final LinkedList<Consumer<String>> handlers = new LinkedList<>();
@@ -34,6 +34,10 @@ public final class DefaultCloudConsoleImpl implements ICloudConsole {
             Rust.getInstance().getEventPerformer().perform(new CloudNativeConsoleInputEvent(readLine));
         }
     });
+
+    public DefaultCloudConsoleImpl() {
+        this.clear();
+    }
 
     @Override
     public ICloudConsole send(String output, Output level) {

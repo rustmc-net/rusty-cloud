@@ -9,6 +9,7 @@ import net.rustmc.cloud.api.objects.SimpleCloudNode;
 import net.rustmc.cloud.base.common.Rust;
 import net.rustmc.cloud.base.communicate.IChannelBootstrap;
 import net.rustmc.cloud.base.communicate.ICommunicateBaseChannel;
+import net.rustmc.cloud.base.console.CloudConsoleColor;
 import net.rustmc.cloud.base.console.ICloudConsole;
 import net.rustmc.cloud.base.util.FileHelper;
 import net.rustmc.cloud.master.commands.CloseCommand;
@@ -17,12 +18,16 @@ import net.rustmc.cloud.master.configurations.RustyMasterConfiguration;
 import net.rustmc.cloud.master.configurations.RustyNodeConfiguration;
 import net.rustmc.cloud.master.managers.SimpleGroupManager;
 import net.rustmc.cloud.master.managers.SimpleNodeManager;
+import org.fusesource.jansi.AnsiConsole;
 
 import java.io.File;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -70,6 +75,8 @@ public final class RustCloud {
 
         });
 
+        this.cloudConsole.run();
+
         new ConsoleInputListener(this.getCommandManager());
         new ConsoleTabListener(this.getCommandManager());
 
@@ -99,7 +106,6 @@ public final class RustCloud {
     public void onBoot() {
 
         this.getCloudConsole().send("The cloud started on port §a" + this.configuration.getPort() + "§r.");
-        this.cloudConsole.run();
 
     }
 
