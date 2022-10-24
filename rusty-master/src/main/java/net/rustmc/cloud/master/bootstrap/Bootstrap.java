@@ -13,11 +13,11 @@ public final class Bootstrap {
 
     public static void main(String[] args) {
 
-        AnsiConsole.systemInstall();
-
         Runtime.getRuntime().addShutdownHook(new Thread(() -> RustCloud.getCloud().onShutdown()));
 
         RustCloud.boot();
+
+        RustCloud.getCloud().onBoot();
 
     }
 
