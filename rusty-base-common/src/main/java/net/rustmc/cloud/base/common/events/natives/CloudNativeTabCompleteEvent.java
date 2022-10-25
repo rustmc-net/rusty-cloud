@@ -16,6 +16,7 @@ import java.util.List;
 @Getter
 public final class CloudNativeTabCompleteEvent extends CloudEvent {
 
+    @Getter
     private static final List<Candidate> candidates = new ArrayList<>();
 
     private final List<String> words;

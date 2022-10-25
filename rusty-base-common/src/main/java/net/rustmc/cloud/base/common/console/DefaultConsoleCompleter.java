@@ -20,6 +20,7 @@ public class DefaultConsoleCompleter implements Completer {
     @Override
     public void complete(LineReader lineReader, ParsedLine parsedLine, List<Candidate> list) {
         Rust.getInstance().getEventPerformer().perform(new CloudNativeTabCompleteEvent(parsedLine.words(), parsedLine.wordIndex(), parsedLine.line()));
+        list.addAll(CloudNativeTabCompleteEvent.getCandidates());
         CloudNativeTabCompleteEvent.flush();
     }
 
