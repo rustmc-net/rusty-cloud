@@ -25,6 +25,7 @@ public final class ChannelFlowImpl implements IChannelFlow {
                 try {
                     channel.write(new PacketOutChannelOverFlow());
                     channel.flush();
+                    channel.eventLoop().shutdownGracefully();
                     channel.close();
                 } catch (RuntimeException e) {
                     throw new RuntimeException(e);

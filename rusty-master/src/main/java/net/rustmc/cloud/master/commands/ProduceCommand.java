@@ -16,7 +16,7 @@ import java.util.List;
  * @author Alexander Jilge
  * @since 24.10.2022, Mo.
  */
-public class ProduceCommand extends Command {
+public final class ProduceCommand extends Command {
 
     public ProduceCommand() {
         super("produce", "command to provide objects", new String[]{"create", "provide"});

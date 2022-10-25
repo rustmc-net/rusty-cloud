@@ -24,10 +24,11 @@ public class ChannelConnectHandler {
                     @Override
                     public void run() {
                         if (RustCloud.getCloud().getChannelFlow().contains(channelHandlerContext.channel().id().asShortText())) {
-                            channelHandlerContext.channel().close();
+                            channelHandlerContext.channel().eventLoop().shutdownGracefully();
+                            channelHandlerContext.channel().pipeline().close();
                             RustCloud.getCloud().getCloudConsole().send("A malicious client has been identified! -> §c" + channelHandlerContext
                                     .channel()
-                                    .localAddress()
+                                    .remoteAddress()
                                     .toString(),
                                     ICloudConsole.Output.WARN);
                         }

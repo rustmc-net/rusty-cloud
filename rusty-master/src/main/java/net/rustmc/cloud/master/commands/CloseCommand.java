@@ -10,7 +10,7 @@ import java.util.List;
  * @author Alexander Jilge
  * @since 24.10.2022, Mo.
  */
-public class CloseCommand extends Command {
+public final class CloseCommand extends Command {
 
     public CloseCommand() {
         super("close", "to close the cloud", new String[]{"shutdown", "stop"});
