@@ -17,7 +17,7 @@ import net.rustmc.cloud.base.configuration.ConfigurationProperty;
 public final class RustyMasterConfiguration implements CloudConfiguration {
 
     @ConfigurationProperty(name = "master.port")
-    private int port = 2222;
+    private int port = 187;
     @ConfigurationProperty(name = "master.auto-updater.config")
     private boolean autoConfigurationUpdater = false;
     @ConfigurationProperty(name = "master.memory")
