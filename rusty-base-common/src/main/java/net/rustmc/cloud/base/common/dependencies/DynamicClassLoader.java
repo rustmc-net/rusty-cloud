@@ -44,7 +44,7 @@ public class DynamicClassLoader extends URLClassLoader {
         this(Thread.currentThread().getContextClassLoader());
     }
 
-    void add(URL url) {
+    public void add(URL url) {
         addURL(url);
     }
 
