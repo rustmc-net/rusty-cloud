@@ -1,6 +1,7 @@
 package net.rustmc.cloud.master.common.modules;
 
 import net.rustmc.cloud.base.common.dependencies.DynamicClassLoader;
+import net.rustmc.cloud.master.RustCloud;
 import net.rustmc.cloud.master.modules.IInstanceBuf;
 import net.rustmc.cloud.master.modules.IInstanceLoader;
 import net.rustmc.cloud.master.modules.RustyCloudModule;
@@ -34,12 +35,12 @@ public class DefaultInstanceLoaderImpl implements IInstanceLoader {
             for (String name : classNames) {
                 if (!name.contains("META")) {
                     final var output = dynamicClassLoader.loadClass(name);
-                    for (Class<?> outputInterface : output.getInterfaces()) {
-                        if (outputInterface.getSimpleName().equals(RustyCloudModule.class.getSimpleName())) {
-                            temp[this.bufs.length] = new SimpleInstanceBuf(output);
-                            this.bufs = temp;
-                            return;
-                        }
+                    final var outputInterface = output.getSuperclass();
+                    if (outputInterface.getSimpleName().equals(RustyCloudModule.class.getSimpleName())) {
+                        temp[this.bufs.length] = new SimpleInstanceBuf(output);
+                        RustCloud.getCloud().getCloudConsole().send(name);
+                        this.bufs = temp;
+                        return;
                     }
                 }
             }

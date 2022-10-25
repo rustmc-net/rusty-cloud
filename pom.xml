@@ -15,6 +15,7 @@
         <module>rusty-master</module>
         <module>rusty-node</module>
         <module>rusty-launcher</module>
+        <module>rusty-modules/rusty-module-restdatabase</module>
     </modules>
 
     <dependencyManagement>
