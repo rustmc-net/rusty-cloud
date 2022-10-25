@@ -11,13 +11,16 @@ import net.rustmc.cloud.base.console.ICloudConsole;
 import net.rustmc.cloud.base.util.FileHelper;
 import net.rustmc.cloud.master.commands.CloseCommand;
 import net.rustmc.cloud.master.commands.ProduceCommand;
+import net.rustmc.cloud.master.common.modules.DefaultInstanceLoaderImpl;
 import net.rustmc.cloud.master.configurations.RustyGroupsConfiguration;
 import net.rustmc.cloud.master.configurations.RustyMasterConfiguration;
 import net.rustmc.cloud.master.configurations.RustyNodeConfiguration;
 import net.rustmc.cloud.master.managers.SimpleGroupManager;
 import net.rustmc.cloud.master.managers.SimpleNodeManager;
+import net.rustmc.cloud.master.modules.IInstanceLoader;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -44,9 +47,11 @@ public final class RustCloud {
     private final ICommunicateBaseChannel communicateBaseChannel;
     private final CommandManager commandManager = new CommandManager();
     private final File nodeFile = new File("nodes");
+    private final File moduleFile = new File("modules");
     private final ArrayList<RustyNodeConfiguration> nodeConfigurations = new ArrayList<>();
     private final SimpleGroupManager groupManager = new SimpleGroupManager();
     private final SimpleNodeManager nodeManager = new SimpleNodeManager();
+    private final IInstanceLoader instanceLoader = new DefaultInstanceLoaderImpl();
 
     public RustCloud() throws MalformedURLException, URISyntaxException {
 
@@ -94,9 +99,9 @@ public final class RustCloud {
 
         this.getCommandManager().register(new CloseCommand());
         this.getCommandManager().register(new ProduceCommand());
-        this.getCloudConsole().send("loaded commands: " + this.getCommandManager().getCommands().size() + "§r.");
 
         FileHelper.create(nodeFile);
+        FileHelper.create(moduleFile);
         for (final File tempNodeFile : Arrays
                 .stream(Objects.requireNonNull(this.nodeFile.listFiles()))
                 .filter(file -> file.getName().endsWith(".json"))
@@ -116,10 +121,21 @@ public final class RustCloud {
 
     }
 
+    @SuppressWarnings("ConstantConditions")
     public void onBoot() {
 
         this.getCloudConsole().send("The cloud started on port §a" + this.configuration.getPort() + "§r.");
         if (this.nodeConfigurations.isEmpty()) this.cloudConsole.send("the master could not locate a registered node!", ICloudConsole.Output.WARN);
+
+        if (this.moduleFile.listFiles() != null) {
+            for (File file : this.moduleFile.listFiles()) {
+                if (file.getName().endsWith(".jar")) {
+                    this.instanceLoader.push(file);
+                }
+            }
+        }
+        this.instanceLoader.load();
+        this.getCloudConsole().send("loaded commands: §a" + this.getCommandManager().getCommands().size() + "§r| loaded modules: §a" + this.getInstanceLoader().modules() + "§r.");
 
     }
 
