@@ -1,0 +1,1 @@
+java -Dfile.encoding=UTF-8 -Djava.system.class.loader=net.rustmc.cloud.base.common.dependencies.DynamicClassLoader -Xmx512m -Xms256m -jar rusty-master.jar
