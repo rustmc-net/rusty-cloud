@@ -2,6 +2,7 @@ package net.rustmc.cloud.master.commands;
 
 import net.rustmc.cloud.api.commands.Command;
 import net.rustmc.cloud.api.objects.SimpleCloudNode;
+import net.rustmc.cloud.base.common.Rust;
 import net.rustmc.cloud.base.console.ICloudConsole;
 import net.rustmc.cloud.master.RustCloud;
 
@@ -32,6 +33,8 @@ public class ProduceCommand extends Command {
                             final var node = new SimpleCloudNode(args[2], args[3], Integer.parseInt(args[4]));
                             RustCloud.getCloud().getNodeManager().register(node);
                             RustCloud.getCloud().getCloudConsole().send("The node §a" + node.getName() + " §ris successfully created");
+                            if (RustCloud.getCloud().getConfiguration().isAutoConfigurationUpdater())
+                                Rust.getInstance().getConfigurationHandler().update(node.getName());
                         } else RustCloud.getCloud().getCloudConsole().send("this arguments can not be handled", ICloudConsole.Output.ERROR);
                     }
                     default -> {
@@ -47,15 +50,25 @@ public class ProduceCommand extends Command {
     }
 
     @Override
-    public List<String> onTab(final int pos, final List<String> line) {
+    public List<String> onTab(final int pos, final String line) {
         final var candidates = new ArrayList<String>();
-        if (line.get(0).equals("node")) {
-            if (pos == 1) {
-                candidates.add("name");
-            } else if (pos == 2) {
-                candidates.add("127.0.0.1");
+        if (pos == 1) {
+            candidates.add("node");
+            candidates.add("group");
+        } else {
+            final var words = line.split(" ");
+            if (pos == 2) {
+                if (words[1].equalsIgnoreCase("node")) {
+                    candidates.add("node-1");
+                }
             } else if (pos == 3) {
-                candidates.add("2024");
+                if (words[1].equalsIgnoreCase("node")) {
+                    candidates.add("127.0.0.1");
+                }
+            } else if (pos == 4) {
+                if (words[1].equalsIgnoreCase("node")) {
+                    candidates.add("2024");
+                }
             }
         }
         return candidates;
