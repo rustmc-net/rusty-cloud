@@ -22,6 +22,8 @@ public interface ICloudConsole {
 
     public void close();
 
+    public void print();
+
     public ICloudConsole push(final Consumer<String> handler);
 
     public static enum Output {

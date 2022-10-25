@@ -56,6 +56,7 @@ public final class RustCloud {
     public RustCloud() throws MalformedURLException, URISyntaxException {
 
         this.cloudConsole = Rust.getInstance().getConsoleFactory().newConsole();
+        this.cloudConsole.print();
 
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
             RustCloud.this
@@ -135,7 +136,7 @@ public final class RustCloud {
             }
         }
         this.instanceLoader.load();
-        this.getCloudConsole().send("loaded commands: §a" + this.getCommandManager().getCommands().size() + "§r| loaded modules: §a" + this.getInstanceLoader().modules() + "§r.");
+        this.getCloudConsole().send("loaded commands: §a" + this.getCommandManager().getCommands().size() + " §r| loaded modules: §a" + this.getInstanceLoader().modules() + "§r.");
 
     }
 

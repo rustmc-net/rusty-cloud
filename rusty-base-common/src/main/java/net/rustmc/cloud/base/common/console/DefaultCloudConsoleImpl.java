@@ -118,6 +118,23 @@ public class DefaultCloudConsoleImpl implements ICloudConsole {
     }
 
     @Override
+    public void print() {
+        send(" ");
+        System.out.println(" ");
+        System.out.println("   ██████╗ ██╗   ██╗███████╗████████╗██╗   ██╗\n" +
+                           "   ██╔══██╗██║   ██║██╔════╝╚══██╔══╝╚██╗ ██╔╝\n" +
+                           "   ██████╔╝██║   ██║███████╗   ██║    ╚████╔╝ \n" +
+                           "   ██╔══██╗██║   ██║╚════██║   ██║     ╚██╔╝  \n" +
+                           "   ██║  ██║╚██████╔╝███████║   ██║      ██║   \n" +
+                           "   ╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝      ╚═╝   \n" +
+                           "                                           ");
+        send(" ");
+        send("      Contributors # §aGenerix030 §r- §aRedCrew");
+        send("      Phase        # §ebeta §r- 1.0");
+        send(" ");
+    }
+
+    @Override
     public ICloudConsole push(Consumer<String> handler) {
         this.handlers.push(handler);
         return this;
