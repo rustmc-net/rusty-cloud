@@ -31,13 +31,13 @@ public class ConsoleTabListener {
             }else {
                 for (Command command : commandManager.getCommands()){
                     if(command.getName().equalsIgnoreCase(event.getWords().get(0))){
-                        List<String> tab = command.onTab(pos-1, event.getWords());
+                        List<String> tab = command.onTab(pos-1, event.getLine());
                         if(tab != null) tab.forEach(event::prompt);
                         return;
                     }
                     for (String arg : command.getAliases()){
                         if(arg.equalsIgnoreCase(event.getWords().get(0))){
-                            List<String> tab = command.onTab(pos-1, event.getWords());
+                            List<String> tab = command.onTab(pos-1, event.getLine());
                             if(tab != null) tab.forEach(event::prompt);
                         }
                     }
