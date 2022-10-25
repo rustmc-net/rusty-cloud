@@ -22,7 +22,7 @@ public class CloseCommand extends Command {
     }
 
     @Override
-    public List<String> onTab(int pos) {
+    public List<String> onTab(int pos, List<String> line) {
         return null;
     }
 

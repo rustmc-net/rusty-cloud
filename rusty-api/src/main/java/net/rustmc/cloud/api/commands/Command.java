@@ -39,6 +39,6 @@ public abstract class Command {
 
     public abstract void execute(String[] args);
 
-    public abstract List<String> onTab(int pos);
+    public abstract List<String> onTab(int pos, List<String> line);
 
 }
