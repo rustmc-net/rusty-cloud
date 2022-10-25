@@ -12,25 +12,24 @@ import net.rustmc.cloud.base.console.ICloudConsole;
 import net.rustmc.cloud.base.util.FileHelper;
 import net.rustmc.cloud.master.commands.CloseCommand;
 import net.rustmc.cloud.master.commands.ProduceCommand;
+import net.rustmc.cloud.master.common.groups.DefaultRemoteGroupPoolImpl;
 import net.rustmc.cloud.master.common.modules.DefaultInstanceLoaderImpl;
+import net.rustmc.cloud.master.common.nodes.DefaultOpenedNodePoolImpl;
 import net.rustmc.cloud.master.configurations.RustyGroupsConfiguration;
 import net.rustmc.cloud.master.configurations.RustyMasterConfiguration;
 import net.rustmc.cloud.master.configurations.RustyNodeConfiguration;
+import net.rustmc.cloud.master.groups.IRemoteGroupPool;
 import net.rustmc.cloud.master.managers.SimpleGroupManager;
 import net.rustmc.cloud.master.managers.SimpleNodeManager;
 import net.rustmc.cloud.master.modules.IInstanceLoader;
+import net.rustmc.cloud.master.nodes.IOpenedNodePool;
 
-import java.io.*;
+import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.jar.JarFile;
 
 /**
  * This class belongs to the rusty-cloud project
@@ -58,6 +57,8 @@ public final class RustCloud {
     private final SimpleGroupManager groupManager = new SimpleGroupManager();
     private final SimpleNodeManager nodeManager = new SimpleNodeManager();
     private final IInstanceLoader instanceLoader = new DefaultInstanceLoaderImpl();
+    private final IOpenedNodePool openedNodePool = new DefaultOpenedNodePoolImpl();
+    private final IRemoteGroupPool remoteGroupPool = new DefaultRemoteGroupPoolImpl();
 
     public RustCloud() throws MalformedURLException, URISyntaxException {
 

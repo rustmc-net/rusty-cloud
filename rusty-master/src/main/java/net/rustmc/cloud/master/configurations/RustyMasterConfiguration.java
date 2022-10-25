@@ -20,6 +20,10 @@ public final class RustyMasterConfiguration implements CloudConfiguration {
     private int port = 2222;
     @ConfigurationProperty(name = "master.auto-updater.config")
     private boolean autoConfigurationUpdater = false;
+    @ConfigurationProperty(name = "master.memory")
+    private int memory = 12000;
+    @ConfigurationProperty(name = "master.server.performance")
+    private boolean unsafe = false;
 
     public RustyMasterConfiguration() {
     }

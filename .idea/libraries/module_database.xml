@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="module-database">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/rusty-master/src/main/resources/modules/module-database.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
