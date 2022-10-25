@@ -143,6 +143,32 @@ public final class DefaultCloudConfigurationHandler implements ICloudConfigurati
             this.close(entry.getKey());
     }
 
+    @Override
+    public void update(String name) {
+        final var pair = this.configurations.get(name);
+        String out = this.gson.toJson(pair.getSecond());
+        for (Field field : pair.getSecond().getClass().getDeclaredFields()) {
+            if (field.isAnnotationPresent(ConfigurationProperty.class)) {
+                final var property = field.getDeclaredAnnotation(ConfigurationProperty.class);
+                out = out.replace(field.getName(), property.name());
+            }
+        }
+        try {
+            final FileOutputStream outputStream = new FileOutputStream(pair.getFirst().getPath());
+            outputStream.write(out.getBytes(StandardCharsets.UTF_8));
+            outputStream.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void update() {
+        for (String name : this.configurations.keySet()) {
+            this.update(name);
+        }
+    }
+
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public void close(String name) {

@@ -18,6 +18,10 @@ public interface ICloudConfigurationHandler {
 
     public void close();
 
+    public void update(final String name);
+
+    public void update();
+
     public void close(String name);
 
 }

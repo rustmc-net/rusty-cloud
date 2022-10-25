@@ -42,7 +42,8 @@ public class DefaultCloudConsoleImpl implements ICloudConsole {
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm");
     private final Thread thread = new Thread(() -> {
         String line;
-        while ((line = lineReader.readLine(this.prompt)) != null) {
+        while (!Thread.currentThread().isInterrupted()) {
+            line = lineReader.readLine(prompt);
             for (Consumer<String> handler : handlers) handler.accept(line);
             Rust.getInstance().getEventPerformer().perform(new CloudNativeConsoleInputEvent(line));
         }
