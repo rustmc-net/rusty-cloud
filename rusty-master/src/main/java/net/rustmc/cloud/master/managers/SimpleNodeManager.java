@@ -27,4 +27,20 @@ public final class SimpleNodeManager {
         RustCloud.getCloud().getNodeConfigurations().add(nodeConfiguration);
     }
 
+    public boolean containsNodeKey(int nodeKey) {
+        for (RustyNodeConfiguration configuration : RustCloud.getCloud().getNodeConfigurations()) {
+            if (configuration.getNode().getNodeKey() == nodeKey)
+                return true;
+        }
+        return false;
+    }
+
+    public String getNameOfNodeKey(int nodeKey) {
+        for (RustyNodeConfiguration configuration : RustCloud.getCloud().getNodeConfigurations()) {
+            if (configuration.getNode().getNodeKey() == nodeKey)
+                return configuration.getNode().getName();
+        }
+        return "null";
+    }
+
 }

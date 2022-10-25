@@ -24,6 +24,10 @@ public final class RustyMasterConfiguration implements CloudConfiguration {
     private int memory = 12000;
     @ConfigurationProperty(name = "master.server.performance")
     private boolean unsafe = false;
+    @ConfigurationProperty(name = "master.server.client-chain-connect")
+    private boolean chainConnect = true;
+    @ConfigurationProperty(name = "master.server.client-discard-time")
+    private int clientTimeOutDiscard = 1000;
 
     public RustyMasterConfiguration() {
     }
