@@ -6,6 +6,7 @@ import net.rustmc.cloud.api.commands.CommandManager;
 import net.rustmc.cloud.api.commands.listeners.ConsoleInputListener;
 import net.rustmc.cloud.api.commands.listeners.ConsoleTabListener;
 import net.rustmc.cloud.base.common.Rust;
+import net.rustmc.cloud.base.communicate.ConnectFailException;
 import net.rustmc.cloud.base.communicate.IChannelBootstrap;
 import net.rustmc.cloud.base.communicate.ICommunicateBaseChannel;
 import net.rustmc.cloud.base.console.ICloudConsole;
@@ -134,7 +135,11 @@ public final class RustCloud {
             this.cloudConsole.send("Waiting for node: §6" + nodeConfiguraion.getNode().getName() + " §ron: §6" + nodeConfiguraion.getNode().getHost() + "§r.");
         }
 
-        this.communicateBaseChannel = this.bootstrap.port(this.configuration.getPort()).open();
+        try {
+            this.communicateBaseChannel = this.bootstrap.port(this.configuration.getPort()).open();
+        } catch (ConnectFailException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
