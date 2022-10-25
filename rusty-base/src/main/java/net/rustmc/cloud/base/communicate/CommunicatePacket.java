@@ -12,6 +12,6 @@ public abstract class CommunicatePacket<T extends CommunicatePacket<?>> {
 
     public abstract void decode(final ByteBuf buf);
 
-    public abstract void write(final ByteBuf buf);
+    public abstract void encode(final ByteBuf buf);
 
 }

@@ -12,6 +12,7 @@ import net.rustmc.cloud.base.console.ICloudConsole;
 import net.rustmc.cloud.base.util.FileHelper;
 import net.rustmc.cloud.master.commands.CloseCommand;
 import net.rustmc.cloud.master.commands.ProduceCommand;
+import net.rustmc.cloud.master.common.channels.ChannelFlowImpl;
 import net.rustmc.cloud.master.common.groups.DefaultRemoteGroupPoolImpl;
 import net.rustmc.cloud.master.common.modules.DefaultInstanceLoaderImpl;
 import net.rustmc.cloud.master.common.nodes.DefaultOpenedNodePoolImpl;
@@ -19,6 +20,9 @@ import net.rustmc.cloud.master.configurations.RustyGroupsConfiguration;
 import net.rustmc.cloud.master.configurations.RustyMasterConfiguration;
 import net.rustmc.cloud.master.configurations.RustyNodeConfiguration;
 import net.rustmc.cloud.master.groups.IRemoteGroupPool;
+import net.rustmc.cloud.master.handlers.PacketInHandshakeHandler;
+import net.rustmc.cloud.master.handlers.channel.ChannelConnectHandler;
+import net.rustmc.cloud.master.handlers.channel.IChannelFlow;
 import net.rustmc.cloud.master.managers.SimpleGroupManager;
 import net.rustmc.cloud.master.managers.SimpleNodeManager;
 import net.rustmc.cloud.master.modules.IInstanceLoader;
@@ -30,6 +34,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * This class belongs to the rusty-cloud project
@@ -59,6 +65,8 @@ public final class RustCloud {
     private final IInstanceLoader instanceLoader = new DefaultInstanceLoaderImpl();
     private final IOpenedNodePool openedNodePool = new DefaultOpenedNodePoolImpl();
     private final IRemoteGroupPool remoteGroupPool = new DefaultRemoteGroupPoolImpl();
+    private final IChannelFlow channelFlow = new ChannelFlowImpl();
+    private final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
 
     public RustCloud() throws MalformedURLException, URISyntaxException {
 
@@ -126,12 +134,15 @@ public final class RustCloud {
             this.cloudConsole.send("Waiting for node: §6" + nodeConfiguraion.getNode().getName() + " §ron: §6" + nodeConfiguraion.getNode().getHost() + "§r.");
         }
 
-        communicateBaseChannel = this.bootstrap.port(this.configuration.getPort()).open();
+        this.communicateBaseChannel = this.bootstrap.port(this.configuration.getPort()).open();
 
     }
 
     @SuppressWarnings("ConstantConditions")
     public void onBoot() {
+
+        new ChannelConnectHandler();
+        new PacketInHandshakeHandler();
 
         this.getCloudConsole().send("The cloud started on port §a" + this.configuration.getPort() + "§r.");
         if (this.nodeConfigurations.isEmpty()) this.cloudConsole.send("the master could not locate a registered node!", ICloudConsole.Output.WARN);

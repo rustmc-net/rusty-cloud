@@ -15,12 +15,10 @@ public class PacketOutHandshake extends CommunicatePacket<PacketOutHandshake> {
 
     @Override
     public void decode(ByteBuf buf) {
-
     }
 
     @Override
-    public void write(ByteBuf buf) {
-
+    public void encode(ByteBuf buf) {
     }
 
 }
