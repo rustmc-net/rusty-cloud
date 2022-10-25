@@ -8,13 +8,16 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="rusty-api" />
+        <module name="rusty-node" />
+        <module name="rusty-launcher" />
         <module name="rusty-base-common" />
         <module name="rusty-base" />
-        <module name="rusty-base-test" />
         <module name="rusty-master" />
-        <module name="rusty-node" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="rusty-base-test" target="16" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
