@@ -12,6 +12,6 @@ public interface IChannelBootstrap {
 
     public IChannelBootstrap host(final String host);
 
-    public ICommunicateBaseChannel open();
+    public ICommunicateBaseChannel open() throws ConnectFailException;
 
 }
