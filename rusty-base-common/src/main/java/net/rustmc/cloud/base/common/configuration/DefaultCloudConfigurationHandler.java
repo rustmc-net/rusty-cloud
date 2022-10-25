@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import lombok.val;
 import net.rustmc.cloud.base.configuration.CloudConfiguration;
 import net.rustmc.cloud.base.configuration.CloudConfigurationInfo;
+import net.rustmc.cloud.base.configuration.ConfigurationProperty;
 import net.rustmc.cloud.base.configuration.ICloudConfigurationHandler;
 import net.rustmc.cloud.base.util.Pair;
 import net.rustmc.cloud.base.util.operations.UnsafeInstanceOperations;
@@ -27,7 +28,7 @@ import java.util.LinkedHashMap;
  * @author Alexander Jilge
  * @since 23.10.2022, So.
  */
-@SuppressWarnings({"DuplicatedCode", "unchecked"})
+@SuppressWarnings({"DuplicatedCode", "unchecked", "ResultOfMethodCallIgnored"})
 public final class DefaultCloudConfigurationHandler implements ICloudConfigurationHandler {
 
     private final LinkedHashMap<String, Pair<URI, CloudConfiguration>> configurations = new LinkedHashMap<>();
@@ -50,7 +51,14 @@ public final class DefaultCloudConfigurationHandler implements ICloudConfigurati
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                T object = this.gson.fromJson(stringBuilder.toString(), tClass);
+                String out = stringBuilder.toString();
+                for (Field field : tClass.getDeclaredFields()) {
+                    if (field.isAnnotationPresent(ConfigurationProperty.class)) {
+                        final var property = field.getDeclaredAnnotation(ConfigurationProperty.class);
+                        out = out.replace(property.name(), field.getName());
+                    }
+                }
+                T object = this.gson.fromJson(out, tClass);
                 this.configurations.put(name, new Pair<>(uri, object));
                 return (T) this.configurations.get(name).getSecond();
             } else {
@@ -88,7 +96,14 @@ public final class DefaultCloudConfigurationHandler implements ICloudConfigurati
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            T object = this.gson.fromJson(stringBuilder.toString(), tClass);
+            String out = stringBuilder.toString();
+            for (Field field : tClass.getDeclaredFields()) {
+                if (field.isAnnotationPresent(ConfigurationProperty.class)) {
+                    final var property = field.getDeclaredAnnotation(ConfigurationProperty.class);
+                    out = out.replace(property.name(), field.getName());
+                }
+            }
+            T object = this.gson.fromJson(out, tClass);
             this.configurations.put(name, new Pair<>(uri, object));
             return object;
         } else {
@@ -133,10 +148,17 @@ public final class DefaultCloudConfigurationHandler implements ICloudConfigurati
     public void close(String name) {
         final var pair = this.configurations.get(name);
         final File file = new File(pair.getFirst());
+        String out = this.gson.toJson(pair.getSecond());
+        for (Field field : pair.getSecond().getClass().getDeclaredFields()) {
+            if (field.isAnnotationPresent(ConfigurationProperty.class)) {
+                final var property = field.getDeclaredAnnotation(ConfigurationProperty.class);
+                out = out.replace(field.getName(), property.name());
+            }
+        }
         if (file.exists()) {
             try {
                 final FileOutputStream outputStream = new FileOutputStream(pair.getFirst().getPath());
-                outputStream.write(this.gson.toJson(pair.getSecond()).getBytes(StandardCharsets.UTF_8));
+                outputStream.write(out.getBytes(StandardCharsets.UTF_8));
                 outputStream.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -149,7 +171,7 @@ public final class DefaultCloudConfigurationHandler implements ICloudConfigurati
             }
             try {
                 final FileOutputStream outputStream = new FileOutputStream(pair.getFirst().getPath());
-                outputStream.write(this.gson.toJson(pair.getSecond()).getBytes(StandardCharsets.UTF_8));
+                outputStream.write(out.getBytes(StandardCharsets.UTF_8));
                 outputStream.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
