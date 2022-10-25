@@ -6,9 +6,11 @@ import net.rustmc.cloud.base.console.CloudConsoleColor;
 import net.rustmc.cloud.base.console.ICloudConsole;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
+import org.jline.terminal.TerminalBuilder;
 import org.jline.utils.InfoCmp;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
@@ -23,7 +25,18 @@ import java.util.function.Consumer;
 @SuppressWarnings("FieldCanBeLocal")
 public class DefaultCloudConsoleImpl implements ICloudConsole {
 
-    private final LineReader lineReader = LineReaderBuilder.builder().completer(new DefaultConsoleCompleter()).build();
+    private final LineReader lineReader = LineReaderBuilder.builder()
+            .terminal(TerminalBuilder.builder()
+            .system(true)
+            .streams(System.in, System.out)
+            .encoding(StandardCharsets.UTF_8)
+            .dumb(true)
+            .build())
+            .completer(new DefaultConsoleCompleter())
+            .option(LineReader.Option.DISABLE_EVENT_EXPANSION, true)
+            .option(LineReader.Option.AUTO_REMOVE_SLASH, false)
+            .option(LineReader.Option.INSERT_TAB, false)
+            .build();
     private final String prompt = "» ";
     private final LinkedList<Consumer<String>> handlers = new LinkedList<>();
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -35,7 +48,7 @@ public class DefaultCloudConsoleImpl implements ICloudConsole {
         }
     });
 
-    public DefaultCloudConsoleImpl() {
+    public DefaultCloudConsoleImpl() throws IOException {
         this.clear();
         lineReader.setAutosuggestion(LineReader.SuggestionType.COMPLETER);
     }

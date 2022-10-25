@@ -38,7 +38,6 @@ public class DefaultInstanceLoaderImpl implements IInstanceLoader {
                     final var outputInterface = output.getSuperclass();
                     if (outputInterface.getSimpleName().equals(RustyCloudModule.class.getSimpleName())) {
                         temp[this.bufs.length] = new SimpleInstanceBuf(output);
-                        RustCloud.getCloud().getCloudConsole().send(name);
                         this.bufs = temp;
                         return;
                     }

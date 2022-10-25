@@ -1,6 +1,7 @@
 package net.rustmc.cloud.master;
 
 import lombok.Getter;
+import lombok.SneakyThrows;
 import net.rustmc.cloud.api.commands.CommandManager;
 import net.rustmc.cloud.api.commands.listeners.ConsoleInputListener;
 import net.rustmc.cloud.api.commands.listeners.ConsoleTabListener;
@@ -19,13 +20,17 @@ import net.rustmc.cloud.master.managers.SimpleGroupManager;
 import net.rustmc.cloud.master.managers.SimpleNodeManager;
 import net.rustmc.cloud.master.modules.IInstanceLoader;
 
-import java.io.File;
-import java.io.FileFilter;
+import java.io.*;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.jar.JarFile;
 
 /**
  * This class belongs to the rusty-cloud project
@@ -48,6 +53,7 @@ public final class RustCloud {
     private final CommandManager commandManager = new CommandManager();
     private final File nodeFile = new File("nodes");
     private final File moduleFile = new File("modules");
+    private final File groupFile = new File("groups");
     private final ArrayList<RustyNodeConfiguration> nodeConfigurations = new ArrayList<>();
     private final SimpleGroupManager groupManager = new SimpleGroupManager();
     private final SimpleNodeManager nodeManager = new SimpleNodeManager();
@@ -103,6 +109,7 @@ public final class RustCloud {
 
         FileHelper.create(nodeFile);
         FileHelper.create(moduleFile);
+        FileHelper.create(groupFile);
         for (final File tempNodeFile : Arrays
                 .stream(Objects.requireNonNull(this.nodeFile.listFiles()))
                 .filter(file -> file.getName().endsWith(".json"))
@@ -127,6 +134,8 @@ public final class RustCloud {
 
         this.getCloudConsole().send("The cloud started on port §a" + this.configuration.getPort() + "§r.");
         if (this.nodeConfigurations.isEmpty()) this.cloudConsole.send("the master could not locate a registered node!", ICloudConsole.Output.WARN);
+
+        this.validate("module-database");
 
         if (this.moduleFile.listFiles() != null) {
             for (File file : this.moduleFile.listFiles()) {
@@ -153,6 +162,13 @@ public final class RustCloud {
         } catch (MalformedURLException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @SneakyThrows
+    public void validate(final String name) {
+        final var dest = new File("modules//" + name + ".jar");
+        if (!dest.exists())
+            this.cloudConsole.send("The §e" + name + " §rmodule could not be found!", ICloudConsole.Output.WARN);
     }
 
 }
