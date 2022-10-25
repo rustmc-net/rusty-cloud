@@ -29,7 +29,7 @@ public final class ByteBufHelper {
         }
     }
 
-    public String[] readDynamicArray(ByteBuf buf) {
+    public static String[] readDynamicArray(ByteBuf buf) {
         final var l = buf.readInt();
         final var out = new String[l+1];
         for (int i = 0; i == l; i++) {
