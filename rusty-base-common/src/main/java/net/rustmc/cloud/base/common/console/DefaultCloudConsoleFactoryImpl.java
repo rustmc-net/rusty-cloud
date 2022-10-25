@@ -3,6 +3,8 @@ package net.rustmc.cloud.base.common.console;
 import net.rustmc.cloud.base.console.ICloudConsole;
 import net.rustmc.cloud.base.console.ICloudConsoleFactory;
 
+import java.io.IOException;
+
 /**
  * This class belongs to the rusty-cloud project
  *
@@ -13,7 +15,11 @@ public class DefaultCloudConsoleFactoryImpl implements ICloudConsoleFactory {
 
     @Override
     public ICloudConsole newConsole() {
-        return new DefaultCloudConsoleImpl();
+        try {
+            return new DefaultCloudConsoleImpl();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
