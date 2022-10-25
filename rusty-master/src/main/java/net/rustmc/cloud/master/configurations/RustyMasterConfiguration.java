@@ -18,6 +18,8 @@ public final class RustyMasterConfiguration implements CloudConfiguration {
 
     @ConfigurationProperty(name = "master.port")
     private int port = 2222;
+    @ConfigurationProperty(name = "master.auto-updater.config")
+    private boolean autoConfigurationUpdater = false;
 
     public RustyMasterConfiguration() {
     }

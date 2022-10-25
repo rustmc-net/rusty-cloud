@@ -7,11 +7,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="rusty-api" />
-        <module name="rusty-node" />
         <module name="rusty-launcher" />
+        <module name="rusty-api" />
         <module name="rusty-base-common" />
         <module name="rusty-base" />
+        <module name="rusty-node" />
         <module name="rusty-master" />
       </profile>
     </annotationProcessing>
