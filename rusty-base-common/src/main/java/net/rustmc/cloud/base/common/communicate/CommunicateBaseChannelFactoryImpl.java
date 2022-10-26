@@ -9,9 +9,11 @@ import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.group.ChannelGroup;
+import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.SneakyThrows;
 import net.rustmc.cloud.base.communicate.IChannelBootstrap;
 import net.rustmc.cloud.base.communicate.ICommunicateBaseChannel;
@@ -56,6 +58,7 @@ public class CommunicateBaseChannelFactoryImpl implements ICommunicateBaseChanne
     @Override
     public ICommunicateBaseChannel open(int port) {
         final int localID = this._groups.size()+1;
+        this._groups.put(localID, new DefaultChannelGroup(GlobalEventExecutor.INSTANCE));
         final EventLoopGroup eventLoopGroup = Epoll.isAvailable() ? new EpollEventLoopGroup() : new NioEventLoopGroup();
         final ICommunicateBaseHandlerPool handlerPool = new CommunicateBaseHandlerPoolImpl();
         final Channel channel = new ServerBootstrap()

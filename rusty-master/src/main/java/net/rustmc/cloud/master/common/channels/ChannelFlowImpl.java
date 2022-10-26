@@ -46,6 +46,11 @@ public final class ChannelFlowImpl implements IChannelFlow {
     }
 
     @Override
+    public void remove(String shortID) {
+        this.inClosure.remove(shortID);
+    }
+
+    @Override
     public Channel getChannel() {
         return this.queue;
     }

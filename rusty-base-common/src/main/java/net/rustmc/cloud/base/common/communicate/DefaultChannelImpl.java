@@ -30,11 +30,17 @@ public class DefaultChannelImpl implements ICommunicateChannel {
 
     @Override
     public SocketAddress getAddress() {
-        return this.core.localAddress();
+        return this.core.remoteAddress();
     }
 
     @Override
     public String getUniqueID() {
         return this.core.id().asLongText();
     }
+
+    @Override
+    public String getShortID() {
+        return this.core.id().asShortText();
+    }
+
 }

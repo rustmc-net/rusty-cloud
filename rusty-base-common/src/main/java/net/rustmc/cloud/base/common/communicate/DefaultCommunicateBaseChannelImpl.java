@@ -94,4 +94,9 @@ public class DefaultCommunicateBaseChannelImpl implements ICommunicateBaseChanne
     public String getUniqueID() {
         return this.core.id().asLongText();
     }
+
+    @Override
+    public String getShortID() {
+        return this.core.id().asShortText();
+    }
 }
