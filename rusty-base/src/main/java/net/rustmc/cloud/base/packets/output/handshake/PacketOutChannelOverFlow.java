@@ -13,6 +13,9 @@ import net.rustmc.cloud.base.communicate.PacketIdentifier;
 @PacketIdentifier(identifier = 'e')
 public class PacketOutChannelOverFlow extends CommunicatePacket<PacketOutChannelOverFlow> {
 
+    public PacketOutChannelOverFlow() {
+    }
+
     @Override
     public void decode(ByteBuf buf) {
     }

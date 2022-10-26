@@ -20,6 +20,9 @@ public class PacketInHandshake extends CommunicatePacket<PacketOutHandshake> {
     private String[] groups = new String[0];
     private int nodeKey;
 
+    public PacketInHandshake() {
+    }
+
     public PacketInHandshake(String[] groups, int nodeKey) {
         this.groups = groups;
         this.nodeKey = nodeKey;
