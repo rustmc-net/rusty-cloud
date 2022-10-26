@@ -26,7 +26,7 @@ public class SimpleCommunicatePacketPool implements ICommunicatePacketPool {
     }
 
     protected void _register(Class<? extends CommunicatePacket<?>> packet) {
-        final PacketIdentifier identifier = packet.getDeclaredAnnotation(PacketIdentifier.class);
+        final PacketIdentifier identifier = packet.getAnnotation(PacketIdentifier.class);
         this.pool.put(identifier.identifier(), packet);
     }
 

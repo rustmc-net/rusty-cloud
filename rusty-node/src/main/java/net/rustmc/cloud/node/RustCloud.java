@@ -5,6 +5,7 @@ import net.rustmc.cloud.api.commands.CommandManager;
 import net.rustmc.cloud.api.commands.listeners.ConsoleInputListener;
 import net.rustmc.cloud.api.commands.listeners.ConsoleTabListener;
 import net.rustmc.cloud.base.common.Rust;
+import net.rustmc.cloud.base.common.packets.ConstantPacketRegistryCluster;
 import net.rustmc.cloud.base.communicate.IChannelBootstrap;
 import net.rustmc.cloud.base.communicate.ICommunicateBaseChannel;
 import net.rustmc.cloud.base.console.ICloudConsole;
@@ -14,6 +15,7 @@ import net.rustmc.cloud.node.commands.CloseCommand;
 import net.rustmc.cloud.node.common.storage.StorageFactoryImpl;
 import net.rustmc.cloud.node.configurations.RustyNodeConfiguration;
 import net.rustmc.cloud.base.communicate.ConnectFailException;
+import net.rustmc.cloud.node.handlers.PacketOutHandshakeHandler;
 import net.rustmc.cloud.node.storage.IStorageFactory;
 
 import java.io.File;
@@ -98,11 +100,19 @@ public final class RustCloud {
 
         this.cloudConsole.send("Connecting to §e" + this.configuration.getHost() + " §rat port §e" + this.configuration.getPort() + "§r.");
 
+        new ConstantPacketRegistryCluster();
+
+    }
+
+    public void onBoot() {
+
         try {
             this.communicateBaseChannel = this.bootstrap
                     .host(this.configuration.getHost())
                     .port(this.configuration.getPort())
                     .open();
+
+            new PacketOutHandshakeHandler();
 
             this.communicateBaseChannel.dispatch(
                     new PacketInHandshake(
@@ -113,10 +123,6 @@ public final class RustCloud {
 
         } catch (Exception ignored) {
         }
-
-    }
-
-    public void onBoot() {
 
     }
 

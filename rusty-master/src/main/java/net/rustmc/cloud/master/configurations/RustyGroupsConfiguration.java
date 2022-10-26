@@ -4,6 +4,7 @@ import lombok.Getter;
 import net.rustmc.cloud.api.objects.SimpleCloudGroup;
 import net.rustmc.cloud.base.configuration.CloudConfiguration;
 import net.rustmc.cloud.base.configuration.CloudConfigurationInfo;
+import net.rustmc.cloud.base.configuration.ConfigurationProperty;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 @Getter
 public final class RustyGroupsConfiguration implements CloudConfiguration {
 
+    @ConfigurationProperty(name = "master.groups")
     private final ArrayList<SimpleCloudGroup> groups = new ArrayList<>();
 
 }

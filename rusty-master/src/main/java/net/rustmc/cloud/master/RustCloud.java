@@ -6,6 +6,7 @@ import net.rustmc.cloud.api.commands.CommandManager;
 import net.rustmc.cloud.api.commands.listeners.ConsoleInputListener;
 import net.rustmc.cloud.api.commands.listeners.ConsoleTabListener;
 import net.rustmc.cloud.base.common.Rust;
+import net.rustmc.cloud.base.common.packets.ConstantPacketRegistryCluster;
 import net.rustmc.cloud.base.communicate.ConnectFailException;
 import net.rustmc.cloud.base.communicate.IChannelBootstrap;
 import net.rustmc.cloud.base.communicate.ICommunicateBaseChannel;
@@ -155,6 +156,8 @@ public final class RustCloud {
 
         new ChannelConnectHandler();
         new PacketInHandshakeHandler();
+
+        new ConstantPacketRegistryCluster();
 
         this.getCloudConsole().send("The cloud started on port §a" + this.configuration.getPort() + "§r.");
         if (this.nodeConfigurations.isEmpty()) this.cloudConsole.send("the master could not locate a registered node!", ICloudConsole.Output.WARN);
