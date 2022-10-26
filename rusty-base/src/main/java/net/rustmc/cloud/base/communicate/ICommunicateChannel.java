@@ -16,4 +16,6 @@ public interface ICommunicateChannel {
 
     public String getUniqueID();
 
+    public String getShortID();
+
 }

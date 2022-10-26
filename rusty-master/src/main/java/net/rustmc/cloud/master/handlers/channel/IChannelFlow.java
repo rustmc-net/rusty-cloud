@@ -14,6 +14,8 @@ public interface IChannelFlow {
 
     public void flush();
 
+    public void remove(final String shortID);
+
     public Channel getChannel();
 
     public boolean contains(final String shortIdentifier);
