@@ -22,5 +22,7 @@ public final class RustyNodeConfiguration implements CloudConfiguration {
     private int port = 187;
     @ConfigurationProperty(name = "client.terminate-after-failure")
     private boolean retry = false;
+    @ConfigurationProperty(name = "node.key")
+    private int nodeKey = -1;
 
 }

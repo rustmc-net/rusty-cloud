@@ -12,4 +12,6 @@ public interface IStorageFactory {
 
     public Collection<IOfflineStorage> getOfflineStorages();
 
+    public String[] getOfflineStoragesAsArray();
+
 }

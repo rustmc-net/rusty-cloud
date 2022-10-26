@@ -82,6 +82,13 @@ public final class RustCloud {
                             ICloudConsole.Output.ERROR
                     );
 
+            RustCloud.this
+                    .getCloudConsole()
+                    .send(
+                            e.getLocalizedMessage(),
+                            ICloudConsole.Output.ERROR
+                    );
+
             for (StackTraceElement element : e.getStackTrace()) {
                 if (element.getModuleName() != null) {
                     this.getCloudConsole().send(

@@ -8,10 +8,13 @@ import net.rustmc.cloud.base.common.Rust;
 import net.rustmc.cloud.base.communicate.IChannelBootstrap;
 import net.rustmc.cloud.base.communicate.ICommunicateBaseChannel;
 import net.rustmc.cloud.base.console.ICloudConsole;
+import net.rustmc.cloud.base.packets.input.handshake.PacketInHandshake;
 import net.rustmc.cloud.base.util.FileHelper;
 import net.rustmc.cloud.node.commands.CloseCommand;
+import net.rustmc.cloud.node.common.storage.StorageFactoryImpl;
 import net.rustmc.cloud.node.configurations.RustyNodeConfiguration;
 import net.rustmc.cloud.base.communicate.ConnectFailException;
+import net.rustmc.cloud.node.storage.IStorageFactory;
 
 import java.io.File;
 
@@ -32,6 +35,7 @@ public final class RustCloud {
     private final CommandManager commandManager = new CommandManager();
     private final RustyNodeConfiguration configuration = Rust.getInstance().getConfigurationHandler().open("node", new File("node.json").toURI(), RustyNodeConfiguration.class);
     private final File storageFile = new File("storages");
+    private final IStorageFactory storageFactory = new StorageFactoryImpl(this);
     private ICommunicateBaseChannel communicateBaseChannel;
 
     public RustCloud() {
@@ -44,6 +48,13 @@ public final class RustCloud {
                     .getCloudConsole()
                     .send(
                             "caught an unexpected error (§c" + e.getClass().getSimpleName() + "§r).",
+                            ICloudConsole.Output.ERROR
+                    );
+
+            RustCloud.this
+                    .getCloudConsole()
+                    .send(
+                            e.getLocalizedMessage(),
                             ICloudConsole.Output.ERROR
                     );
 
@@ -85,14 +96,22 @@ public final class RustCloud {
 
         FileHelper.create(this.storageFile);
 
+        this.cloudConsole.send("Connecting to §e" + this.configuration.getHost() + " §rat port §e" + this.configuration.getPort() + "§r.");
+
         try {
             this.communicateBaseChannel = this.bootstrap
                     .host(this.configuration.getHost())
                     .port(this.configuration.getPort())
                     .open();
-        } catch (ConnectFailException exception) {
-            exception.getStackTrace();
-            System.exit(-1);
+
+            this.communicateBaseChannel.dispatch(
+                    new PacketInHandshake(
+                            this.storageFactory.getOfflineStoragesAsArray(),
+                            this.configuration.getNodeKey()
+                    )
+            );
+
+        } catch (Exception ignored) {
         }
 
     }

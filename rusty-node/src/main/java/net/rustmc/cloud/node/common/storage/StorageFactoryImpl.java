@@ -18,9 +18,9 @@ public class StorageFactoryImpl implements IStorageFactory {
     private final LinkedList<IOfflineStorage> storages = new LinkedList<>();
 
     @SuppressWarnings("ConstantConditions")
-    public StorageFactoryImpl() {
-        if (RustCloud.getCloud().getStorageFile().listFiles() != null) {
-            for (final var directory : RustCloud.getCloud().getStorageFile().listFiles()) {
+    public StorageFactoryImpl(RustCloud cloud) {
+        if (cloud.getStorageFile().listFiles() != null) {
+            for (final var directory : cloud.getStorageFile().listFiles()) {
                 if (SimpleOfflineStorage.validate(directory)) {
                     storages.addLast(SimpleOfflineStorage.of(directory));
                 }
@@ -31,6 +31,21 @@ public class StorageFactoryImpl implements IStorageFactory {
     @Override
     public Collection<IOfflineStorage> getOfflineStorages() {
         return this.storages;
+    }
+
+    @Override
+    public String[] getOfflineStoragesAsArray() {
+        if (this.storages.isEmpty()) {
+            return new String[0];
+        } else {
+            final var out = new String[storages.size()];
+            int i = 0;
+            for (IOfflineStorage storage : this.storages) {
+                out[i] = storage.getName();
+                i++;
+            }
+            return out;
+        }
     }
 
 }
