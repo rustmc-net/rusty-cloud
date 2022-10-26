@@ -38,15 +38,16 @@ public class CommunicateBaseChannelFactoryImpl implements ICommunicateBaseChanne
     @SneakyThrows
     @Override
     public ICommunicateBaseChannel open(int port, String host) {
+        final var client = true;
         final int localID = this._groups.size()+1;
         final EventLoopGroup eventLoopGroup = Epoll.isAvailable() ? new EpollEventLoopGroup() : new NioEventLoopGroup();
         final ICommunicateBaseHandlerPool handlerPool = new CommunicateBaseHandlerPoolImpl();
         final Channel channel = new Bootstrap()
                 .group(eventLoopGroup)
-                .handler(new CoreBaseChannelInitializer(handlerPool, localID))
+                .handler(new CoreBaseChannelInitializer(handlerPool, localID, client))
                 .channel(Epoll.isAvailable() ? EpollSocketChannel.class : NioSocketChannel.class)
                 .connect(host, port).sync().channel();
-        final DefaultCommunicateBaseChannelImpl defaultCommunicateBaseChannel = new DefaultCommunicateBaseChannelImpl(channel, handlerPool, true, localID);
+        final DefaultCommunicateBaseChannelImpl defaultCommunicateBaseChannel = new DefaultCommunicateBaseChannelImpl(channel, handlerPool, client, localID);
         this.channels.put(localID, new Pair<>(eventLoopGroup, defaultCommunicateBaseChannel));
         return defaultCommunicateBaseChannel;
     }
@@ -59,7 +60,7 @@ public class CommunicateBaseChannelFactoryImpl implements ICommunicateBaseChanne
         final ICommunicateBaseHandlerPool handlerPool = new CommunicateBaseHandlerPoolImpl();
         final Channel channel = new ServerBootstrap()
                 .group(eventLoopGroup)
-                .childHandler(new CoreBaseChannelInitializer(handlerPool, localID))
+                .childHandler(new CoreBaseChannelInitializer(handlerPool, localID, false))
                 .channel(Epoll.isAvailable() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
                 .bind(port).sync().channel();
         final DefaultCommunicateBaseChannelImpl defaultCommunicateBaseChannel = new DefaultCommunicateBaseChannelImpl(channel, handlerPool, false, localID);

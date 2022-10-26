@@ -16,10 +16,12 @@ public class CoreBaseChannelInitializer extends ChannelInitializer<Channel> {
 
     private final ICommunicateBaseHandlerPool handlerPool;
     private final int localID;
+    private final boolean client;
 
-    public CoreBaseChannelInitializer(ICommunicateBaseHandlerPool handlerPool, int localID) {
+    public CoreBaseChannelInitializer(ICommunicateBaseHandlerPool handlerPool, int localID, boolean client) {
         this.handlerPool = handlerPool;
         this.localID = localID;
+        this.client = client;
     }
 
     @Override
@@ -27,6 +29,6 @@ public class CoreBaseChannelInitializer extends ChannelInitializer<Channel> {
         channel.pipeline()
                 .addLast(new CoreChannelDecodeHandler())
                 .addLast(new CoreChannelEncodeHandler())
-                .addLast(new CoreChannelInboundHandler(handlerPool, localID));
+                .addLast(new CoreChannelInboundHandler(handlerPool, localID, client));
     }
 }

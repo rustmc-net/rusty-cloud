@@ -20,10 +20,12 @@ public class CoreChannelInboundHandler extends SimpleChannelInboundHandler<Commu
 
     private final ICommunicateBaseHandlerPool handlerPool;
     private final int localID;
+    private final boolean client;
 
-    public CoreChannelInboundHandler(ICommunicateBaseHandlerPool handlerPool, int localID) {
+    public CoreChannelInboundHandler(ICommunicateBaseHandlerPool handlerPool, int localID, boolean client) {
         this.handlerPool = handlerPool;
         this.localID = localID;
+        this.client = client;
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
@@ -41,10 +43,16 @@ public class CoreChannelInboundHandler extends SimpleChannelInboundHandler<Commu
         for (Consumer<ChannelHandlerContext> handler : this.handlerPool.getBootHandlers()) {
             handler.accept(ctx);
         }
-        if (Rust.getInstance().getChannelFactory().of(this.localID).isClient()) {
-            Rust.getInstance().getChannelFactory().getGroups().get(localID).add(ctx.channel());
-        }
-        super.channelActive(ctx);
+        Rust.getInstance().getAsynchronousExecutor().submit(() -> {
+            if (this.client) {
+                Rust.getInstance().getChannelFactory().getGroups().get(localID).add(ctx.channel());
+            }
+            try {
+                super.channelActive(ctx);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Override
