@@ -26,4 +26,6 @@ public interface IConnectedNode {
 
     public List<IOfflineGroup> getOfflineBootGroups();
 
+    public int getFreeMemory();
+
 }

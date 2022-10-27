@@ -1,5 +1,7 @@
 package net.rustmc.cloud.master.handlers;
 
+import net.rustmc.cloud.api.events.node.CloudNodeConnectCompleteEvent;
+import net.rustmc.cloud.api.events.node.CloudNodeConnectEvent;
 import net.rustmc.cloud.base.common.Rust;
 import net.rustmc.cloud.base.communicate.CommunicateChannelHandler;
 import net.rustmc.cloud.base.communicate.ICommunicateChannel;
@@ -18,18 +20,22 @@ public class PacketInHandshakeHandler {
 
     public PacketInHandshakeHandler() {
         RustCloud.getCloud().getCommunicateBaseChannel().getBaseHandlerPool().subscribe(PacketInHandshake.class, new CommunicateChannelHandler<PacketInHandshake>() {
+            @SuppressWarnings("DataFlowIssue")
             @Override
             public void handle(PacketInHandshake packet, ICommunicateChannel channel) {
                 if (RustCloud.getCloud().getNodeManager().containsNodeKey(packet.getNodeKey())) {
-                    RustCloud.getCloud().getChannelFlow().flush();
-                    RustCloud.getCloud().getChannelFlow().remove(channel.getShortID());
-                    RustCloud.getCloud().getCommunicateBaseChannel().dispatch(new PacketOutHandshake(), channel.getUniqueID());
-                    RustCloud.getCloud().getCloudConsole().send("The node §a" +
-                            RustCloud
-                                    .getCloud()
-                                    .getNodeManager()
-                                    .getNameOfNodeKey(packet.getNodeKey()) +
-                            " §rhas connected to the server.");
+                    final var nodeObject = RustCloud.getCloud().getNodeManager().getNodeByNodeKey(packet.getNodeKey());
+                    Rust.getInstance().getEventPerformer().perform(new CloudNodeConnectEvent(nodeObject));
+                    if (!CloudNodeConnectEvent.flush()) {
+                        RustCloud.getCloud().getChannelFlow().flush();
+                        RustCloud.getCloud().getChannelFlow().remove(channel.getShortID());
+                        RustCloud.getCloud().getCommunicateBaseChannel().dispatch(new PacketOutHandshake(), channel.getUniqueID());
+                        RustCloud.getCloud().getCloudConsole().send("The node §a" +
+                                nodeObject.getName() +
+                                " §rhas connected to the server.");
+                        Rust.getInstance().getEventPerformer().perform(new CloudNodeConnectCompleteEvent(nodeObject));
+
+                    }
                 } else {
                     RustCloud.getCloud()
                             .getCloudConsole()
