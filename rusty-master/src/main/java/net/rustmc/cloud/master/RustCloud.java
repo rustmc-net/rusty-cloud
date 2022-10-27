@@ -15,12 +15,16 @@ import net.rustmc.cloud.base.util.FileHelper;
 import net.rustmc.cloud.master.commands.CloseCommand;
 import net.rustmc.cloud.master.commands.ProduceCommand;
 import net.rustmc.cloud.master.common.channels.ChannelFlowImpl;
+import net.rustmc.cloud.master.common.groups.DefaultGroupRequestQueueImpl;
+import net.rustmc.cloud.master.common.groups.DefaultOfflineGroupPoolImpl;
 import net.rustmc.cloud.master.common.groups.DefaultRemoteGroupPoolImpl;
 import net.rustmc.cloud.master.common.modules.DefaultInstanceLoaderImpl;
 import net.rustmc.cloud.master.common.nodes.DefaultOpenedNodePoolImpl;
 import net.rustmc.cloud.master.configurations.RustyGroupsConfiguration;
 import net.rustmc.cloud.master.configurations.RustyMasterConfiguration;
 import net.rustmc.cloud.master.configurations.RustyNodeConfiguration;
+import net.rustmc.cloud.master.groups.IGroupRequestQueue;
+import net.rustmc.cloud.master.groups.IOfflineGroupPool;
 import net.rustmc.cloud.master.groups.IRemoteGroupPool;
 import net.rustmc.cloud.master.handlers.PacketInHandshakeHandler;
 import net.rustmc.cloud.master.handlers.channel.ChannelConnectHandler;
@@ -67,8 +71,10 @@ public final class RustCloud {
     private final IInstanceLoader instanceLoader = new DefaultInstanceLoaderImpl();
     private final IOpenedNodePool openedNodePool = new DefaultOpenedNodePoolImpl();
     private final IRemoteGroupPool remoteGroupPool = new DefaultRemoteGroupPoolImpl();
+    private final IOfflineGroupPool offlineGroupPool = new DefaultOfflineGroupPoolImpl();
     private final IChannelFlow channelFlow = new ChannelFlowImpl();
     private final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+    private final IGroupRequestQueue groupRequestQueue = new DefaultGroupRequestQueueImpl();
 
     public RustCloud() throws MalformedURLException, URISyntaxException {
 
@@ -153,6 +159,9 @@ public final class RustCloud {
 
     @SuppressWarnings("ConstantConditions")
     public void onBoot() {
+
+        this.offlineGroupPool.load();
+        this.groupRequestQueue.load(this.offlineGroupPool);
 
         new ChannelConnectHandler();
         new PacketInHandshakeHandler();
