@@ -43,4 +43,12 @@ public final class SimpleNodeManager {
         return "null";
     }
 
+    public SimpleCloudNode getNodeByNodeKey(int nodeKey) {
+        for (RustyNodeConfiguration configuration : RustCloud.getCloud().getNodeConfigurations()) {
+            if (configuration.getNode().getNodeKey() == nodeKey)
+                return configuration.getNode();
+        }
+        return null;
+    }
+
 }

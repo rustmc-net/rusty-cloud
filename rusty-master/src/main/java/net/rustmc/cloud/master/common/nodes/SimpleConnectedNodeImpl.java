@@ -49,4 +49,9 @@ public class SimpleConnectedNodeImpl implements IConnectedNode {
         return null;
     }
 
+    @Override
+    public int getFreeMemory() {
+        return 0;
+    }
+
 }

@@ -12,10 +12,13 @@ import net.rustmc.cloud.base.console.ICloudConsole;
 import net.rustmc.cloud.base.packets.input.handshake.PacketInHandshake;
 import net.rustmc.cloud.base.util.FileHelper;
 import net.rustmc.cloud.node.commands.CloseCommand;
+import net.rustmc.cloud.node.common.DefaultMemoryImpl;
+import net.rustmc.cloud.node.common.groups.DefaultGroupFactoryImpl;
 import net.rustmc.cloud.node.common.storage.StorageFactoryImpl;
 import net.rustmc.cloud.node.configurations.RustyNodeConfiguration;
-import net.rustmc.cloud.base.communicate.ConnectFailException;
+import net.rustmc.cloud.node.groups.IGroupFactory;
 import net.rustmc.cloud.node.handlers.PacketOutHandshakeHandler;
+import net.rustmc.cloud.node.memory.IMemoryMonitor;
 import net.rustmc.cloud.node.storage.IStorageFactory;
 
 import java.io.File;
@@ -39,6 +42,8 @@ public final class RustCloud {
     private final File storageFile = new File("storages");
     private final IStorageFactory storageFactory = new StorageFactoryImpl(this);
     private ICommunicateBaseChannel communicateBaseChannel;
+    private final IGroupFactory groupFactory = new DefaultGroupFactoryImpl();
+    private final IMemoryMonitor memoryMonitor = new DefaultMemoryImpl();
 
     public RustCloud() {
 
@@ -98,13 +103,15 @@ public final class RustCloud {
 
         FileHelper.create(this.storageFile);
 
-        this.cloudConsole.send("Connecting to §e" + this.configuration.getHost() + " §rat port §e" + this.configuration.getPort() + "§r.");
-
-        new ConstantPacketRegistryCluster();
-
     }
 
     public void onBoot() {
+
+        this.groupFactory.loadStayedCacheGroups();
+
+        this.cloudConsole.send("Connecting to §e" + this.configuration.getHost() + " §rat port §e" + this.configuration.getPort() + "§r.");
+
+        new ConstantPacketRegistryCluster();
 
         try {
             this.communicateBaseChannel = this.bootstrap
