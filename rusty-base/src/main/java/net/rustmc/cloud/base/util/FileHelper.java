@@ -34,7 +34,7 @@ public final class FileHelper {
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static void create(final File file) {
+    public static File create(final File file) {
         if (!file.exists()) {
             if (!file.getName().contains(".")) file.mkdirs();
                 else {
@@ -49,6 +49,7 @@ public final class FileHelper {
                 }
             }
         }
+        return file;
     }
 
 }
