@@ -1,6 +1,6 @@
 package net.rustmc.cloud.node.common.groups;
 
-import net.rustmc.cloud.node.groups.IRemoteOnlineGroup;
+import net.rustmc.cloud.node.groups.IRemoteGroup;
 
 import java.io.File;
 
@@ -10,7 +10,7 @@ import java.io.File;
  * @author Alexander Jilge
  * @since 28.10.2022
  */
-public class SimpleRemoteOnlineGroup implements IRemoteOnlineGroup {
+public class SimpleRemoteGroup implements IRemoteGroup {
 
     private final String name;
     private final int version;
@@ -19,7 +19,7 @@ public class SimpleRemoteOnlineGroup implements IRemoteOnlineGroup {
     private final int maxServers;
     private final int minServers;
 
-    public SimpleRemoteOnlineGroup(String name, int version, int maxPlayers, int maxMemory, int maxServers, int minServers) {
+    public SimpleRemoteGroup(String name, int version, int maxPlayers, int maxMemory, int maxServers, int minServers) {
         this.name = name;
         this.version = version;
         this.maxPlayers = maxPlayers;

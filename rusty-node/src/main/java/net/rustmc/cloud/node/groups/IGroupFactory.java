@@ -12,12 +12,16 @@ public interface IGroupFactory {
 
     public Collection<IStatedCacheGroup> getStayedCacheGroups();
 
-    public Collection<IRemoteOnlineGroup> getRemoteOnlineGroups();
+    public Collection<IRemoteGroup> getRemoteOnlineGroups();
 
     public void loadStayedCacheGroups();
 
-    public void logIn(IRemoteOnlineGroup localOnlineGroup);
+    public void logIn(IRemoteGroup localOnlineGroup);
 
-    public IRemoteOnlineGroup request(final String name);
+    public IRemoteGroup request(final String name);
+
+    public void requestAsynchronousForStayed();
+
+    public Collection<IRemoteGroup> getRemoteGroups();
 
 }

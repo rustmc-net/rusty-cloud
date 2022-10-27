@@ -34,7 +34,7 @@ public class PacketInHandshakeHandler {
                         RustCloud.getCloud().getCloudConsole().send("The node §a" +
                                 nodeObject.getName() +
                                 " §rhas connected to the server.");
-                        RustCloud.getCloud().getCommunicateBaseChannel().dispatch(new PacketOutNodeMemory(nodeObject.getMaxMemory()));
+                        RustCloud.getCloud().getCommunicateBaseChannel().dispatch(new PacketOutNodeMemory(nodeObject.getMaxMemory()), channel.getUniqueID());
                         Rust.getInstance().getEventPerformer().perform(new CloudNodeConnectCompleteEvent(nodeObject));
                     }
                 } else {

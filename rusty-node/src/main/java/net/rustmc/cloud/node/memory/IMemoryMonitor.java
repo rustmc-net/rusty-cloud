@@ -14,4 +14,6 @@ public interface IMemoryMonitor {
 
     public int getUsedMemory();
 
+    public void update();
+
 }

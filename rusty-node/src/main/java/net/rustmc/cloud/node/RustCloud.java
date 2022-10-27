@@ -23,6 +23,7 @@ import net.rustmc.cloud.node.memory.IMemoryMonitor;
 import net.rustmc.cloud.node.storage.IStorageFactory;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class belongs to the rusty-cloud project
@@ -129,6 +130,12 @@ public final class RustCloud {
                             this.configuration.getNodeKey()
                     )
             );
+
+            this.getGroupFactory().requestAsynchronousForStayed();
+            Thread.currentThread().wait(300);
+            this.getMemoryMonitor().update();
+
+            this.cloudConsole.send("§a" + this.getMemoryMonitor().getFreeMemoryFromRemote() + " §rmb ram can still be allocated§r.");
 
         } catch (Exception ignored) {
         }

@@ -4,8 +4,8 @@ import net.rustmc.cloud.base.communicate.CommunicateChannelHandler;
 import net.rustmc.cloud.base.communicate.ICommunicateChannel;
 import net.rustmc.cloud.base.packets.output.groups.PacketOutGroupInfoRequest;
 import net.rustmc.cloud.node.RustCloud;
-import net.rustmc.cloud.node.common.groups.SimpleRemoteOnlineGroup;
-import net.rustmc.cloud.node.groups.IRemoteOnlineGroup;
+import net.rustmc.cloud.node.common.groups.SimpleRemoteGroup;
+import net.rustmc.cloud.node.groups.IRemoteGroup;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,13 +18,13 @@ import java.util.Map;
  */
 public class PacketOutGroupInfoRequestHandler {
 
-    private static final Map<String, IRemoteOnlineGroup> flow = new HashMap<>();
+    private static final Map<String, IRemoteGroup> flow = new HashMap<>();
 
     public PacketOutGroupInfoRequestHandler() {
         RustCloud.getCloud().getCommunicateBaseChannel().getBaseHandlerPool().subscribe(PacketOutGroupInfoRequest.class, new CommunicateChannelHandler<PacketOutGroupInfoRequest>() {
             @Override
             public void handle(PacketOutGroupInfoRequest packet, ICommunicateChannel channel) {
-                flow.put(packet.getName(), new SimpleRemoteOnlineGroup(
+                flow.put(packet.getName(), new SimpleRemoteGroup(
                         packet.getName(),
                         packet.getVersion(),
                         packet.getMaxPlayers(),
@@ -37,7 +37,7 @@ public class PacketOutGroupInfoRequestHandler {
         });
     }
 
-    public static IRemoteOnlineGroup request(final String name) {
+    public static IRemoteGroup request(final String name) {
         final var result = flow.get(name);
         flow.remove(name);
         return result;

@@ -8,7 +8,7 @@ import java.io.File;
  * @author Alexander Jilge
  * @since 27.10.2022
  */
-public interface IRemoteOnlineGroup {
+public interface IRemoteGroup {
 
     public String getGroupName();
 
