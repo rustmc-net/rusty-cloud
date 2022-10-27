@@ -11,7 +11,7 @@ import net.rustmc.cloud.base.communicate.PacketIdentifier;
  * @since 25.10.2022
  */
 @PacketIdentifier(identifier = 'o')
-public class PacketOutHandshake extends CommunicatePacket<PacketOutHandshake> {
+public final class PacketOutHandshake extends CommunicatePacket<PacketOutHandshake> {
 
     public PacketOutHandshake() {
     }

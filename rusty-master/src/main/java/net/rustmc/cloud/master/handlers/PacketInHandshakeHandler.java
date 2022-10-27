@@ -6,6 +6,7 @@ import net.rustmc.cloud.base.common.Rust;
 import net.rustmc.cloud.base.communicate.CommunicateChannelHandler;
 import net.rustmc.cloud.base.communicate.ICommunicateChannel;
 import net.rustmc.cloud.base.console.ICloudConsole;
+import net.rustmc.cloud.base.packets.output.nodes.PacketOutNodeMemory;
 import net.rustmc.cloud.base.packets.input.handshake.PacketInHandshake;
 import net.rustmc.cloud.base.packets.output.handshake.PacketOutHandshake;
 import net.rustmc.cloud.master.RustCloud;
@@ -33,8 +34,8 @@ public class PacketInHandshakeHandler {
                         RustCloud.getCloud().getCloudConsole().send("The node §a" +
                                 nodeObject.getName() +
                                 " §rhas connected to the server.");
+                        RustCloud.getCloud().getCommunicateBaseChannel().dispatch(new PacketOutNodeMemory(nodeObject.getMaxMemory()));
                         Rust.getInstance().getEventPerformer().perform(new CloudNodeConnectCompleteEvent(nodeObject));
-
                     }
                 } else {
                     RustCloud.getCloud()

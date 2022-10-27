@@ -1,4 +1,4 @@
-package net.rustmc.cloud.base.packets;
+package net.rustmc.cloud.base.packets.input;
 
 import io.netty.buffer.ByteBuf;
 import net.rustmc.cloud.base.communicate.CommunicatePacket;
@@ -12,7 +12,7 @@ import net.rustmc.cloud.base.communicate.files.ICommunicateFile;
  * @since 26.10.2022
  */
 @PacketIdentifier(identifier = 'h')
-public class PacketInOutFile extends CommunicatePacket<PacketInOutFile> {
+public final class PacketInOutFile extends CommunicatePacket<PacketInOutFile> {
 
     private ICommunicateFile communicateFile;
 

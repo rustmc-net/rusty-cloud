@@ -11,7 +11,7 @@ import net.rustmc.cloud.base.communicate.PacketIdentifier;
  * @since 25.10.2022
  */
 @PacketIdentifier(identifier = 'e')
-public class PacketOutChannelOverFlow extends CommunicatePacket<PacketOutChannelOverFlow> {
+public final class PacketOutChannelOverFlow extends CommunicatePacket<PacketOutChannelOverFlow> {
 
     public PacketOutChannelOverFlow() {
     }
