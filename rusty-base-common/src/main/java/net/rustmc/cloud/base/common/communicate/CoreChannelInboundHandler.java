@@ -44,7 +44,7 @@ public class CoreChannelInboundHandler extends SimpleChannelInboundHandler<Commu
             handler.accept(ctx);
         }
         Rust.getInstance().getAsynchronousExecutor().submit(() -> {
-            if (this.client) {
+            if (!this.client) {
                 Rust.getInstance().getChannelFactory().getGroups().get(localID).add(ctx.channel());
             }
             try {

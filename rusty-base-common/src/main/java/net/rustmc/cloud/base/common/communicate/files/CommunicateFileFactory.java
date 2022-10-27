@@ -15,6 +15,7 @@ public class CommunicateFileFactory implements ICommunicateFileFactory {
 
     @Override
     public ICommunicateFile of(File file) {
+        return new DefaultCommunicateFileImpl(file, null, null);
     }
 
 }

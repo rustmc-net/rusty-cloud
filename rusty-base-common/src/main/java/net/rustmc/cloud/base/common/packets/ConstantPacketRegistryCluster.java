@@ -1,6 +1,7 @@
 package net.rustmc.cloud.base.common.packets;
 
 import net.rustmc.cloud.base.common.Rust;
+import net.rustmc.cloud.base.packets.PacketInOutFile;
 import net.rustmc.cloud.base.packets.input.handshake.PacketInHandshake;
 import net.rustmc.cloud.base.packets.output.handshake.PacketOutHandshake;
 
@@ -18,7 +19,8 @@ public class ConstantPacketRegistryCluster {
                 .getCommunicatePacketPool()
                 .register(
                         PacketInHandshake.class,
-                        PacketOutHandshake.class
+                        PacketOutHandshake.class,
+                        PacketInOutFile.class
                 );
     }
 
