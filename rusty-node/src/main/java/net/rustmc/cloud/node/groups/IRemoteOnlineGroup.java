@@ -8,9 +8,19 @@ import java.io.File;
  * @author Alexander Jilge
  * @since 27.10.2022
  */
-public interface ILocalOnlineGroup {
+public interface IRemoteOnlineGroup {
 
     public String getGroupName();
+
+    public int getVersion();
+
+    public int getMaxPlayers();
+
+    public int getMaxMemory();
+
+    public int getMaxServers();
+
+    public int getMinServers();
 
     public File getDirectory();
 

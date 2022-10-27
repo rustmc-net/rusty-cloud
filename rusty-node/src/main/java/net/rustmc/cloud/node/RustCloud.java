@@ -18,6 +18,7 @@ import net.rustmc.cloud.node.common.storage.StorageFactoryImpl;
 import net.rustmc.cloud.node.configurations.RustyNodeConfiguration;
 import net.rustmc.cloud.node.groups.IGroupFactory;
 import net.rustmc.cloud.node.handlers.PacketOutHandshakeHandler;
+import net.rustmc.cloud.node.handlers.PacketOutNodeMemoryHandler;
 import net.rustmc.cloud.node.memory.IMemoryMonitor;
 import net.rustmc.cloud.node.storage.IStorageFactory;
 
@@ -120,6 +121,7 @@ public final class RustCloud {
                     .open();
 
             new PacketOutHandshakeHandler();
+            new PacketOutNodeMemoryHandler();
 
             this.communicateBaseChannel.dispatch(
                     new PacketInHandshake(

@@ -1,9 +1,11 @@
 package net.rustmc.cloud.node.common.groups;
 
+import net.rustmc.cloud.base.packets.input.groups.PacketInGroupInfoRequest;
 import net.rustmc.cloud.node.RustCloud;
 import net.rustmc.cloud.node.groups.IGroupFactory;
-import net.rustmc.cloud.node.groups.ILocalOnlineGroup;
+import net.rustmc.cloud.node.groups.IRemoteOnlineGroup;
 import net.rustmc.cloud.node.groups.IStatedCacheGroup;
+import net.rustmc.cloud.node.handlers.PacketOutGroupInfoRequestHandler;
 
 import java.io.File;
 import java.util.Collection;
@@ -18,7 +20,7 @@ import java.util.LinkedList;
 public class DefaultGroupFactoryImpl implements IGroupFactory {
 
     private final LinkedList<IStatedCacheGroup> statedCacheGroups = new LinkedList<>();
-    private final LinkedList<ILocalOnlineGroup> localOnlineGroups = new LinkedList<>();
+    private final LinkedList<IRemoteOnlineGroup> remoteOnlineGroups = new LinkedList<>();
 
     @Override
     public Collection<IStatedCacheGroup> getStayedCacheGroups() {
@@ -26,8 +28,8 @@ public class DefaultGroupFactoryImpl implements IGroupFactory {
     }
 
     @Override
-    public Collection<ILocalOnlineGroup> getLocalOnlineGroups() {
-        return this.localOnlineGroups;
+    public Collection<IRemoteOnlineGroup> getRemoteOnlineGroups() {
+        return this.remoteOnlineGroups;
     }
 
     @SuppressWarnings("DataFlowIssue")
@@ -43,7 +45,18 @@ public class DefaultGroupFactoryImpl implements IGroupFactory {
     }
 
     @Override
-    public void logIn(ILocalOnlineGroup localOnlineGroup) {
-        this.localOnlineGroups.addLast(localOnlineGroup);
+    public void logIn(IRemoteOnlineGroup localOnlineGroup) {
+        this.remoteOnlineGroups.addLast(localOnlineGroup);
+    }
+
+    @Override
+    public IRemoteOnlineGroup request(String name) {
+        RustCloud.getCloud().getCommunicateBaseChannel().dispatch(new PacketInGroupInfoRequest(name));
+        while (!Thread.currentThread().isInterrupted()) {
+            if (PacketOutGroupInfoRequestHandler.contains(name)) {
+                return PacketOutGroupInfoRequestHandler.request(name);
+            }
+        }
+        throw new UnsupportedOperationException("The request of " + name + " could not resolved!");
     }
 }
