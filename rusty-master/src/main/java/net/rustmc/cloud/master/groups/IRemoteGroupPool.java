@@ -7,4 +7,7 @@ package net.rustmc.cloud.master.groups;
  * @since 25.10.2022
  */
 public interface IRemoteGroupPool {
+
+    public boolean contains(final String name);
+
 }

@@ -14,4 +14,6 @@ public interface ICommunicateFile {
 
     public void encode(final ByteBuf buf);
 
+    public void create(final String path);
+
 }

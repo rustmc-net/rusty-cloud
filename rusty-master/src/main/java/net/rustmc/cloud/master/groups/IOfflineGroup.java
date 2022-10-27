@@ -1,5 +1,8 @@
 package net.rustmc.cloud.master.groups;
 
+import java.io.File;
+import java.util.List;
+
 /**
  * This class belongs to the rusty-cloud project
  *
@@ -9,5 +12,9 @@ package net.rustmc.cloud.master.groups;
 public interface IOfflineGroup {
 
     String getGroupName();
+
+    File getDirectory();
+
+    List<File> getImportantFiles();
 
 }
