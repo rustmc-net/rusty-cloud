@@ -1,6 +1,7 @@
 package net.rustmc.cloud.base.packets.input.handshake;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.util.ByteProcessor;
 import lombok.Getter;
 import net.rustmc.cloud.base.communicate.CommunicatePacket;
 import net.rustmc.cloud.base.communicate.PacketIdentifier;

@@ -4,6 +4,8 @@ import lombok.Getter;
 import net.rustmc.cloud.api.commands.CommandManager;
 import net.rustmc.cloud.api.commands.listeners.ConsoleInputListener;
 import net.rustmc.cloud.api.commands.listeners.ConsoleTabListener;
+import net.rustmc.cloud.api.common.scheduler.SchedulerFactoryImpl;
+import net.rustmc.cloud.api.scheduler.IScheduler;
 import net.rustmc.cloud.base.common.Rust;
 import net.rustmc.cloud.base.common.packets.ConstantPacketRegistryCluster;
 import net.rustmc.cloud.base.communicate.IChannelBootstrap;
@@ -24,6 +26,7 @@ import net.rustmc.cloud.node.storage.IStorageFactory;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  * This class belongs to the rusty-cloud project
@@ -132,10 +135,21 @@ public final class RustCloud {
             );
 
             this.getGroupFactory().requestAsynchronousForStayed();
-            Thread.currentThread().wait(300);
-            this.getMemoryMonitor().update();
 
-            this.cloudConsole.send("§a" + this.getMemoryMonitor().getFreeMemoryFromRemote() + " §rmb ram can still be allocated§r.");
+            SchedulerFactoryImpl.getDefaultFactory()
+                    .register()
+                    .delay(500)
+                    .getHandlerPool()
+                    .addOnCompleteHandler(new Consumer<IScheduler>() {
+                @Override
+                public void accept(IScheduler iScheduler) {
+                    RustCloud.this.getMemoryMonitor().update();
+                    var free = RustCloud.getCloud().getMemoryMonitor().getFreeMemoryFromRemote();
+                    if (free > 500)
+                        RustCloud.this.cloudConsole.send("§a" + free + " §rmb ram can still be allocated§r.");
+                            else RustCloud.this.cloudConsole.send("§e" + free + " §rmb ram can still be allocated§r.", ICloudConsole.Output.WARN);
+                }
+            }).getScheduler().run();
 
         } catch (Exception ignored) {
         }

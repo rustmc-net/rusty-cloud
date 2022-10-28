@@ -27,12 +27,12 @@ public final class PacketInGroupInfoRequest extends CommunicatePacket<PacketInGr
 
     @Override
     public void decode(ByteBuf buf) {
-        ByteBufHelper.write(this.name, buf);
+        this.name = ByteBufHelper.readString(buf);
     }
 
     @Override
     public void encode(ByteBuf buf) {
-        this.name = ByteBufHelper.readString(buf);
+        ByteBufHelper.write(this.name, buf);
     }
 
 }

@@ -25,22 +25,22 @@ public final class PacketOutGroupInfoRequest extends CommunicatePacket<PacketOut
 
     @Override
     public void decode(ByteBuf buf) {
-        ByteBufHelper.write(this.name, buf);
-        buf.writeInt(this.version);
-        buf.writeInt(this.maxPlayers);
-        buf.writeInt(this.memory);
-        buf.writeInt(this.maxServers);
-        buf.writeInt(this.minServer);
-    }
-
-    @Override
-    public void encode(ByteBuf buf) {
         this.name = ByteBufHelper.readString(buf);
         this.version = buf.readInt();
         this.maxPlayers = buf.readInt();
         this.memory = buf.readInt();
         this.maxServers = buf.readInt();
         this.minServer = buf.readInt();
+    }
+
+    @Override
+    public void encode(ByteBuf buf) {
+        ByteBufHelper.write(this.name, buf);
+        buf.writeInt(this.version);
+        buf.writeInt(this.maxPlayers);
+        buf.writeInt(this.memory);
+        buf.writeInt(this.maxServers);
+        buf.writeInt(this.minServer);
     }
 
 }

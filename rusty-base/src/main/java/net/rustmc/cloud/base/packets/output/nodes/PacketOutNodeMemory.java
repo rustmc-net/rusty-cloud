@@ -26,11 +26,12 @@ public final class PacketOutNodeMemory extends CommunicatePacket<PacketOutNodeMe
 
     @Override
     public void decode(ByteBuf buf) {
-        buf.writeInt(this.memory);
+        this.memory = buf.readInt();
     }
 
     @Override
     public void encode(ByteBuf buf) {
-        this.memory = buf.readInt();
+        buf.writeInt(this.memory);
     }
+
 }
