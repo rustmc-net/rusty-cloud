@@ -21,13 +21,7 @@ public class PacketInNodeMemoryHandler {
             public void handle(PacketInNodeMemory packet, ICommunicateChannel channel) {
                 final var node = RustCloud.getCloud()
                         .getNodeManager()
-                        .getNodeByNodeAddress(channel.getAddress()
-                                .toString()
-                                .replace("/", "")
-                                .substring(0, channel
-                                        .getAddress()
-                                        .toString()
-                                        .indexOf(':')));
+                        .getNodeByNodeKey(packet.getNodeKey());
                 RustCloud.getCloud()
                         .getOpenedNodePool()
                         .getByNodeKey(
@@ -35,10 +29,10 @@ public class PacketInNodeMemoryHandler {
                         .setFreeMemory(packet.getMemory());
                 if (RustCloud.getCloud().getConfiguration().getMinRam() <= packet.getMemory()) {
                     //TODO: Handle groups for node
-                    RustCloud.getCloud().getCloudConsole().send("The node §a" + node.getName() + " §rcan be allocated " + RustCloud.getCloud()
+                    RustCloud.getCloud().getCloudConsole().send("The node " + node.getName() + " §rcan still be allocated §b" + RustCloud.getCloud()
                             .getOpenedNodePool()
                             .getByNodeKey(node.getNodeKey())
-                            .getFreeMemory() + " MB of memory.");
+                            .getFreeMemory() + " §rMB of memory.");
                 } else {
                     RustCloud
                             .getCloud()

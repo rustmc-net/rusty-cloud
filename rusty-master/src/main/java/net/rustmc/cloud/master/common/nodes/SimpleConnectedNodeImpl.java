@@ -29,7 +29,7 @@ public class SimpleConnectedNodeImpl implements IConnectedNode {
 
     @Override
     public int getTransmittedNodeKey() {
-        return 0;
+        return this.nodeKey;
     }
 
     @Override

@@ -10,6 +10,7 @@ import net.rustmc.cloud.base.packets.output.nodes.PacketOutNodeMemory;
 import net.rustmc.cloud.base.packets.input.handshake.PacketInHandshake;
 import net.rustmc.cloud.base.packets.output.handshake.PacketOutHandshake;
 import net.rustmc.cloud.master.RustCloud;
+import net.rustmc.cloud.master.common.nodes.SimpleConnectedNodeImpl;
 
 /**
  * This class belongs to the rusty-cloud project
@@ -35,6 +36,7 @@ public class PacketInHandshakeHandler {
                                 nodeObject.getName() +
                                 " §rhas connected to the server.");
                         RustCloud.getCloud().getCommunicateBaseChannel().dispatch(new PacketOutNodeMemory(nodeObject.getMaxMemory()), channel.getUniqueID());
+                        RustCloud.getCloud().getOpenedNodePool().getConnectedNodes().add(new SimpleConnectedNodeImpl(nodeObject.getNodeKey()));
                         Rust.getInstance().getEventPerformer().perform(new CloudNodeConnectCompleteEvent(nodeObject));
                     }
                 } else {

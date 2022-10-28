@@ -15,22 +15,26 @@ import net.rustmc.cloud.base.communicate.PacketIdentifier;
 @PacketIdentifier(identifier = 'r')
 public class PacketInNodeMemory extends CommunicatePacket<PacketInNodeMemory> {
 
-    public PacketInNodeMemory(int memory) {
+    public PacketInNodeMemory(int memory, int nodeKey) {
         this.memory = memory;
+        this.nodeKey = nodeKey;
     }
 
     public PacketInNodeMemory() {
     }
 
     private int memory;
+    private int nodeKey;
 
     @Override
     public void decode(ByteBuf buf) {
         this.memory = buf.readInt();
+        this.nodeKey = buf.readInt();
     }
 
     @Override
     public void encode(ByteBuf buf) {
         buf.writeInt(this.memory);
+        buf.writeInt(this.nodeKey);
     }
 }

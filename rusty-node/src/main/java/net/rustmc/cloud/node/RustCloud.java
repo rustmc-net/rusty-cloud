@@ -149,7 +149,7 @@ public final class RustCloud {
                     if (free > 500)
                         RustCloud.this.cloudConsole.send("§a" + free + " §rmb ram can still be allocated§r.");
                             else RustCloud.this.cloudConsole.send("§e" + free + " §rmb ram can still be allocated§r.", ICloudConsole.Output.WARN);
-                    RustCloud.this.getCommunicateBaseChannel().dispatch(new PacketInNodeMemory(free));
+                    RustCloud.this.getCommunicateBaseChannel().dispatch(new PacketInNodeMemory(free, RustCloud.this.getConfiguration().getNodeKey()));
                 }
             }).getScheduler().run();
 

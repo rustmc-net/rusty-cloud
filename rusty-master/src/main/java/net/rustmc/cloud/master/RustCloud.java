@@ -29,6 +29,7 @@ import net.rustmc.cloud.master.groups.IGroupRequestQueue;
 import net.rustmc.cloud.master.groups.IOfflineGroupPool;
 import net.rustmc.cloud.master.groups.IRemoteGroupPool;
 import net.rustmc.cloud.master.handlers.PacketInHandshakeHandler;
+import net.rustmc.cloud.master.handlers.PacketInNodeMemoryHandler;
 import net.rustmc.cloud.master.handlers.channel.ChannelConnectHandler;
 import net.rustmc.cloud.master.handlers.channel.IChannelFlow;
 import net.rustmc.cloud.master.managers.SimpleGroupManager;
@@ -168,6 +169,7 @@ public final class RustCloud {
 
         new ChannelConnectHandler();
         new PacketInHandshakeHandler();
+        new PacketInNodeMemoryHandler();
 
         new ConstantPacketRegistryCluster();
 
