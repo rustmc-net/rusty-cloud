@@ -28,6 +28,8 @@ public final class RustyMasterConfiguration implements CloudConfiguration {
     private boolean chainConnect = true;
     @ConfigurationProperty(name = "master.server.client-discard-time")
     private int clientTimeOutDiscard = 1000;
+    @ConfigurationProperty(name = "node.memory.min")
+    private int minRam = 250;
 
     public RustyMasterConfiguration() {
     }

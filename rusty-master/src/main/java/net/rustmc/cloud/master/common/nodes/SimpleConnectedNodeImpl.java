@@ -2,10 +2,12 @@ package net.rustmc.cloud.master.common.nodes;
 
 import lombok.Setter;
 import net.rustmc.cloud.api.objects.SimpleCloudNode;
+import net.rustmc.cloud.master.RustCloud;
 import net.rustmc.cloud.master.groups.IOfflineGroup;
 import net.rustmc.cloud.master.groups.IRemoteGroup;
 import net.rustmc.cloud.master.nodes.IConnectedNode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +19,13 @@ import java.util.List;
 @Setter
 public class SimpleConnectedNodeImpl implements IConnectedNode {
 
+    private final List<IOfflineGroup> offlineGroups = new ArrayList<>();
+    private final int nodeKey;
+    private int freeMemory = -1;
 
+    public SimpleConnectedNodeImpl(int nodeKey) {
+        this.nodeKey = nodeKey;
+    }
 
     @Override
     public int getTransmittedNodeKey() {
@@ -26,12 +34,12 @@ public class SimpleConnectedNodeImpl implements IConnectedNode {
 
     @Override
     public String getNodeName() {
-        return null;
+        return RustCloud.getCloud().getNodeManager().getNameOfNodeKey(this.nodeKey);
     }
 
     @Override
     public SimpleCloudNode getLocalNodeObject() {
-        return null;
+        return RustCloud.getCloud().getNodeManager().getNodeByNodeKey(this.nodeKey);
     }
 
     @Override
@@ -46,12 +54,27 @@ public class SimpleConnectedNodeImpl implements IConnectedNode {
 
     @Override
     public List<IOfflineGroup> getOfflineBootGroups() {
-        return null;
+        return this.offlineGroups;
     }
 
     @Override
     public int getFreeMemory() {
-        return 0;
+        return this.freeMemory;
+    }
+
+    @Override
+    public void setOfflineGroups(String[] groups) {
+        this.offlineGroups.clear();
+        for (String group : groups) {
+            this.offlineGroups.add(RustCloud.getCloud()
+                    .getGroupFactory()
+                    .newOfflineGroup(group));
+        }
+    }
+
+    @Override
+    public void setFreeMemory(int memory) {
+        this.freeMemory = memory;
     }
 
 }

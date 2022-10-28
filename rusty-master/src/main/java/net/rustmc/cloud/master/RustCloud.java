@@ -15,6 +15,7 @@ import net.rustmc.cloud.base.util.FileHelper;
 import net.rustmc.cloud.master.commands.CloseCommand;
 import net.rustmc.cloud.master.commands.ProduceCommand;
 import net.rustmc.cloud.master.common.channels.ChannelFlowImpl;
+import net.rustmc.cloud.master.common.groups.DefaultGroupFactoryImpl;
 import net.rustmc.cloud.master.common.groups.DefaultGroupRequestQueueImpl;
 import net.rustmc.cloud.master.common.groups.DefaultOfflineGroupPoolImpl;
 import net.rustmc.cloud.master.common.groups.DefaultRemoteGroupPoolImpl;
@@ -23,6 +24,7 @@ import net.rustmc.cloud.master.common.nodes.DefaultOpenedNodePoolImpl;
 import net.rustmc.cloud.master.configurations.RustyGroupsConfiguration;
 import net.rustmc.cloud.master.configurations.RustyMasterConfiguration;
 import net.rustmc.cloud.master.configurations.RustyNodeConfiguration;
+import net.rustmc.cloud.master.groups.IGroupFactory;
 import net.rustmc.cloud.master.groups.IGroupRequestQueue;
 import net.rustmc.cloud.master.groups.IOfflineGroupPool;
 import net.rustmc.cloud.master.groups.IRemoteGroupPool;
@@ -75,6 +77,7 @@ public final class RustCloud {
     private final IChannelFlow channelFlow = new ChannelFlowImpl();
     private final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     private final IGroupRequestQueue groupRequestQueue = new DefaultGroupRequestQueueImpl();
+    private final IGroupFactory groupFactory = new DefaultGroupFactoryImpl();
 
     public RustCloud() throws MalformedURLException, URISyntaxException {
 

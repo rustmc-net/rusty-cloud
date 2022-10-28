@@ -12,6 +12,7 @@ import net.rustmc.cloud.base.communicate.IChannelBootstrap;
 import net.rustmc.cloud.base.communicate.ICommunicateBaseChannel;
 import net.rustmc.cloud.base.console.ICloudConsole;
 import net.rustmc.cloud.base.packets.input.handshake.PacketInHandshake;
+import net.rustmc.cloud.base.packets.input.nodes.PacketInNodeMemory;
 import net.rustmc.cloud.base.util.FileHelper;
 import net.rustmc.cloud.node.commands.CloseCommand;
 import net.rustmc.cloud.node.common.DefaultMemoryImpl;
@@ -144,10 +145,11 @@ public final class RustCloud {
                 @Override
                 public void accept(IScheduler iScheduler) {
                     RustCloud.this.getMemoryMonitor().update();
-                    var free = RustCloud.getCloud().getMemoryMonitor().getFreeMemoryFromRemote();
+                    var free = RustCloud.this.getMemoryMonitor().getFreeMemoryFromRemote();
                     if (free > 500)
                         RustCloud.this.cloudConsole.send("§a" + free + " §rmb ram can still be allocated§r.");
                             else RustCloud.this.cloudConsole.send("§e" + free + " §rmb ram can still be allocated§r.", ICloudConsole.Output.WARN);
+                    RustCloud.this.getCommunicateBaseChannel().dispatch(new PacketInNodeMemory(free));
                 }
             }).getScheduler().run();
 

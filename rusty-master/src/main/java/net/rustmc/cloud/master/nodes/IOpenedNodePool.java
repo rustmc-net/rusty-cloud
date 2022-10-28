@@ -2,6 +2,7 @@ package net.rustmc.cloud.master.nodes;
 
 import net.rustmc.cloud.api.objects.SimpleCloudGroup;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -12,8 +13,10 @@ import java.util.List;
  */
 public interface IOpenedNodePool {
 
-    public List<IConnectedNode> getConnectedNodes();
+    public LinkedList<IConnectedNode> getConnectedNodes();
 
     public IConnectedNode getSuitableNode(final SimpleCloudGroup group);
+
+    public IConnectedNode getByNodeKey(int nodeKey);
 
 }

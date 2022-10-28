@@ -4,6 +4,7 @@ import net.rustmc.cloud.api.objects.SimpleCloudNode;
 import net.rustmc.cloud.master.groups.IOfflineGroup;
 import net.rustmc.cloud.master.groups.IRemoteGroup;
 
+import java.io.StringReader;
 import java.util.List;
 
 /**
@@ -27,5 +28,9 @@ public interface IConnectedNode {
     public List<IOfflineGroup> getOfflineBootGroups();
 
     public int getFreeMemory();
+
+    public void setOfflineGroups(String[] groups);
+
+    public void setFreeMemory(int memory);
 
 }

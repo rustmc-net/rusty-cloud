@@ -51,4 +51,12 @@ public final class SimpleNodeManager {
         return null;
     }
 
+    public SimpleCloudNode getNodeByNodeAddress(String address) {
+        for (RustyNodeConfiguration configuration : RustCloud.getCloud().getNodeConfigurations()) {
+            if (configuration.getNode().getHost().equals(address))
+                return configuration.getNode();
+        }
+        return null;
+    }
+
 }
