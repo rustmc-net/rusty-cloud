@@ -19,4 +19,11 @@ public final class SimpleGroupManager {
         FileHelper.create(new File("groups//" + cloudGroup.getName()));
     }
 
+    public SimpleCloudGroup getGroupByName(String name) {
+        for (SimpleCloudGroup group : RustCloud.getCloud().getGroupsConfiguration().getGroups()) {
+            if (group.getName().equals(name)) return group;
+        }
+        return null;
+    }
+
 }

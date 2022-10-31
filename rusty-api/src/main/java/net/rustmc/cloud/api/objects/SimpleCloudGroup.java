@@ -24,14 +24,15 @@ public final class SimpleCloudGroup {
     private final int minServers = 0;
     private final int priority = 0;
     private final String permission = "null";
-    private final int nodeKey = random.nextInt();
+    private final int memory;
 
-    public SimpleCloudGroup(String name, boolean proxy, int version, int maxPlayersPer, int maxServers) {
+    public SimpleCloudGroup(String name, boolean proxy, int version, int maxPlayersPer, int maxServers, int memory) {
         this.name = name;
         this.proxy = proxy;
         this.version = version;
         this.maxPlayersPer = maxPlayersPer;
         this.maxServers = maxServers;
+        this.memory = memory;
     }
 
 }

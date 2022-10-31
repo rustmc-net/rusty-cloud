@@ -68,6 +68,7 @@ public final class RustCloud {
     private final File nodeFile = new File("nodes");
     private final File moduleFile = new File("modules");
     private final File groupFile = new File("groups");
+    private final File tempFile = new File("temp");
     private final ArrayList<RustyNodeConfiguration> nodeConfigurations = new ArrayList<>();
     private final SimpleGroupManager groupManager = new SimpleGroupManager();
     private final SimpleNodeManager nodeManager = new SimpleNodeManager();
@@ -137,6 +138,7 @@ public final class RustCloud {
 
         FileHelper.create(nodeFile);
         FileHelper.create(moduleFile);
+        FileHelper.create(tempFile);
         FileHelper.create(groupFile);
         for (final File tempNodeFile : Arrays
                 .stream(Objects.requireNonNull(this.nodeFile.listFiles()))

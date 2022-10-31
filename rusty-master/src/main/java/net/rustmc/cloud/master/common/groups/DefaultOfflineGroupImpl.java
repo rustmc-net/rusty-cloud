@@ -1,5 +1,7 @@
 package net.rustmc.cloud.master.common.groups;
 
+import net.rustmc.cloud.api.objects.SimpleCloudGroup;
+import net.rustmc.cloud.master.RustCloud;
 import net.rustmc.cloud.master.groups.IOfflineGroup;
 import net.rustmc.cloud.master.groups.IOfflineGroupPool;
 import net.rustmc.cloud.master.groups.IRemoteGroup;
@@ -49,6 +51,15 @@ public class DefaultOfflineGroupImpl implements IOfflineGroup {
             }
         }
         return out;
+    }
+
+    @Override
+    public SimpleCloudGroup getObject() {
+        return RustCloud.getCloud()
+                .getGroupManager()
+                .getGroupByName(
+                        this.getGroupName()
+                );
     }
 
 }

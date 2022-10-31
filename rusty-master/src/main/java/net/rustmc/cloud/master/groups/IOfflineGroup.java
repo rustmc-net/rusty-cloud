@@ -1,5 +1,7 @@
 package net.rustmc.cloud.master.groups;
 
+import net.rustmc.cloud.api.objects.SimpleCloudGroup;
+
 import java.io.File;
 import java.util.List;
 
@@ -16,5 +18,7 @@ public interface IOfflineGroup {
     File getDirectory();
 
     List<File> getImportantFiles();
+
+    public SimpleCloudGroup getObject();
 
 }

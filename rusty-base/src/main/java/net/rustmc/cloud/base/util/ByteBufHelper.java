@@ -23,7 +23,7 @@ public final class ByteBufHelper {
     }
 
     public static void writeDynamicArray(String[] array, ByteBuf buf) {
-        buf.writeInt(array.length-1);
+        buf.writeInt(array.length);
         for (final var s : array) {
             write(s, buf);
         }
@@ -31,12 +31,27 @@ public final class ByteBufHelper {
 
     public static String[] readDynamicArray(ByteBuf buf) {
         final var l = buf.readInt();
-        final var out = new String[l+1];
-        for (int i = 0; i == l; i++) {
+        final var out = new String[l];
+        for (int i = 0; i == l-1; i++) {
             out[i] = readString(buf);
         }
         return out;
     }
 
+    public static void writeDynamicByteArray(Byte[] array, ByteBuf buf) {
+        buf.writeInt(array.length);
+        for (final var s : array) {
+            buf.writeByte(s);
+        }
+    }
+
+    public static Byte[] readDynamicByteArray(ByteBuf buf) {
+        final var l = buf.readInt();
+        final var out = new Byte[l];
+        for (int i = 0; i == l-1; i++) {
+            out[i] = buf.readByte();
+        }
+        return out;
+    }
 
 }

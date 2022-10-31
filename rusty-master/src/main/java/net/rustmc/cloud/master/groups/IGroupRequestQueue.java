@@ -1,5 +1,8 @@
 package net.rustmc.cloud.master.groups;
 
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
 /**
  * This class belongs to the rusty-cloud project
  *
@@ -12,12 +15,8 @@ public interface IGroupRequestQueue {
 
     public int size();
 
-    public IOfflineGroup next();
-
-    public void flush();
-
-    public void decline();
-
     public boolean hasNext();
+
+    public void consume(Predicate<IOfflineGroup> groupConsumer);
 
 }

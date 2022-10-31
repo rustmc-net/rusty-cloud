@@ -37,8 +37,8 @@ public final class ProduceCommand extends Command {
                         } else RustCloud.getCloud().getCloudConsole().send("this arguments can not be handled", ICloudConsole.Output.ERROR);
                     }
                     case "group" -> {
-                        if (args.length == 7) {
-                            final var group = new SimpleCloudGroup(args[2], Boolean.parseBoolean(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]));
+                        if (args.length == 8) {
+                            final var group = new SimpleCloudGroup(args[2], Boolean.parseBoolean(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), Integer.parseInt(args[7]));
                             RustCloud.getCloud().getGroupManager().register(group);
                             RustCloud.getCloud().getCloudConsole().send("The group §a" + group.getName() + " §ris successfully created");
                             if (RustCloud.getCloud().getConfiguration().isAutoConfigurationUpdater())
