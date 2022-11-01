@@ -5,6 +5,7 @@ import net.rustmc.cloud.base.packets.input.PacketInOutFile;
 import net.rustmc.cloud.base.packets.input.groups.PacketInGroupInfoRequest;
 import net.rustmc.cloud.base.packets.input.nodes.PacketInNodeCacheGroups;
 import net.rustmc.cloud.base.packets.input.nodes.PacketInNodeMemory;
+import net.rustmc.cloud.base.packets.output.groups.PacketOutGroupEmploy;
 import net.rustmc.cloud.base.packets.output.groups.PacketOutGroupInfoRequest;
 import net.rustmc.cloud.base.packets.output.nodes.PacketOutNodeMemory;
 import net.rustmc.cloud.base.packets.input.handshake.PacketInHandshake;
@@ -31,7 +32,8 @@ public class ConstantPacketRegistryCluster {
                         PacketOutGroupInfoRequest.class,
                         PacketInOutFile.class,
                         PacketInNodeMemory.class,
-                        PacketInNodeCacheGroups.class
+                        PacketInNodeCacheGroups.class,
+                        PacketOutGroupEmploy.class
                 );
     }
 
