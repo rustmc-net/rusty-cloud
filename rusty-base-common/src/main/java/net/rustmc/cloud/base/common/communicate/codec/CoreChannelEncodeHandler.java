@@ -16,6 +16,7 @@ public class CoreChannelEncodeHandler extends MessageToByteEncoder<CommunicatePa
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, CommunicatePacket<?> input, ByteBuf output) {
+        System.out.println("new packet out -> " + input.getClass().getName());
         output.writeChar(Rust.getInstance().getCommunicatePacketPool().of(input.getClass()));
         input.encode(output);
     }

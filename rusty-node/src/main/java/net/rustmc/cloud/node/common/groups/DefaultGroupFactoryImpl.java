@@ -85,4 +85,9 @@ public class DefaultGroupFactoryImpl implements IGroupFactory {
         return this.remoteGroups;
     }
 
+    @Override
+    public IRemoteGroup of(String name, int memory, int maxServer, int minServers, int version, int maxPlayers) {
+        return new SimpleRemoteGroup(name, version, maxPlayers, memory, maxServer, minServers);
+    }
+
 }

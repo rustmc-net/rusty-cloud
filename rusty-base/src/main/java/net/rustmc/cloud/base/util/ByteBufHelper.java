@@ -38,16 +38,16 @@ public final class ByteBufHelper {
         return out;
     }
 
-    public static void writeDynamicByteArray(Byte[] array, ByteBuf buf) {
+    public static void writeDynamicByteArray(byte[] array, ByteBuf buf) {
         buf.writeInt(array.length);
         for (final var s : array) {
             buf.writeByte(s);
         }
     }
 
-    public static Byte[] readDynamicByteArray(ByteBuf buf) {
+    public static byte[] readDynamicByteArray(ByteBuf buf) {
         final var l = buf.readInt();
-        final var out = new Byte[l];
+        final var out = new byte[l];
         for (int i = 0; i == l-1; i++) {
             out[i] = buf.readByte();
         }

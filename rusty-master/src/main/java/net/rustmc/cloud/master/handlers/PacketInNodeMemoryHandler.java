@@ -58,9 +58,14 @@ public class PacketInNodeMemoryHandler {
                                             .getCommunicateBaseChannel()
                                             .dispatch(
                                                     new PacketOutGroupEmploy(
-                                                            toObjects(Files.readAllBytes(file.toPath())),
+                                                            Files.readAllBytes(file.toPath()),
                                                             offlineGroup.getGroupName(),
-                                                            offlineGroup.getObject().getMemory())
+                                                            offlineGroup.getObject().getMemory(),
+                                                            offlineGroup.getObject().getMaxPlayersPer(),
+                                                            offlineGroup.getObject().getMaxServers(),
+                                                            offlineGroup.getObject().getMinServers(),
+                                                            offlineGroup.getObject().getVersion()
+                                                    )
                                             , channel.getUniqueID());
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
@@ -80,13 +85,6 @@ public class PacketInNodeMemoryHandler {
                 }
             }
         });
-    }
-
-    Byte[] toObjects(byte[] bytesPrim) {
-        Byte[] bytes = new Byte[bytesPrim.length];
-        int i = 0;
-        for (byte b : bytesPrim) bytes[i++] = b;
-        return bytes;
     }
 
 }

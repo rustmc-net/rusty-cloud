@@ -24,4 +24,6 @@ public interface IGroupFactory {
 
     public Collection<IRemoteGroup> getRemoteGroups();
 
+    public IRemoteGroup of(final String name, final int memory, final int maxServer, final int minServers, final int version, final int maxPlayers);
+
 }
