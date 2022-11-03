@@ -152,7 +152,7 @@ public final class RustCloud {
                             RustyNodeConfiguration.class
                     );
             this.nodeConfigurations.add(nodeConfiguraion);
-            this.cloudConsole.send("Waiting for node: §6" + nodeConfiguraion.getNode().getName() + " §ron: §6" + nodeConfiguraion.getNode().getHost() + "§r.");
+            this.cloudConsole.send("Waiting for node: §e" + nodeConfiguraion.getNode().getName() + " §ron: §e" + nodeConfiguraion.getNode().getHost() + "§r.");
         }
 
         try {

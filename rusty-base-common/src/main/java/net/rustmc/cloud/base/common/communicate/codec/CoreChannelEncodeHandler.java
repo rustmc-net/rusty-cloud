@@ -5,6 +5,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import net.rustmc.cloud.base.common.Rust;
 import net.rustmc.cloud.base.communicate.CommunicatePacket;
+import net.rustmc.cloud.base.packets.EmptyPacket;
+import net.rustmc.cloud.base.packets.output.groups.PacketOutGroupEmploy;
 
 /**
  * This class belongs to the rusty-cloud project
@@ -16,7 +18,6 @@ public class CoreChannelEncodeHandler extends MessageToByteEncoder<CommunicatePa
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, CommunicatePacket<?> input, ByteBuf output) {
-        System.out.println("new packet out -> " + input.getClass().getName());
         output.writeChar(Rust.getInstance().getCommunicatePacketPool().of(input.getClass()));
         input.encode(output);
     }

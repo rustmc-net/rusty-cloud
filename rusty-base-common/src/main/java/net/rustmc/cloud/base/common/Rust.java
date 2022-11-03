@@ -18,6 +18,7 @@ import net.rustmc.cloud.base.threads.IThreadPool;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * This class belongs to the rusty-cloud project
@@ -38,7 +39,7 @@ public final class Rust {
     private final ICloudEventPerformer eventPerformer = new CloudEventPerformerImpl();
     private final ICommunicatePacketPool communicatePacketPool = new SimpleCommunicatePacketPool();
     private final ICommunicateBaseChannelFactory channelFactory = new CommunicateBaseChannelFactoryImpl();
-    private final ExecutorService asynchronousExecutor = Executors.newSingleThreadExecutor();
+    private final ScheduledExecutorService asynchronousExecutor = Executors.newSingleThreadScheduledExecutor();
     private final String operatingSystem = System.getProperty("os.name");
 
 }
