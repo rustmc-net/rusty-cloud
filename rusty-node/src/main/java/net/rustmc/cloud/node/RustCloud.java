@@ -13,6 +13,7 @@ import net.rustmc.cloud.base.communicate.ICommunicateBaseChannel;
 import net.rustmc.cloud.base.console.ICloudConsole;
 import net.rustmc.cloud.base.packets.input.handshake.PacketInHandshake;
 import net.rustmc.cloud.base.packets.input.nodes.PacketInNodeMemory;
+import net.rustmc.cloud.base.packets.output.groups.PacketOutGroupEmploy;
 import net.rustmc.cloud.base.util.FileHelper;
 import net.rustmc.cloud.node.commands.CloseCommand;
 import net.rustmc.cloud.node.common.DefaultMemoryImpl;
@@ -20,6 +21,8 @@ import net.rustmc.cloud.node.common.groups.DefaultGroupFactoryImpl;
 import net.rustmc.cloud.node.common.storage.StorageFactoryImpl;
 import net.rustmc.cloud.node.configurations.RustyNodeConfiguration;
 import net.rustmc.cloud.node.groups.IGroupFactory;
+import net.rustmc.cloud.node.handlers.ChannelInboundChunkHandler;
+import net.rustmc.cloud.node.handlers.PacketOutGroupEmployHandler;
 import net.rustmc.cloud.node.handlers.PacketOutHandshakeHandler;
 import net.rustmc.cloud.node.handlers.PacketOutNodeMemoryHandler;
 import net.rustmc.cloud.node.memory.IMemoryMonitor;
@@ -125,8 +128,11 @@ public final class RustCloud {
                     .port(this.configuration.getPort())
                     .open();
 
+            this.communicateBaseChannel.origin().pipeline().addFirst(new ChannelInboundChunkHandler());
+
             new PacketOutHandshakeHandler();
             new PacketOutNodeMemoryHandler();
+            new PacketOutGroupEmployHandler();
 
             this.communicateBaseChannel.dispatch(
                     new PacketInHandshake(

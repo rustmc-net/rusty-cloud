@@ -1,5 +1,6 @@
 package net.rustmc.cloud.master.handlers;
 
+import io.netty.handler.stream.ChunkedFile;
 import net.rustmc.cloud.base.communicate.CommunicateChannelHandler;
 import net.rustmc.cloud.base.communicate.ICommunicateChannel;
 import net.rustmc.cloud.base.console.ICloudConsole;
@@ -55,22 +56,22 @@ public class PacketInNodeMemoryHandler {
                                     );
                                 }
                                 try {
-                                    RustCloud.getCloud()
-                                            .getCommunicateBaseChannel()
-                                            .dispatch(
-                                                    new PacketOutGroupEmploy(
-                                                            Files.readAllBytes(file.toPath()),
-                                                            offlineGroup.getGroupName(),
-                                                            offlineGroup.getObject().getMemory(),
-                                                            offlineGroup.getObject().getMaxPlayersPer(),
-                                                            offlineGroup.getObject().getMaxServers(),
-                                                            offlineGroup.getObject().getMinServers(),
-                                                            offlineGroup.getObject().getVersion()
-                                                    )
-                                            , channel.getUniqueID());
+                                    RustCloud.getCloud().getCommunicateBaseChannel().dispatch(new ChunkedFile(file));
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
+                                RustCloud.getCloud()
+                                        .getCommunicateBaseChannel()
+                                        .dispatch(
+                                                new PacketOutGroupEmploy(
+                                                        offlineGroup.getGroupName(),
+                                                        offlineGroup.getObject().getMemory(),
+                                                        offlineGroup.getObject().getMaxPlayersPer(),
+                                                        offlineGroup.getObject().getMaxServers(),
+                                                        offlineGroup.getObject().getMinServers(),
+                                                        offlineGroup.getObject().getVersion()
+                                                )
+                                        , channel.getUniqueID());
                                 RustCloud.getCloud().getCloudConsole().send("A new group §a" + offlineGroup.getGroupName() + " §rhas been employed to §e" + channel.getAddress().toString() + "§r.");
                                 return true;
                             }

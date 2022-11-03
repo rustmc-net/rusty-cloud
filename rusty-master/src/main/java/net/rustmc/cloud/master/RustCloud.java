@@ -1,5 +1,6 @@
 package net.rustmc.cloud.master;
 
+import io.netty.handler.stream.ChunkedWriteHandler;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import net.rustmc.cloud.api.commands.CommandManager;
@@ -157,6 +158,9 @@ public final class RustCloud {
 
         try {
             this.communicateBaseChannel = this.bootstrap.port(this.configuration.getPort()).open();
+
+            this.communicateBaseChannel.origin().pipeline().addFirst(new ChunkedWriteHandler());
+
         } catch (ConnectFailException e) {
             throw new RuntimeException(e);
         }

@@ -81,6 +81,16 @@ public class DefaultCommunicateBaseChannelImpl implements ICommunicateBaseChanne
     }
 
     @Override
+    public Channel origin() {
+        return this.core;
+    }
+
+    @Override
+    public void dispatch(Object o) {
+        this.core.writeAndFlush(o);
+    }
+
+    @Override
     public void decline() {
         this.core.close();
     }

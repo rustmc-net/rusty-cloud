@@ -13,10 +13,9 @@ import net.rustmc.cloud.base.util.ByteBufHelper;
  * @since 31.10.2022
  */
 @Getter
-@PacketIdentifier(identifier = 'k')
+@PacketIdentifier(identifier = 'x')
 public class PacketOutGroupEmploy extends CommunicatePacket<PacketOutGroupEmploy> {
 
-    private byte[] directoryContent;
     private String name;
     private int memory;
     private int maxPlayers;
@@ -24,8 +23,7 @@ public class PacketOutGroupEmploy extends CommunicatePacket<PacketOutGroupEmploy
     private int minServers;
     private int version;
 
-    public PacketOutGroupEmploy(byte[] directoryContent, String name, int memory, int maxPlayers, int maxServers, int minServers, int version) {
-        this.directoryContent = directoryContent;
+    public PacketOutGroupEmploy(String name, int memory, int maxPlayers, int maxServers, int minServers, int version) {
         this.name = name;
         this.memory = memory;
         this.maxPlayers = maxPlayers;
@@ -41,7 +39,6 @@ public class PacketOutGroupEmploy extends CommunicatePacket<PacketOutGroupEmploy
     public void decode(ByteBuf buf) {
         this.name = ByteBufHelper.readString(buf);
         this.memory = buf.readInt();
-        this.directoryContent = ByteBufHelper.readDynamicByteArray(buf);
         this.maxPlayers = buf.readInt();
         this.maxServers = buf.readInt();
         this.minServers = buf.readInt();
@@ -52,7 +49,6 @@ public class PacketOutGroupEmploy extends CommunicatePacket<PacketOutGroupEmploy
     public void encode(ByteBuf buf) {
         ByteBufHelper.write(name, buf);
         buf.writeInt(memory);
-        ByteBufHelper.writeDynamicByteArray(this.directoryContent, buf);
         buf.writeInt(maxPlayers);
         buf.writeInt(maxServers);
         buf.writeInt(minServers);
