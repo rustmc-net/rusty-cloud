@@ -1,4 +1,4 @@
-package net.rustmc.cloud.api.scheduler;
+package net.rustmc.cloud.base.scheduler;
 
 import net.rustmc.cloud.base.util.ables.Closeable;
 

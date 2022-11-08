@@ -1,8 +1,8 @@
-package net.rustmc.cloud.api.common.scheduler;
+package net.rustmc.cloud.master.scheduler;
 
 import lombok.Getter;
-import net.rustmc.cloud.api.scheduler.IScheduler;
-import net.rustmc.cloud.api.scheduler.ISchedulerFactory;
+import net.rustmc.cloud.base.scheduler.IScheduler;
+import net.rustmc.cloud.base.scheduler.ISchedulerFactory;
 
 import java.util.LinkedList;
 import java.util.function.Consumer;

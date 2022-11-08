@@ -1,4 +1,4 @@
-package net.rustmc.cloud.api.objects;
+package net.rustmc.cloud.base.objects;
 
 import lombok.Getter;
 

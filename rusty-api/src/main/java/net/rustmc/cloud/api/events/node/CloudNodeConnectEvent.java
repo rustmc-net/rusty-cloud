@@ -1,6 +1,6 @@
 package net.rustmc.cloud.api.events.node;
 
-import net.rustmc.cloud.api.objects.SimpleCloudNode;
+import net.rustmc.cloud.base.objects.SimpleCloudNode;
 import net.rustmc.cloud.base.util.ables.Cancelable;
 
 /**

@@ -4,8 +4,7 @@ import lombok.Getter;
 import net.rustmc.cloud.api.commands.CommandManager;
 import net.rustmc.cloud.api.commands.listeners.ConsoleInputListener;
 import net.rustmc.cloud.api.commands.listeners.ConsoleTabListener;
-import net.rustmc.cloud.api.common.scheduler.SchedulerFactoryImpl;
-import net.rustmc.cloud.api.scheduler.IScheduler;
+import net.rustmc.cloud.base.scheduler.IScheduler;
 import net.rustmc.cloud.base.common.Rust;
 import net.rustmc.cloud.base.common.packets.ConstantPacketRegistryCluster;
 import net.rustmc.cloud.base.communicate.IChannelBootstrap;
@@ -13,23 +12,11 @@ import net.rustmc.cloud.base.communicate.ICommunicateBaseChannel;
 import net.rustmc.cloud.base.console.ICloudConsole;
 import net.rustmc.cloud.base.packets.input.handshake.PacketInHandshake;
 import net.rustmc.cloud.base.packets.input.nodes.PacketInNodeMemory;
-import net.rustmc.cloud.base.packets.output.groups.PacketOutGroupEmploy;
 import net.rustmc.cloud.base.util.FileHelper;
 import net.rustmc.cloud.node.commands.CloseCommand;
-import net.rustmc.cloud.node.common.DefaultMemoryImpl;
-import net.rustmc.cloud.node.common.groups.DefaultGroupFactoryImpl;
-import net.rustmc.cloud.node.common.storage.StorageFactoryImpl;
 import net.rustmc.cloud.node.configurations.RustyNodeConfiguration;
-import net.rustmc.cloud.node.groups.IGroupFactory;
-import net.rustmc.cloud.node.handlers.ChannelInboundChunkHandler;
-import net.rustmc.cloud.node.handlers.PacketOutGroupEmployHandler;
-import net.rustmc.cloud.node.handlers.PacketOutHandshakeHandler;
-import net.rustmc.cloud.node.handlers.PacketOutNodeMemoryHandler;
-import net.rustmc.cloud.node.memory.IMemoryMonitor;
-import net.rustmc.cloud.node.storage.IStorageFactory;
 
 import java.io.File;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
@@ -49,10 +36,7 @@ public final class RustCloud {
     private final CommandManager commandManager = new CommandManager();
     private final RustyNodeConfiguration configuration = Rust.getInstance().getConfigurationHandler().open("node", new File("node.json").toURI(), RustyNodeConfiguration.class);
     private final File storageFile = new File("storages");
-    private final IStorageFactory storageFactory = new StorageFactoryImpl(this);
     private ICommunicateBaseChannel communicateBaseChannel;
-    private final IGroupFactory groupFactory = new DefaultGroupFactoryImpl();
-    private final IMemoryMonitor memoryMonitor = new DefaultMemoryImpl();
 
     public RustCloud() {
 
@@ -116,8 +100,6 @@ public final class RustCloud {
 
     public void onBoot() {
 
-        this.groupFactory.loadStayedCacheGroups();
-
         this.cloudConsole.send("Connecting to §e" + this.configuration.getHost() + " §rat port §e" + this.configuration.getPort() + "§r.");
 
         new ConstantPacketRegistryCluster();
@@ -127,37 +109,6 @@ public final class RustCloud {
                     .host(this.configuration.getHost())
                     .port(this.configuration.getPort())
                     .open();
-
-            this.communicateBaseChannel.origin().pipeline().addFirst(new ChannelInboundChunkHandler());
-
-            new PacketOutHandshakeHandler();
-            new PacketOutNodeMemoryHandler();
-            new PacketOutGroupEmployHandler();
-
-            this.communicateBaseChannel.dispatch(
-                    new PacketInHandshake(
-                            this.storageFactory.getOfflineStoragesAsArray(),
-                            this.configuration.getNodeKey()
-                    )
-            );
-
-            this.getGroupFactory().requestAsynchronousForStayed();
-
-            SchedulerFactoryImpl.getDefaultFactory()
-                    .register()
-                    .delay(500)
-                    .getHandlerPool()
-                    .addOnCompleteHandler(new Consumer<IScheduler>() {
-                @Override
-                public void accept(IScheduler iScheduler) {
-                    RustCloud.this.getMemoryMonitor().update();
-                    var free = RustCloud.this.getMemoryMonitor().getFreeMemoryFromRemote();
-                    if (free > 500)
-                        RustCloud.this.cloudConsole.send("§a" + free + " §rmb ram can still be allocated§r.");
-                            else RustCloud.this.cloudConsole.send("§e" + free + " §rmb ram can still be allocated§r.", ICloudConsole.Output.WARN);
-                    RustCloud.this.getCommunicateBaseChannel().dispatch(new PacketInNodeMemory(free, RustCloud.this.getConfiguration().getNodeKey()));
-                }
-            }).getScheduler().run();
 
         } catch (Exception ignored) {
         }

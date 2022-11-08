@@ -1,7 +1,7 @@
 package net.rustmc.cloud.api.events.node;
 
 import lombok.Getter;
-import net.rustmc.cloud.api.objects.SimpleCloudNode;
+import net.rustmc.cloud.base.objects.SimpleCloudNode;
 import net.rustmc.cloud.base.events.CloudEvent;
 
 import java.util.HashMap;
