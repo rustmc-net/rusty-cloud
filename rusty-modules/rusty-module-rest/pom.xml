@@ -18,4 +18,21 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>net.rustymc</groupId>
+            <artifactId>rusty-master</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>net.rustmc</groupId>
+            <artifactId>rusty-base-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>net.rustmc</groupId>
+            <artifactId>rusty-base</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>
