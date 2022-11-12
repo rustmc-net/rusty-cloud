@@ -16,5 +16,10 @@
       <option name="name" value="JBoss Community repository" />
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="snapshots" />
+      <option name="name" value="libs-release" />
+      <option name="url" value="http://37.114.60.81:8081/artifactory/ld-media-services" />
+    </remote-repository>
   </component>
 </project>

@@ -123,6 +123,8 @@ public final class RustCloud {
         this.instanceLoader.load();
         this.getCloudConsole().send("loaded commands: §a" + this.getCommandManager().getCommands().size() + " §r| loaded modules: §a" + this.getInstanceLoader().modules() + "§r.");
 
+
+
     }
 
     public void onShutdown() {

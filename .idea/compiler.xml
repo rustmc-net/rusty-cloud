@@ -17,7 +17,13 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="cloud-api" target="17" />
+      <module name="cloud-base" target="17" />
+      <module name="cloud-base-common" target="17" />
+      <module name="cloud-bootstrap-master" target="17" />
+      <module name="cloud-bootstrap-node" target="17" />
       <module name="rusty-base-test" target="16" />
+      <module name="rusty-cloud" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

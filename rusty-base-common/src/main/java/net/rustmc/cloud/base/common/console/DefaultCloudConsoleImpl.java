@@ -58,9 +58,47 @@ public class DefaultCloudConsoleImpl implements ICloudConsole {
     public ICloudConsole send(String output, Output level) {
         output = this._color(output);
         switch (level) {
-            case INFO -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.GREEN.getAnsiCode() + "INFO" + CloudConsoleColor.RESET + " » " + output + CloudConsoleColor.RESET;
-            case ERROR -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.RED.getAnsiCode() + "ERRO" + CloudConsoleColor.RESET + " » " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
-            case WARN -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.YELLOW.getAnsiCode() + "WARN" + CloudConsoleColor.RESET + " » " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
+            case INFO -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.GREEN.getAnsiCode() + "INFO" + CloudConsoleColor.RESET + " - [" + name("base") + "] : " + output + CloudConsoleColor.RESET;
+            case ERROR -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.RED.getAnsiCode() + "ERRO" + CloudConsoleColor.RESET + " - [ base      ] : " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
+            case WARN -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.YELLOW.getAnsiCode() + "WARN" + CloudConsoleColor.RESET + " - [ base      ] : " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
+        }
+        lineReader.getTerminal().puts(InfoCmp.Capability.carriage_return);
+        lineReader.getTerminal().writer().println(output);
+        lineReader.getTerminal().flush();
+        if (lineReader.isReading()) {
+            lineReader.callWidget(org.jline.reader.LineReader.REDRAW_LINE);
+            lineReader.callWidget(org.jline.reader.LineReader.REDISPLAY);
+        }
+        return this;
+    }
+
+    protected String name(String input) {
+        if (input.length() >= 11) {
+            return " " + input.substring(0, 11) + " ";
+        } else {
+            StringBuilder builder = new StringBuilder(" ");
+            int size = 11;
+            for (char c : input.toCharArray()) {
+                builder.append(c);
+                size--;
+            }
+            builder.append(" ".repeat(Math.max(0, size)));
+            return builder.toString();
+        }
+    }
+
+    @Override
+    public ICloudConsole send(String output) {
+        return send(output, Output.INFO);
+    }
+
+    @Override
+    public ICloudConsole send(Object module, String output, Output level) {
+        output = this._color(output);
+        switch (level) {
+            case INFO -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.GREEN.getAnsiCode() + "INFO" + CloudConsoleColor.RESET + " - [" + name(module.getClass().getSimpleName().toLowerCase().replace("pool", "")) + "] : " + output + CloudConsoleColor.RESET;
+            case ERROR -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.RED.getAnsiCode() + "ERRO" + CloudConsoleColor.RESET + " - [ " + module.getClass().getSimpleName().toLowerCase().replace("pool", "") + " ] : " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
+            case WARN -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.YELLOW.getAnsiCode() + "WARN" + CloudConsoleColor.RESET + " - [ " + module.getClass().getSimpleName().toLowerCase().replace("pool", "") + " ] : " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
         }
         lineReader.getTerminal().puts(InfoCmp.Capability.carriage_return);
         lineReader.getTerminal().writer().println(output);
@@ -73,8 +111,8 @@ public class DefaultCloudConsoleImpl implements ICloudConsole {
     }
 
     @Override
-    public ICloudConsole send(String output) {
-        return send(output, Output.INFO);
+    public ICloudConsole send(Object module, String output) {
+        return this.send(module, output, Output.INFO);
     }
 
     @Override
