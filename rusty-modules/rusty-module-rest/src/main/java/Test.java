@@ -18,6 +18,8 @@ public class Test extends RustyCloudModule {
 
         configuration.getPort();
 
+        Rust.getInstance().getConfigurationHandler().update("test");
+
     }
 
     @Override
