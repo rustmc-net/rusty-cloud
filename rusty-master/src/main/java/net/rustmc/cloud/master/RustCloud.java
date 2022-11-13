@@ -7,17 +7,23 @@ import net.rustmc.cloud.api.commands.listeners.ConsoleInputListener;
 import net.rustmc.cloud.api.commands.listeners.ConsoleTabListener;
 import net.rustmc.cloud.base.common.Rust;
 import net.rustmc.cloud.base.common.packets.ConstantPacketRegistryCluster;
+import net.rustmc.cloud.base.communicate.ConnectFailException;
 import net.rustmc.cloud.base.communicate.IChannelBootstrap;
+import net.rustmc.cloud.base.communicate.ICommunicateChannel;
 import net.rustmc.cloud.base.console.ICloudConsole;
 import net.rustmc.cloud.base.util.FileHelper;
 import net.rustmc.cloud.master.commands.CloseCommand;
+import net.rustmc.cloud.master.commands.ProduceCommand;
 import net.rustmc.cloud.master.common.modules.DefaultInstanceLoaderImpl;
+import net.rustmc.cloud.master.common.nodes.CloudOfflineNodeTerminalImpl;
 import net.rustmc.cloud.master.configurations.CloudBaseConfiguration;
 import net.rustmc.cloud.master.modules.IInstanceLoader;
+import net.rustmc.cloud.master.nodes.IOfflineNodeTerminal;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -44,7 +50,10 @@ public final class RustCloud {
     private final IInstanceLoader instanceLoader = new DefaultInstanceLoaderImpl();
     private final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     private final CloudBaseConfiguration baseCloudConfiguration = Rust.getInstance().getConfigurationHandler().open(new File("base.json").toURI(), CloudBaseConfiguration.class);
+    private ICommunicateChannel communicateChannel;
+    private final IOfflineNodeTerminal offlineNodeTerminal = new CloudOfflineNodeTerminalImpl();
 
+    @SuppressWarnings("DataFlowIssue")
     public RustCloud() throws MalformedURLException, URISyntaxException {
 
         this.cloudConsole = Rust.getInstance().getConsoleFactory().newConsole();
@@ -98,11 +107,18 @@ public final class RustCloud {
         new ConsoleTabListener(this.getCommandManager());
 
         this.getCommandManager().register(new CloseCommand());
+        this.getCommandManager().register(new ProduceCommand());
 
         FileHelper.create(nodeFile);
         FileHelper.create(moduleFile);
         FileHelper.create(tempFile);
         FileHelper.create(groupFile);
+
+        if (this.nodeFile.listFiles() != null) {
+            for (File file : this.nodeFile.listFiles()) {
+                this.offlineNodeTerminal.registerCloudNodeConfiguration(file);
+            }
+        }
 
     }
 
@@ -110,8 +126,6 @@ public final class RustCloud {
     public void onBoot() {
 
         new ConstantPacketRegistryCluster();
-
-        /* opens the cloud */
 
         this.validate("module-database");
 
@@ -125,7 +139,19 @@ public final class RustCloud {
         this.instanceLoader.load();
         this.getCloudConsole().send("loaded commands: §a" + this.getCommandManager().getCommands().size() + " §r| loaded modules: §a" + this.getInstanceLoader().modules() + "§r.");
 
+        try {
 
+            this.communicateChannel = Rust.getInstance()
+                    .getChannelFactory()
+                    .bootstrap()
+                    .port(this.baseCloudConfiguration.getPort())
+                    .open();
+
+            this.getCloudConsole().send("cloud channel succesfully opened on port §a" + this.baseCloudConfiguration.getPort() + "§r.");
+
+        } catch (ConnectFailException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 

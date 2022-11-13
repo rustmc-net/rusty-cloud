@@ -59,8 +59,8 @@ public class DefaultCloudConsoleImpl implements ICloudConsole {
         output = this._color(output);
         switch (level) {
             case INFO -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.GREEN.getAnsiCode() + "INFO" + CloudConsoleColor.RESET + " - [" + name("base") + "] : " + output + CloudConsoleColor.RESET;
-            case ERROR -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.RED.getAnsiCode() + "ERRO" + CloudConsoleColor.RESET + " - [ base      ] : " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
-            case WARN -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.YELLOW.getAnsiCode() + "WARN" + CloudConsoleColor.RESET + " - [ base      ] : " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
+            case ERROR -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.RED.getAnsiCode() + "ERRO" + CloudConsoleColor.RESET +" - [" + name("base") + "] : " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
+            case WARN -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.YELLOW.getAnsiCode() + "WARN" + CloudConsoleColor.RESET + " - [" + name("base") + "] : " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
         }
         lineReader.getTerminal().puts(InfoCmp.Capability.carriage_return);
         lineReader.getTerminal().writer().println(output);
