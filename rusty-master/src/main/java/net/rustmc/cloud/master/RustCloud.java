@@ -12,6 +12,7 @@ import net.rustmc.cloud.base.console.ICloudConsole;
 import net.rustmc.cloud.base.util.FileHelper;
 import net.rustmc.cloud.master.commands.CloseCommand;
 import net.rustmc.cloud.master.common.modules.DefaultInstanceLoaderImpl;
+import net.rustmc.cloud.master.configurations.CloudBaseConfiguration;
 import net.rustmc.cloud.master.modules.IInstanceLoader;
 
 import java.io.File;
@@ -42,6 +43,7 @@ public final class RustCloud {
     private final File tempFile = new File("temp");
     private final IInstanceLoader instanceLoader = new DefaultInstanceLoaderImpl();
     private final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+    private final CloudBaseConfiguration baseCloudConfiguration = Rust.getInstance().getConfigurationHandler().open(new File("base.json").toURI(), CloudBaseConfiguration.class);
 
     public RustCloud() throws MalformedURLException, URISyntaxException {
 
