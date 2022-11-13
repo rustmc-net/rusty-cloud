@@ -33,6 +33,11 @@
             <groupId>net.rustmc</groupId>
             <artifactId>rusty-base</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.java-websocket</groupId>
+            <artifactId>Java-WebSocket</artifactId>
+            <version>1.5.3</version>
+        </dependency>
     </dependencies>
 
 </project>
