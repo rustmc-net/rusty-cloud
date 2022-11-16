@@ -33,6 +33,8 @@ public class CoreChannelInboundHandler extends SimpleChannelInboundHandler<Commu
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, CommunicatePacket<?> packet) {
         Class<? extends CommunicatePacket> type = packet.getClass();
         val cape = DefaultChannelImpl.newChannel(channelHandlerContext.channel());
+        if (this.handlerPool.getHandler() != null)
+            this.handlerPool.getHandler().accept(channelHandlerContext ,packet);
         for (CommunicateChannelHandler handler : this.handlerPool.handlers(type)) {
             handler.handle(packet, cape);
         }

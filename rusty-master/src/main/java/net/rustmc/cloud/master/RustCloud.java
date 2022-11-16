@@ -9,6 +9,7 @@ import net.rustmc.cloud.base.common.Rust;
 import net.rustmc.cloud.base.common.packets.ConstantPacketRegistryCluster;
 import net.rustmc.cloud.base.communicate.ConnectFailException;
 import net.rustmc.cloud.base.communicate.IChannelBootstrap;
+import net.rustmc.cloud.base.communicate.ICommunicateBaseChannel;
 import net.rustmc.cloud.base.communicate.ICommunicateChannel;
 import net.rustmc.cloud.base.console.ICloudConsole;
 import net.rustmc.cloud.base.util.FileHelper;
@@ -56,7 +57,7 @@ public final class RustCloud {
     private final CloudGroupsConfiguration groupsConfiguration = Rust.getInstance()
             .getConfigurationHandler()
             .open(new File("groups.json").toURI(), CloudGroupsConfiguration.class);
-    private ICommunicateChannel communicateChannel;
+    private ICommunicateBaseChannel communicateChannel;
     private final IOfflineNodeTerminal offlineNodeTerminal = new CloudOfflineNodeTerminalImpl();
 
     @SuppressWarnings("DataFlowIssue")

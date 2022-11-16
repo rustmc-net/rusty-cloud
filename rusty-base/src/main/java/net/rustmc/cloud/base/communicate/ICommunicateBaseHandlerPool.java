@@ -4,6 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -16,6 +17,8 @@ public interface ICommunicateBaseHandlerPool {
 
     public <T extends CommunicatePacket<?>> void subscribe(Class<T> tClass, CommunicateChannelHandler<T> handler);
 
+    public void subscribe(BiConsumer<ChannelHandlerContext, Object> consumer);
+
     public void subscribeBootHandler(Consumer<ChannelHandlerContext> handler);
 
     public void subscribeCloseHandler(Consumer<ChannelHandlerContext> handler);
@@ -27,5 +30,6 @@ public interface ICommunicateBaseHandlerPool {
 
     public List<Consumer<ChannelHandlerContext>> getCloseHandlers();
 
+    public BiConsumer<ChannelHandlerContext, Object> getHandler();
 
 }

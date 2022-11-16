@@ -6,6 +6,7 @@ import net.rustmc.cloud.base.communicate.CommunicatePacket;
 import net.rustmc.cloud.base.communicate.ICommunicateBaseHandlerPool;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -20,12 +21,18 @@ public final class CommunicateBaseHandlerPoolImpl implements ICommunicateBaseHan
     private final HashMap<Class<?>, List<CommunicateChannelHandler>> handlers = new HashMap<>();
     private final List<Consumer<ChannelHandlerContext>> bootHandlers = new ArrayList<>();
     private final List<Consumer<ChannelHandlerContext>> closeHandlers = new ArrayList<>();
+    private BiConsumer<ChannelHandlerContext, Object> handler;
 
     @Override
     public <T extends CommunicatePacket<?>> void subscribe(Class<T> tClass, CommunicateChannelHandler<T> handler) {
         if (this.handlers.containsKey(tClass))
             this.handlers.get(tClass).add(handler);
                 else this.handlers.put(tClass, new ArrayList<>(Collections.singleton(handler)));
+    }
+
+    @Override
+    public void subscribe(BiConsumer<ChannelHandlerContext, Object> consumer) {
+        this.handler = consumer;
     }
 
     @Override
@@ -53,6 +60,11 @@ public final class CommunicateBaseHandlerPoolImpl implements ICommunicateBaseHan
     @Override
     public List<Consumer<ChannelHandlerContext>> getCloseHandlers() {
         return closeHandlers;
+    }
+
+    @Override
+    public BiConsumer<ChannelHandlerContext, Object> getHandler() {
+        return this.handler;
     }
 
 }
