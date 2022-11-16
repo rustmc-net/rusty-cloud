@@ -35,4 +35,20 @@ public final class SimpleCloudGroup {
         this.memory = memory;
     }
 
+    @Override
+    public String toString() {
+        return "SimpleCloudGroup{" +
+                "name='" + name + '\'' +
+                ", proxy=" + proxy +
+                ", version=" + version +
+                ", maxPlayersPer=" + maxPlayersPer +
+                ", percent=" + percent +
+                ", maxServers=" + maxServers +
+                ", minServers=" + minServers +
+                ", priority=" + priority +
+                ", permission='" + permission + '\'' +
+                ", memory=" + memory +
+                '}';
+    }
+
 }

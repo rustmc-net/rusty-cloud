@@ -17,6 +17,7 @@ import net.rustmc.cloud.master.commands.ProduceCommand;
 import net.rustmc.cloud.master.common.modules.DefaultInstanceLoaderImpl;
 import net.rustmc.cloud.master.common.nodes.CloudOfflineNodeTerminalImpl;
 import net.rustmc.cloud.master.configurations.CloudBaseConfiguration;
+import net.rustmc.cloud.master.configurations.CloudGroupsConfiguration;
 import net.rustmc.cloud.master.modules.IInstanceLoader;
 import net.rustmc.cloud.master.nodes.IOfflineNodeTerminal;
 
@@ -49,7 +50,12 @@ public final class RustCloud {
     private final File tempFile = new File("temp");
     private final IInstanceLoader instanceLoader = new DefaultInstanceLoaderImpl();
     private final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-    private final CloudBaseConfiguration baseCloudConfiguration = Rust.getInstance().getConfigurationHandler().open(new File("base.json").toURI(), CloudBaseConfiguration.class);
+    private final CloudBaseConfiguration baseCloudConfiguration = Rust.getInstance()
+            .getConfigurationHandler()
+            .open(new File("base.json").toURI(), CloudBaseConfiguration.class);
+    private final CloudGroupsConfiguration groupsConfiguration = Rust.getInstance()
+            .getConfigurationHandler()
+            .open(new File("groups.json").toURI(), CloudGroupsConfiguration.class);
     private ICommunicateChannel communicateChannel;
     private final IOfflineNodeTerminal offlineNodeTerminal = new CloudOfflineNodeTerminalImpl();
 
@@ -128,6 +134,7 @@ public final class RustCloud {
         new ConstantPacketRegistryCluster();
 
         this.validate("module-database");
+        this.validate("module-rest");
 
         if (this.moduleFile.listFiles() != null) {
             for (File file : this.moduleFile.listFiles()) {
@@ -152,6 +159,8 @@ public final class RustCloud {
         } catch (ConnectFailException e) {
             throw new RuntimeException(e);
         }
+
+        this.cloudConsole.send("waits for §e" + this.offlineNodeTerminal.getOfflineNodes().size() + " §rregistered nodes in the cache.");
 
     }
 

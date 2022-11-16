@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/cloud-api/cloud-api.iml" filepath="$PROJECT_DIR$/cloud-api/cloud-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cloud-base/cloud-base.iml" filepath="$PROJECT_DIR$/cloud-base/cloud-base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cloud-base-common/cloud-base-common.iml" filepath="$PROJECT_DIR$/cloud-base-common/cloud-base-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cloud-bootstrap-master/cloud-bootstrap-master.iml" filepath="$PROJECT_DIR$/cloud-bootstrap-master/cloud-bootstrap-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cloud-bootstrap-node/cloud-bootstrap-node.iml" filepath="$PROJECT_DIR$/cloud-bootstrap-node/cloud-bootstrap-node.iml" />
+    </modules>
+  </component>
+</project>

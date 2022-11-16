@@ -16,12 +16,10 @@ public final class DatabasePool extends RustyCloudModule {
 
     @Override
     public void onBoot() {
-        RustCloud.getCloud().getCloudConsole().send(this ,"trying to enable §adatabase §rmodule.", ICloudConsole.Output.INFO);
     }
 
     @Override
     public void onTerminate() {
-        RustCloud.getCloud().getCloudConsole().send(this ,"shutting down §adatabase §rmodule.", ICloudConsole.Output.INFO);
     }
 
 }

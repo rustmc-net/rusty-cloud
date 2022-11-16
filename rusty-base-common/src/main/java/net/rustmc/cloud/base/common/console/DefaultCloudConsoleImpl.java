@@ -58,9 +58,9 @@ public class DefaultCloudConsoleImpl implements ICloudConsole {
     public ICloudConsole send(String output, Output level) {
         output = this._color(output);
         switch (level) {
-            case INFO -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.GREEN.getAnsiCode() + "INFO" + CloudConsoleColor.RESET + " - [" + name("base") + "] : " + output + CloudConsoleColor.RESET;
-            case ERROR -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.RED.getAnsiCode() + "ERRO" + CloudConsoleColor.RESET +" - [" + name("base") + "] : " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
-            case WARN -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.YELLOW.getAnsiCode() + "WARN" + CloudConsoleColor.RESET + " - [" + name("base") + "] : " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
+            case INFO -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.GREEN.getAnsiCode() + "INFO" + CloudConsoleColor.RESET + " | " + output + CloudConsoleColor.RESET;
+            case ERROR -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.RED.getAnsiCode() + "ERRO" + CloudConsoleColor.RESET +" | " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
+            case WARN -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.YELLOW.getAnsiCode() + "WARN" + CloudConsoleColor.RESET + " | " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
         }
         lineReader.getTerminal().puts(InfoCmp.Capability.carriage_return);
         lineReader.getTerminal().writer().println(output);
@@ -96,9 +96,9 @@ public class DefaultCloudConsoleImpl implements ICloudConsole {
     public ICloudConsole send(Object module, String output, Output level) {
         output = this._color(output);
         switch (level) {
-            case INFO -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.GREEN.getAnsiCode() + "INFO" + CloudConsoleColor.RESET + " - [" + name(module.getClass().getSimpleName().toLowerCase().replace("pool", "")) + "] : " + output + CloudConsoleColor.RESET;
-            case ERROR -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.RED.getAnsiCode() + "ERRO" + CloudConsoleColor.RESET + " - [ " + module.getClass().getSimpleName().toLowerCase().replace("pool", "") + " ] : " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
-            case WARN -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.YELLOW.getAnsiCode() + "WARN" + CloudConsoleColor.RESET + " - [ " + module.getClass().getSimpleName().toLowerCase().replace("pool", "") + " ] : " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
+            case INFO -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.GREEN.getAnsiCode() + "INFO" + CloudConsoleColor.RESET + " | " + output + CloudConsoleColor.RESET;
+            case ERROR -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.RED.getAnsiCode() + "ERRO" + CloudConsoleColor.RESET + " | " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
+            case WARN -> output = " | " +  dateTimeFormatter.format(LocalDateTime.now()) + " | " + CloudConsoleColor.YELLOW.getAnsiCode() + "WARN" + CloudConsoleColor.RESET + " | " + CloudConsoleColor.RESET + output + CloudConsoleColor.RESET;
         }
         lineReader.getTerminal().puts(InfoCmp.Capability.carriage_return);
         lineReader.getTerminal().writer().println(output);
