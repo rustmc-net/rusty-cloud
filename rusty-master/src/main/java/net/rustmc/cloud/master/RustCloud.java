@@ -6,6 +6,7 @@ import net.rustmc.cloud.api.commands.CommandManager;
 import net.rustmc.cloud.api.commands.listeners.ConsoleInputListener;
 import net.rustmc.cloud.api.commands.listeners.ConsoleTabListener;
 import net.rustmc.cloud.base.common.Rust;
+import net.rustmc.cloud.base.common.communicate.CommunicationFuture;
 import net.rustmc.cloud.base.common.packets.ConstantPacketRegistryCluster;
 import net.rustmc.cloud.base.communicate.ConnectFailException;
 import net.rustmc.cloud.base.communicate.IChannelBootstrap;
@@ -154,6 +155,8 @@ public final class RustCloud {
                     .bootstrap()
                     .port(this.baseCloudConfiguration.getPort())
                     .open();
+
+            CommunicationFuture.subscribe(communicateChannel);
 
             this.getCloudConsole().send("cloud channel succesfully opened on port §a" + this.baseCloudConfiguration.getPort() + "§r.");
 
