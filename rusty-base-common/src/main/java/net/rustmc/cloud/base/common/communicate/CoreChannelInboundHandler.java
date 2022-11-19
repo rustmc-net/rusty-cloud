@@ -42,9 +42,9 @@ public class CoreChannelInboundHandler extends SimpleChannelInboundHandler<Commu
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        for (Consumer<ChannelHandlerContext> handler : this.handlerPool.getBootHandlers()) {
-            handler.accept(ctx);
-        }
+        this.handlerPool.getBootHandlers().forEach(handlerContextConsumer -> {
+            handlerContextConsumer.accept(ctx);
+        });
         Rust.getInstance().getAsynchronousExecutor().submit(() -> {
             if (!this.client) {
                 Rust.getInstance().getChannelFactory().getGroups().get(localID).add(ctx.channel());

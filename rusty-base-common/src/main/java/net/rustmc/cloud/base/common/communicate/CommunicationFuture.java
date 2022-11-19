@@ -24,6 +24,7 @@ public class CommunicationFuture<T extends CommunicatePacket<?>> {
         communicateBaseChannel.getBaseHandlerPool().subscribe(new BiConsumer<ChannelHandlerContext, Object>() {
             @Override
             public void accept(ChannelHandlerContext channelHandlerContext, Object o) {
+                System.out.println("Hello");
                 if (channelHandlerContext.channel().id().asLongText().equals(uniqueID)) {
                     handler.accept(channelHandlerContext, (CommunicatePacket<?>) o);
                     flush();
@@ -33,9 +34,9 @@ public class CommunicationFuture<T extends CommunicatePacket<?>> {
     }
 
     public CommunicationFuture(final CommunicatePacket<?> packet, String uniqueID, BiConsumer<ChannelHandlerContext, CommunicatePacket<?>> handler) {
-        baseChannel.dispatch(packet, uniqueID);
         CommunicationFuture.uniqueID = uniqueID;
         CommunicationFuture.handler = handler;
+        baseChannel.dispatch(packet, uniqueID);
     }
 
     private static void flush() {

@@ -27,17 +27,17 @@ public class NodeConnectHandler {
         RustCloud.getCloud().getCommunicateChannel().getBaseHandlerPool().subscribeBootHandler(new Consumer<ChannelHandlerContext>() {
             @Override
             public void accept(ChannelHandlerContext channelHandlerContext) {
-                RustCloud.getCloud().getCommunicateChannel().getBaseHandlerPool().subscribeBootHandler(new Consumer<ChannelHandlerContext>() {
+                final CommunicationFuture<PacketInHandshake> handshakeCommunicationFuture = new CommunicationFuture<>(new PacketOutHandshake(), channelHandlerContext.channel().id().asLongText(), new BiConsumer<ChannelHandlerContext, CommunicatePacket<?>>() {
                     @Override
-                    public void accept(ChannelHandlerContext channelHandlerContext) {
-                        final CommunicationFuture<PacketInHandshake> handshakeCommunicationFuture = new CommunicationFuture<>(new PacketOutHandshake(), channelHandlerContext.channel().id().asLongText(), new BiConsumer<ChannelHandlerContext, CommunicatePacket<?>>() {
-                            @Override
-                            public void accept(ChannelHandlerContext channelHandlerContext, CommunicatePacket<?> communicatePacket) {
-                                final var income = (PacketInHandshake) communicatePacket;
-
-                                timeout = true;
-                            }
-                        });
+                    public void accept(ChannelHandlerContext channelHandlerContext, CommunicatePacket<?> communicatePacket) {
+                        System.out.println("Hello World");
+                        final var income = (PacketInHandshake) communicatePacket;
+                        final var node = RustCloud.getCloud().getOfflineNodeTerminal().getOfflineNodeByNodeKey(income.getNodeKey());
+                        if (node != null) {
+                            RustCloud.getCloud().getCommunicateChannel().dispatch(new PacketOutHandshake(), channelHandlerContext.channel().id().asLongText());
+                            RustCloud.getCloud().getCloudConsole().send("the §a" + node.configuration().getName() + " §rhas connected to the server.");
+                        }
+                        timeout = true;
                     }
                 });
                 Rust.getInstance().getAsynchronousExecutor().schedule(new Runnable() {

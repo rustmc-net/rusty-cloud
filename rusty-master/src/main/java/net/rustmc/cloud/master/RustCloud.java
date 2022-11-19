@@ -20,6 +20,7 @@ import net.rustmc.cloud.master.common.modules.DefaultInstanceLoaderImpl;
 import net.rustmc.cloud.master.common.nodes.CloudOfflineNodeTerminalImpl;
 import net.rustmc.cloud.master.configurations.CloudBaseConfiguration;
 import net.rustmc.cloud.master.configurations.CloudGroupsConfiguration;
+import net.rustmc.cloud.master.handlers.NodeConnectHandler;
 import net.rustmc.cloud.master.modules.IInstanceLoader;
 import net.rustmc.cloud.master.nodes.IOfflineNodeTerminal;
 
@@ -157,6 +158,8 @@ public final class RustCloud {
                     .open();
 
             CommunicationFuture.subscribe(communicateChannel);
+
+            new NodeConnectHandler();
 
             this.getCloudConsole().send("cloud channel succesfully opened on port §a" + this.baseCloudConfiguration.getPort() + "§r.");
 
