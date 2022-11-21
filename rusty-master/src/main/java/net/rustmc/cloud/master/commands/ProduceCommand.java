@@ -27,6 +27,8 @@ public class ProduceCommand extends Command {
                     RustCloud.getCloud().getOfflineNodeTerminal().newOfflineNode(args[2], Integer.parseInt(args[3]));
                     RustCloud.getCloud().getCloudConsole().send("The node " + args[2] + " §ris §asuccessfully §rcreated.");
                 }
+            } else if (args[1].equals("group")) {
+
             }
         }
     }
@@ -40,10 +42,14 @@ public class ProduceCommand extends Command {
                 candidates.add("group");
             }
             case 2 -> {
-                candidates.add(resultForNodes());
+                if (line.contains("node")) {
+                    candidates.add(resultForNodes());
+                }
             }
             case 3 -> {
-                candidates.add("max.groups");
+                if (line.contains("node")) {
+                    candidates.add("max.groups");
+                }
             }
         }
         return candidates;

@@ -16,11 +16,13 @@ import net.rustmc.cloud.base.util.FileHelper;
 import net.rustmc.cloud.master.commands.CloseCommand;
 import net.rustmc.cloud.master.commands.InfoCommand;
 import net.rustmc.cloud.master.commands.ProduceCommand;
+import net.rustmc.cloud.master.common.groups.GroupTerminalImpl;
 import net.rustmc.cloud.master.common.modules.DefaultInstanceLoaderImpl;
 import net.rustmc.cloud.master.common.nodes.CloudOfflineNodeTerminalImpl;
 import net.rustmc.cloud.master.common.nodes.CloudOnlineNodeTerminalImpl;
 import net.rustmc.cloud.master.configurations.CloudBaseConfiguration;
 import net.rustmc.cloud.master.configurations.CloudGroupConfiguration;
+import net.rustmc.cloud.master.groups.IGroupTerminal;
 import net.rustmc.cloud.master.handlers.NodeConnectHandler;
 import net.rustmc.cloud.master.handlers.NodeDisconnectHandler;
 import net.rustmc.cloud.master.handlers.PacketInNodeDisconnectHandler;
@@ -65,6 +67,7 @@ public final class RustCloud {
     private ICommunicateBaseChannel communicateChannel;
     private final IOfflineNodeTerminal offlineNodeTerminal = new CloudOfflineNodeTerminalImpl();
     private final IOnlineNodeTerminal onlineNodeTerminal = new CloudOnlineNodeTerminalImpl();
+    private final IGroupTerminal groupTerminal = new GroupTerminalImpl();
 
     @SuppressWarnings("DataFlowIssue")
     public RustCloud() throws MalformedURLException, URISyntaxException {
@@ -129,8 +132,14 @@ public final class RustCloud {
         FileHelper.create(groupFile);
 
         if (this.nodeFile.listFiles() != null) {
-            for (File file : this.nodeFile.listFiles()) {
+            for (final var file : this.nodeFile.listFiles()) {
                 this.offlineNodeTerminal.registerCloudNodeConfiguration(file);
+            }
+        }
+
+        if (this.groupFile.listFiles() != null) {
+            for (final var file : this.groupFile.listFiles()) {
+                this.groupTerminal.register(file);
             }
         }
 
