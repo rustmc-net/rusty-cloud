@@ -6,28 +6,31 @@ import net.rustmc.cloud.api.commands.CommandManager;
 import net.rustmc.cloud.api.commands.listeners.ConsoleInputListener;
 import net.rustmc.cloud.api.commands.listeners.ConsoleTabListener;
 import net.rustmc.cloud.base.common.Rust;
-import net.rustmc.cloud.base.common.communicate.CommunicationFuture;
+import net.rustmc.cloud.base.common.communicate.CommunicationFuturePromise;
 import net.rustmc.cloud.base.common.packets.ConstantPacketRegistryCluster;
 import net.rustmc.cloud.base.communicate.ConnectFailException;
 import net.rustmc.cloud.base.communicate.IChannelBootstrap;
 import net.rustmc.cloud.base.communicate.ICommunicateBaseChannel;
-import net.rustmc.cloud.base.communicate.ICommunicateChannel;
 import net.rustmc.cloud.base.console.ICloudConsole;
 import net.rustmc.cloud.base.util.FileHelper;
 import net.rustmc.cloud.master.commands.CloseCommand;
+import net.rustmc.cloud.master.commands.InfoCommand;
 import net.rustmc.cloud.master.commands.ProduceCommand;
 import net.rustmc.cloud.master.common.modules.DefaultInstanceLoaderImpl;
 import net.rustmc.cloud.master.common.nodes.CloudOfflineNodeTerminalImpl;
+import net.rustmc.cloud.master.common.nodes.CloudOnlineNodeTerminalImpl;
 import net.rustmc.cloud.master.configurations.CloudBaseConfiguration;
 import net.rustmc.cloud.master.configurations.CloudGroupsConfiguration;
 import net.rustmc.cloud.master.handlers.NodeConnectHandler;
+import net.rustmc.cloud.master.handlers.NodeDisconnectHandler;
+import net.rustmc.cloud.master.handlers.PacketInNodeDisconnectHandler;
 import net.rustmc.cloud.master.modules.IInstanceLoader;
 import net.rustmc.cloud.master.nodes.IOfflineNodeTerminal;
+import net.rustmc.cloud.master.nodes.IOnlineNodeTerminal;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -61,6 +64,7 @@ public final class RustCloud {
             .open(new File("groups.json").toURI(), CloudGroupsConfiguration.class);
     private ICommunicateBaseChannel communicateChannel;
     private final IOfflineNodeTerminal offlineNodeTerminal = new CloudOfflineNodeTerminalImpl();
+    private final IOnlineNodeTerminal onlineNodeTerminal = new CloudOnlineNodeTerminalImpl();
 
     @SuppressWarnings("DataFlowIssue")
     public RustCloud() throws MalformedURLException, URISyntaxException {
@@ -117,6 +121,7 @@ public final class RustCloud {
 
         this.getCommandManager().register(new CloseCommand());
         this.getCommandManager().register(new ProduceCommand());
+        this.getCommandManager().register(new InfoCommand());
 
         FileHelper.create(nodeFile);
         FileHelper.create(moduleFile);
@@ -157,9 +162,11 @@ public final class RustCloud {
                     .port(this.baseCloudConfiguration.getPort())
                     .open();
 
-            CommunicationFuture.subscribe(communicateChannel);
+            CommunicationFuturePromise.subscribe(communicateChannel);
 
             new NodeConnectHandler();
+            new NodeDisconnectHandler();
+            new PacketInNodeDisconnectHandler();
 
             this.getCloudConsole().send("cloud channel succesfully opened on port §a" + this.baseCloudConfiguration.getPort() + "§r.");
 

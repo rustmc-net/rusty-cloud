@@ -4,20 +4,21 @@ import lombok.Getter;
 import net.rustmc.cloud.api.commands.CommandManager;
 import net.rustmc.cloud.api.commands.listeners.ConsoleInputListener;
 import net.rustmc.cloud.api.commands.listeners.ConsoleTabListener;
-import net.rustmc.cloud.base.scheduler.IScheduler;
+import net.rustmc.cloud.base.common.communicate.CommunicationFuturePromise;
 import net.rustmc.cloud.base.common.Rust;
 import net.rustmc.cloud.base.common.packets.ConstantPacketRegistryCluster;
 import net.rustmc.cloud.base.communicate.IChannelBootstrap;
 import net.rustmc.cloud.base.communicate.ICommunicateBaseChannel;
 import net.rustmc.cloud.base.console.ICloudConsole;
 import net.rustmc.cloud.base.packets.input.handshake.PacketInHandshake;
-import net.rustmc.cloud.base.packets.input.nodes.PacketInNodeMemory;
 import net.rustmc.cloud.base.util.FileHelper;
 import net.rustmc.cloud.node.commands.CloseCommand;
+import net.rustmc.cloud.node.commons.groups.OfflineGroupTerminalImpl;
 import net.rustmc.cloud.node.configurations.RustyNodeConfiguration;
+import net.rustmc.cloud.node.groups.IOfflineGroupTerminal;
+import net.rustmc.cloud.node.handlers.PacketOutHandshakeHandler;
 
 import java.io.File;
-import java.util.function.Consumer;
 
 /**
  * This class belongs to the rusty-cloud project
@@ -36,7 +37,9 @@ public final class RustCloud {
     private final CommandManager commandManager = new CommandManager();
     private final RustyNodeConfiguration configuration = Rust.getInstance().getConfigurationHandler().open("node", new File("node.json").toURI(), RustyNodeConfiguration.class);
     private final File storageFile = new File("storages");
+    private final File groupsFile = new File("groups");
     private ICommunicateBaseChannel communicateBaseChannel;
+    private final IOfflineGroupTerminal offlineGroupTerminal = new OfflineGroupTerminalImpl();
 
     public RustCloud() {
 
@@ -95,6 +98,7 @@ public final class RustCloud {
         this.getCommandManager().register(new CloseCommand());
 
         FileHelper.create(this.storageFile);
+        FileHelper.create(this.groupsFile);
 
     }
 
@@ -109,6 +113,16 @@ public final class RustCloud {
                     .host(this.configuration.getHost())
                     .port(this.configuration.getPort())
                     .open();
+
+            CommunicationFuturePromise.subscribe(this.getCommunicateBaseChannel());
+
+            new PacketOutHandshakeHandler();
+
+            this.getCommunicateBaseChannel().dispatch(new PacketInHandshake(this.getOfflineGroupTerminal()
+                    .collectNames()
+                    .toArray(new String[0]),
+                    this.configuration.getNodeKey())
+            );
 
         } catch (Exception ignored) {
         }

@@ -21,4 +21,6 @@ public interface IOfflineNodeTerminal {
 
     public Collection<IOfflineNode> getOfflineNodes();
 
+    public int size();
+
 }

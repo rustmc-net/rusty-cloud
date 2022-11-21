@@ -73,4 +73,9 @@ public class CloudOfflineNodeTerminalImpl implements IOfflineNodeTerminal {
         return this.offlineNodes;
     }
 
+    @Override
+    public int size() {
+        return this.offlineNodes.size();
+    }
+
 }
