@@ -20,7 +20,7 @@ import net.rustmc.cloud.master.common.modules.DefaultInstanceLoaderImpl;
 import net.rustmc.cloud.master.common.nodes.CloudOfflineNodeTerminalImpl;
 import net.rustmc.cloud.master.common.nodes.CloudOnlineNodeTerminalImpl;
 import net.rustmc.cloud.master.configurations.CloudBaseConfiguration;
-import net.rustmc.cloud.master.configurations.CloudGroupsConfiguration;
+import net.rustmc.cloud.master.configurations.CloudGroupConfiguration;
 import net.rustmc.cloud.master.handlers.NodeConnectHandler;
 import net.rustmc.cloud.master.handlers.NodeDisconnectHandler;
 import net.rustmc.cloud.master.handlers.PacketInNodeDisconnectHandler;
@@ -59,9 +59,9 @@ public final class RustCloud {
     private final CloudBaseConfiguration baseCloudConfiguration = Rust.getInstance()
             .getConfigurationHandler()
             .open(new File("base.json").toURI(), CloudBaseConfiguration.class);
-    private final CloudGroupsConfiguration groupsConfiguration = Rust.getInstance()
+    private final CloudGroupConfiguration groupsConfiguration = Rust.getInstance()
             .getConfigurationHandler()
-            .open(new File("groups.json").toURI(), CloudGroupsConfiguration.class);
+            .open(new File("groups.json").toURI(), CloudGroupConfiguration.class);
     private ICommunicateBaseChannel communicateChannel;
     private final IOfflineNodeTerminal offlineNodeTerminal = new CloudOfflineNodeTerminalImpl();
     private final IOnlineNodeTerminal onlineNodeTerminal = new CloudOnlineNodeTerminalImpl();

@@ -25,6 +25,7 @@ public final class SimpleCloudGroup {
     private final int priority = 0;
     private final String permission = "null";
     private final int memory;
+    private String allocatedNode = "null";
 
     public SimpleCloudGroup(String name, boolean proxy, int version, int maxPlayersPer, int maxServers, int memory) {
         this.name = name;
@@ -49,6 +50,10 @@ public final class SimpleCloudGroup {
                 ", permission='" + permission + '\'' +
                 ", memory=" + memory +
                 '}';
+    }
+
+    public void setAllocatedNode(String allocatedNode) {
+        this.allocatedNode = allocatedNode;
     }
 
 }

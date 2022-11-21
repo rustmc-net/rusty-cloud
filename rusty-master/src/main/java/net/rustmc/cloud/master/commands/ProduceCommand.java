@@ -37,6 +37,7 @@ public class ProduceCommand extends Command {
         switch (pos) {
             case 1 -> {
                 candidates.add("node");
+                candidates.add("group");
             }
             case 2 -> {
                 candidates.add(resultForNodes());
