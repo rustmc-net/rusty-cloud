@@ -5,8 +5,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import net.rustmc.cloud.base.common.Rust;
 import net.rustmc.cloud.base.communicate.CommunicatePacket;
-import net.rustmc.cloud.base.packets.EmptyPacket;
-import net.rustmc.cloud.base.packets.output.groups.PacketOutGroupEmploy;
 
 /**
  * This class belongs to the rusty-cloud project

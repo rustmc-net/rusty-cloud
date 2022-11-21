@@ -35,12 +35,13 @@ public class ConsoleTabListener {
                         if(tab != null) tab.forEach(event::prompt);
                         return;
                     }
-                    for (String arg : command.getAliases()){
-                        if(arg.equalsIgnoreCase(event.getWords().get(0))){
-                            List<String> tab = command.onTab(pos-1, event.getLine());
-                            if(tab != null) tab.forEach(event::prompt);
+                    if (command.getAliases() != null)
+                        for (String arg : command.getAliases()){
+                            if(arg.equalsIgnoreCase(event.getWords().get(0))){
+                                List<String> tab = command.onTab(pos-1, event.getLine());
+                                if(tab != null) tab.forEach(event::prompt);
+                            }
                         }
-                    }
                 }
             }
         });

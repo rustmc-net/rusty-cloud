@@ -15,7 +15,7 @@ public class DefaultChannelImpl implements ICommunicateChannel {
 
     private final Channel core;
 
-    private DefaultChannelImpl(Channel core) {
+    public DefaultChannelImpl(Channel core) {
         this.core = core;
     }
 
