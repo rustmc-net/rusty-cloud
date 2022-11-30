@@ -205,4 +205,9 @@ public final class DefaultCloudConfigurationHandler implements ICloudConfigurati
         }
     }
 
+    @Override
+    public Gson getDefaultGson() {
+        return this.gson;
+    }
+
 }

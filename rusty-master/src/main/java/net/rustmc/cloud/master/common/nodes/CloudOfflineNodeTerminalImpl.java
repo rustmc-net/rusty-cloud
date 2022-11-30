@@ -69,7 +69,7 @@ public class CloudOfflineNodeTerminalImpl implements IOfflineNodeTerminal {
     }
 
     @Override
-    public Collection<IOfflineNode> getOfflineNodes() {
+    public List<IOfflineNode> getOfflineNodes() {
         return this.offlineNodes;
     }
 

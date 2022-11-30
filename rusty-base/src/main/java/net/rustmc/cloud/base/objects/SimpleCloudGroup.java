@@ -27,13 +27,14 @@ public final class SimpleCloudGroup {
     private final int memory;
     private String allocatedNode = "null";
 
-    public SimpleCloudGroup(String name, boolean proxy, int version, int maxPlayersPer, int maxServers, int memory) {
+    public SimpleCloudGroup(String name, boolean proxy, int version, int maxPlayersPer, int maxServers, int memory, String allocatedNode) {
         this.name = name;
         this.proxy = proxy;
         this.version = version;
         this.maxPlayersPer = maxPlayersPer;
         this.maxServers = maxServers;
         this.memory = memory;
+        this.allocatedNode = allocatedNode;
     }
 
     @Override

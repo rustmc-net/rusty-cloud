@@ -17,4 +17,6 @@ public interface IGroupTerminal {
 
     public ICloudGroup getCloudGroupByName(String name);
 
+    public ICloudGroup produce(String name, boolean proxy, int maxPlayersPer, int percent, int maxServers, int memory, String allocatedNode);
+
 }

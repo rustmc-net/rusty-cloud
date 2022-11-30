@@ -65,4 +65,9 @@ public class CloudOnlineNodeTerminalImpl implements IOnlineNodeTerminal {
         return this.nodes.size();
     }
 
+    @Override
+    public List<IOnlineNode> getOnlineNodes() {
+        return this.nodes;
+    }
+
 }

@@ -1,5 +1,7 @@
 package net.rustmc.cloud.base.configuration;
 
+import com.google.gson.Gson;
+
 import java.net.URI;
 
 /**
@@ -23,5 +25,7 @@ public interface ICloudConfigurationHandler {
     public void update();
 
     public void close(String name);
+
+    public Gson getDefaultGson();
 
 }

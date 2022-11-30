@@ -4,6 +4,7 @@ import net.rustmc.cloud.api.commands.Command;
 import net.rustmc.cloud.master.RustCloud;
 
 import javax.lang.model.util.Elements;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,35 @@ public class ProduceCommand extends Command {
                     RustCloud.getCloud().getCloudConsole().send("The node " + args[2] + " §ris §asuccessfully §rcreated.");
                 }
             } else if (args[1].equals("group")) {
-
+                if (args.length == 9) {
+                    try {
+                        RustCloud.getCloud().getGroupTerminal().produce(
+                                args[2],
+                                Boolean.parseBoolean(args[3]),
+                                Integer.parseInt(args[4]),
+                                Integer.parseInt(args[5]),
+                                Integer.parseInt(args[6]),
+                                Integer.parseInt(args[7]),
+                                args[8]
+                        );
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
+                } else if (args.length == 8) {
+                    try {
+                        RustCloud.getCloud().getGroupTerminal().produce(
+                                args[2],
+                                Boolean.parseBoolean(args[3]),
+                                Integer.parseInt(args[4]),
+                                Integer.parseInt(args[5]),
+                                Integer.parseInt(args[6]),
+                                Integer.parseInt(args[7]),
+                                "null"
+                        );
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
+                }
             }
         }
     }
@@ -44,11 +73,35 @@ public class ProduceCommand extends Command {
             case 2 -> {
                 if (line.contains("node")) {
                     candidates.add(resultForNodes());
+                } else {
+                    candidates.add("name");
                 }
             }
             case 3 -> {
                 if (line.contains("node")) {
                     candidates.add("max.groups");
+                } else {
+                    candidates.add("is.proxy");
+                }
+            }
+            case 4 -> {
+                if (line.contains("group")) {
+                    candidates.add("max.players");
+                }
+            }
+            case 5 -> {
+                if (line.contains("group")) {
+                    candidates.add("percent");
+                }
+            }
+            case 6 -> {
+                if (line.contains("group")) {
+                    candidates.add("max.services");
+                }
+            }
+            case 7 -> {
+                if (line.contains("group")) {
+                    candidates.add("memory");
                 }
             }
         }

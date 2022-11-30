@@ -2,6 +2,7 @@ package net.rustmc.cloud.master.nodes;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * This class belongs to the rusty-cloud project
@@ -19,7 +20,7 @@ public interface IOfflineNodeTerminal {
 
     public IOfflineNode newOfflineNode(String name, int maxGroups);
 
-    public Collection<IOfflineNode> getOfflineNodes();
+    public List<IOfflineNode> getOfflineNodes();
 
     public int size();
 

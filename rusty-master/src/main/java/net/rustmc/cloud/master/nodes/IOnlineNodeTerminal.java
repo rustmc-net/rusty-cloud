@@ -2,6 +2,8 @@ package net.rustmc.cloud.master.nodes;
 
 import net.rustmc.cloud.base.communicate.ICommunicateChannel;
 
+import java.util.List;
+
 /**
  * This class belongs to the rusty-cloud project
  *
@@ -21,5 +23,7 @@ public interface IOnlineNodeTerminal {
     public void remove(String name);
 
     public int size();
+
+    public List<IOnlineNode> getOnlineNodes();
 
 }

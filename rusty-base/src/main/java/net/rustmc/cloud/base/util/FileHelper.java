@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 /**
  * This class belongs to the rusty-cloud project
@@ -50,6 +52,16 @@ public final class FileHelper {
             }
         }
         return file;
+    }
+
+    public static void write(File file, String input) {
+        try {
+            final var outStream = new FileOutputStream(file);
+            outStream.write(input.getBytes(StandardCharsets.UTF_8));
+            outStream.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
