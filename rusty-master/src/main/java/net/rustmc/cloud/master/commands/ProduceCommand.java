@@ -40,12 +40,13 @@ public class ProduceCommand extends Command {
                                 Integer.parseInt(args[7]),
                                 args[8]
                         );
+                        RustCloud.getCloud().getCloudConsole().send("the " + args[2] + " group has been §asuccessfully §rcreated.");
                     } catch (Exception exception) {
                         exception.printStackTrace();
                     }
                 } else if (args.length == 8) {
                     try {
-                        RustCloud.getCloud().getGroupTerminal().produce(
+                        final var object = RustCloud.getCloud().getGroupTerminal().produce(
                                 args[2],
                                 Boolean.parseBoolean(args[3]),
                                 Integer.parseInt(args[4]),
@@ -54,6 +55,7 @@ public class ProduceCommand extends Command {
                                 Integer.parseInt(args[7]),
                                 "null"
                         );
+                        RustCloud.getCloud().getCloudConsole().send("the " + args[2] + " group has been §asuccessfully §rcreated on " + object.getObject().getAllocatedNode() + ".");
                     } catch (Exception exception) {
                         exception.printStackTrace();
                     }
@@ -71,36 +73,36 @@ public class ProduceCommand extends Command {
                 candidates.add("group");
             }
             case 2 -> {
-                if (line.contains("node")) {
+                if (line.split(" ")[1].equals("node")) {
                     candidates.add(resultForNodes());
                 } else {
                     candidates.add("name");
                 }
             }
             case 3 -> {
-                if (line.contains("node")) {
+                if (line.split(" ")[1].equals("node")) {
                     candidates.add("max.groups");
                 } else {
                     candidates.add("is.proxy");
                 }
             }
             case 4 -> {
-                if (line.contains("group")) {
+                if (line.split(" ")[1].equals("group")) {
                     candidates.add("max.players");
                 }
             }
             case 5 -> {
-                if (line.contains("group")) {
+                if (line.split(" ")[1].equals("group")) {
                     candidates.add("percent");
                 }
             }
             case 6 -> {
-                if (line.contains("group")) {
+                if (line.split(" ")[1].equals("group")) {
                     candidates.add("max.services");
                 }
             }
             case 7 -> {
-                if (line.contains("group")) {
+                if (line.split(" ")[1].equals("group")) {
                     candidates.add("memory");
                 }
             }

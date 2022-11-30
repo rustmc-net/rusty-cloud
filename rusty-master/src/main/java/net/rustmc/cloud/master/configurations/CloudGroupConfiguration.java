@@ -11,6 +11,5 @@ import net.rustmc.cloud.base.objects.SimpleCloudGroup;
  * @since 13.11.2022
  */
 @SuppressWarnings("FieldMayBeFinal")
-@Getter
 public record CloudGroupConfiguration(SimpleCloudGroup cloudGroup) implements CloudConfiguration {
 }

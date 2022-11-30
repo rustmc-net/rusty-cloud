@@ -61,9 +61,6 @@ public final class RustCloud {
     private final CloudBaseConfiguration baseCloudConfiguration = Rust.getInstance()
             .getConfigurationHandler()
             .open(new File("base.json").toURI(), CloudBaseConfiguration.class);
-    private final CloudGroupConfiguration groupsConfiguration = Rust.getInstance()
-            .getConfigurationHandler()
-            .open(new File("groups.json").toURI(), CloudGroupConfiguration.class);
     private ICommunicateBaseChannel communicateChannel;
     private final IOfflineNodeTerminal offlineNodeTerminal = new CloudOfflineNodeTerminalImpl();
     private final IOnlineNodeTerminal onlineNodeTerminal = new CloudOnlineNodeTerminalImpl();

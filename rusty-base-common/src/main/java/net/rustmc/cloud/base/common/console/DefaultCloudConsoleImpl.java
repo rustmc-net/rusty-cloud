@@ -181,7 +181,7 @@ public class DefaultCloudConsoleImpl implements ICloudConsole {
                            "   ╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝      ╚═╝   \n" +
                            "                                           ");
         send(" ");
-        send("      Contributors # §aGenerix030 §r- §aRedCrew");
+        send("      Contributors # §aHarman030 §r- §aRedCrew");
         send("      Phase        # §ebeta §r- 1.0");
         send(" ");
     }
