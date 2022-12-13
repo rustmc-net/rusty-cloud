@@ -1,5 +1,7 @@
 package net.rustmc.cloud.master.groups;
 
+import net.rustmc.cloud.base.packets.input.transfer.PacketInGroupTransfer;
+
 import java.io.File;
 import java.util.Collection;
 
@@ -18,5 +20,7 @@ public interface IGroupTerminal {
     public ICloudGroup getCloudGroupByName(String name);
 
     public ICloudGroup produce(String name, boolean proxy, int maxPlayersPer, int percent, int maxServers, int memory, String allocatedNode);
+
+    public void requestTransfer(ICloudGroup group);
 
 }

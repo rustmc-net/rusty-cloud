@@ -4,6 +4,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import net.rustmc.cloud.base.common.communicate.codec.CoreChannelDecodeHandler;
 import net.rustmc.cloud.base.common.communicate.codec.CoreChannelEncodeHandler;
+import net.rustmc.cloud.base.common.communicate.files.SimpleChunkedFileHandler;
 import net.rustmc.cloud.base.communicate.ICommunicateBaseHandlerPool;
 
 /**
@@ -29,6 +30,7 @@ public class CoreBaseChannelInitializer extends ChannelInitializer<Channel> {
         channel.pipeline()
                 .addLast(new CoreChannelDecodeHandler())
                 .addLast(new CoreChannelEncodeHandler())
-                .addLast(new CoreChannelInboundHandler(handlerPool, localID, client));
+                .addLast(new CoreChannelInboundHandler(handlerPool, localID, client))
+                .addLast(new SimpleChunkedFileHandler());
     }
 }
