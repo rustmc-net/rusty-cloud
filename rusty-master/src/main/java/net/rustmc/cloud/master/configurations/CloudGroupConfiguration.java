@@ -1,6 +1,5 @@
 package net.rustmc.cloud.master.configurations;
 
-import lombok.Getter;
 import net.rustmc.cloud.base.configuration.CloudConfiguration;
 import net.rustmc.cloud.base.objects.SimpleCloudGroup;
 
