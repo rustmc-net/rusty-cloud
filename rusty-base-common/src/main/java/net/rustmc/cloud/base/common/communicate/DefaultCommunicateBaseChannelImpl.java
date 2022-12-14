@@ -3,6 +3,7 @@ package net.rustmc.cloud.base.common.communicate;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
+import io.netty.handler.stream.ChunkedFile;
 import net.rustmc.cloud.base.common.Rust;
 import net.rustmc.cloud.base.communicate.CommunicatePacket;
 import net.rustmc.cloud.base.communicate.ICommunicateBaseChannel;
@@ -88,6 +89,24 @@ public class DefaultCommunicateBaseChannelImpl implements ICommunicateBaseChanne
     @Override
     public void dispatch(Object o) {
         this.core.writeAndFlush(o);
+    }
+
+    @SuppressWarnings("DuplicatedCode")
+    @Override
+    public void dispatch(ChunkedFile chunkedFile, String uniqueID) {
+        if (this.isClient())
+            throw new UnsupportedOperationException("Only the server can send to certain client packets.");
+        for (Channel channel : Rust.getInstance().getChannelFactory().getGroups().get(this.localID)) {
+            if (channel.id().asLongText().equals(uniqueID)) {
+                channel.writeAndFlush(chunkedFile).addListener(new ChannelFutureListener() {
+                    public void operationComplete(ChannelFuture channelFuture) {
+                        if (!channelFuture.isSuccess()) {
+                            channelFuture.cause().printStackTrace();
+                        }
+                    }
+                });
+            }
+        }
     }
 
     @Override

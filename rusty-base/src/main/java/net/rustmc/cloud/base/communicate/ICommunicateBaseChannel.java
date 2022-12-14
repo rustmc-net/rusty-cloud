@@ -1,6 +1,7 @@
 package net.rustmc.cloud.base.communicate;
 
 import io.netty.channel.Channel;
+import io.netty.handler.stream.ChunkedFile;
 
 /**
  * This class belongs to the rusty-cloud project
@@ -22,4 +23,6 @@ public interface ICommunicateBaseChannel extends ICommunicateChannel {
 
     public void dispatch(Object o);
 
+    public void dispatch(ChunkedFile chunkedFile, String uniqueID);
 }
+

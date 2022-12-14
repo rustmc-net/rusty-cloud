@@ -1,17 +1,19 @@
 package net.rustmc.cloud.master.common.groups;
 
+import io.netty.handler.stream.ChunkedFile;
 import net.rustmc.cloud.base.common.Rust;
 import net.rustmc.cloud.base.common.communicate.CommunicationFuturePromise;
 import net.rustmc.cloud.base.console.ICloudConsole;
 import net.rustmc.cloud.base.objects.SimpleCloudGroup;
-import net.rustmc.cloud.base.packets.input.transfer.PacketInGroupTransfer;
 import net.rustmc.cloud.base.packets.output.transfer.PacketOutGroupTransfer;
+import net.rustmc.cloud.base.util.ZipHelper;
 import net.rustmc.cloud.master.RustCloud;
 import net.rustmc.cloud.master.configurations.CloudGroupConfiguration;
 import net.rustmc.cloud.master.groups.ICloudGroup;
 import net.rustmc.cloud.master.groups.IGroupTerminal;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -102,15 +104,16 @@ public class GroupTerminalImpl implements IGroupTerminal {
         return out;
     }
 
-    @SuppressWarnings("InstantiationOfUtilityClass")
     @Override
     public void requestTransfer(ICloudGroup group) {
+        final File transfer = new File("temp//" + group.getObject().getName()).toPath().toFile();
+        ZipHelper.zipFoldersAndFiles(
+                new File("groups//templates//" + group.getObject().getName()).toPath(),
+                transfer.toPath()
+        );
         final var node = RustCloud.getCloud().getOnlineNodeTerminal().getByName(group.getObject().getAllocatedNode());
-        if (node != null) {
-            final var promise = new CommunicationFuturePromise<PacketInGroupTransfer>(new PacketOutGroupTransfer(), node.getNodeCommunicateChannel().getUniqueID(), (channelHandlerContext, communicatePacket) -> {
-                RustCloud.getCloud().getCloudConsole().send("the group " + group.getObject().getName() + " is up to date!");
-            });
-        }
+        if (node !=  null)
+            node.dispatch(transfer);
     }
 
 }

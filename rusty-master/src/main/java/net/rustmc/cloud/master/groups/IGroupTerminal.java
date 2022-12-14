@@ -1,7 +1,5 @@
 package net.rustmc.cloud.master.groups;
 
-import net.rustmc.cloud.base.packets.input.transfer.PacketInGroupTransfer;
-
 import java.io.File;
 import java.util.Collection;
 
