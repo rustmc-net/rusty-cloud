@@ -26,6 +26,7 @@ public final class SimpleCloudGroup {
     private final String permission = "null";
     private final int memory;
     private String allocatedNode = "null";
+    private boolean template = true;
 
     public SimpleCloudGroup(String name, boolean proxy, int version, int maxPlayersPer, int maxServers, int memory, String allocatedNode) {
         this.name = name;

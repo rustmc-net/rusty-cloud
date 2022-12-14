@@ -1,5 +1,6 @@
 package net.rustmc.cloud.master.common.nodes;
 
+import io.netty.handler.stream.ChunkedFile;
 import net.rustmc.cloud.base.communicate.CommunicatePacket;
 import net.rustmc.cloud.base.communicate.ICommunicateChannel;
 import net.rustmc.cloud.master.RustCloud;
@@ -8,6 +9,7 @@ import net.rustmc.cloud.master.nodes.IOfflineNode;
 import net.rustmc.cloud.master.nodes.IOnlineNode;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -45,6 +47,11 @@ public class OnlineNodeImpl implements IOnlineNode {
 
     @Override
     public IOnlineNode dispatch(File file) {
+        try {
+            RustCloud.getCloud().getCommunicateChannel().dispatch(new ChunkedFile(file), this.channel.getUniqueID());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return this;
     }
 
