@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Getter;
 import net.rustmc.cloud.base.communicate.CommunicatePacket;
 import net.rustmc.cloud.base.communicate.PacketIdentifier;
+import net.rustmc.cloud.base.objects.PrimitiveGroup;
 import net.rustmc.cloud.base.util.ByteBufHelper;
 
 /**
@@ -16,26 +17,23 @@ import net.rustmc.cloud.base.util.ByteBufHelper;
 @PacketIdentifier(identifier = 'n')
 public class PacketOutGroupTransfer extends CommunicatePacket<PacketOutGroupTransfer> {
 
-    private String name;
-    private boolean template;
+    private PrimitiveGroup primitiveGroup;
 
     public PacketOutGroupTransfer() {
     }
 
     public PacketOutGroupTransfer(String name, boolean template) {
-        this.name = name;
-        this.template = template;
+        this.primitiveGroup = PrimitiveGroup.group(name, template);
     }
 
     @Override
     public void decode(ByteBuf buf) {
-        this.name = ByteBufHelper.readString(buf);
-        this.template = buf.readBoolean();
+        this.primitiveGroup = PrimitiveGroup.group(ByteBufHelper.readString(buf), buf.readBoolean());
     }
 
     @Override
     public void encode(ByteBuf buf) {
-        ByteBufHelper.write(this.name, buf);
-        buf.writeBoolean(this.template);
+        ByteBufHelper.write(this.primitiveGroup.name, buf);
+        buf.writeBoolean(this.primitiveGroup.template);
     }
 }
