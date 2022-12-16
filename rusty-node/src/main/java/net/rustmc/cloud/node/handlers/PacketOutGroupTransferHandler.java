@@ -20,10 +20,10 @@ public class PacketOutGroupTransferHandler {
             @SneakyThrows
             @Override
             public void handle(PacketOutGroupTransfer packet, ICommunicateChannel channel) {
-                final var zip = new File("temp//" + packet.getName() + ".zip");
+                final var zip = new File("temp//" + packet.getPrimitiveGroup().name + ".zip");
                 zip.createNewFile();
                 Files.write(zip.toPath(), SimpleChunkedFileHandler.read());
-                final var path = (packet.isTemplate() ? "templates" : "statics") + "//" + packet.getName();
+                final var path = (packet.getPrimitiveGroup().template ? "templates" : "statics") + "//" + packet.getPrimitiveGroup().name;
                 FileHelper.create(new File(path));
                 ZipHelper.unzip(zip.getPath(), path);
             }
