@@ -14,7 +14,7 @@ import net.rustmc.cloud.base.util.ByteBufHelper;
  * @since 13.12.2022
  */
 @Getter
-@PacketIdentifier(identifier = 'n')
+@PacketIdentifier(identifier = 'g')
 public class PacketOutGroupTransfer extends CommunicatePacket<PacketOutGroupTransfer> {
 
     private PrimitiveGroup primitiveGroup;

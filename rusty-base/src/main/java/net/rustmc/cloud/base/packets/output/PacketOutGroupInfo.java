@@ -14,7 +14,7 @@ import net.rustmc.cloud.base.util.ByteBufHelper;
  * @since 25.10.2022
  */
 @Getter
-@PacketIdentifier(identifier = 'z')
+@PacketIdentifier(identifier = 'h')
 public final class PacketOutGroupInfo extends CommunicatePacket<PacketOutGroupInfo> {
 
     private SimpleCloudGroup cloudGroup;

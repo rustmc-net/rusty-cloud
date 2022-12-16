@@ -1,11 +1,11 @@
 package net.rustmc.cloud.master.common.groups;
 
-import io.netty.handler.stream.ChunkedFile;
 import net.rustmc.cloud.base.common.Rust;
-import net.rustmc.cloud.base.common.communicate.CommunicationFuturePromise;
 import net.rustmc.cloud.base.console.ICloudConsole;
 import net.rustmc.cloud.base.objects.SimpleCloudGroup;
+import net.rustmc.cloud.base.packets.PacketPauseCodec;
 import net.rustmc.cloud.base.packets.output.transfer.PacketOutGroupTransfer;
+import net.rustmc.cloud.base.util.FileHelper;
 import net.rustmc.cloud.base.util.ZipHelper;
 import net.rustmc.cloud.master.RustCloud;
 import net.rustmc.cloud.master.configurations.CloudGroupConfiguration;
@@ -13,11 +13,11 @@ import net.rustmc.cloud.master.groups.ICloudGroup;
 import net.rustmc.cloud.master.groups.IGroupTerminal;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class belongs to the rusty-cloud project
@@ -98,6 +98,8 @@ public class GroupTerminalImpl implements IGroupTerminal {
         }
         final var object = new SimpleCloudGroup(name, proxy, 19, maxPlayersPer, maxServers, memory, node);
         final var file = new File("groups//" + name + ".json");
+        final var content = new File(object.isTemplate() ? "templates//" + object.getName() : "statics//" + object.getName());
+        FileHelper.create(content);
         Rust.getInstance().getConfigurationHandler().open(name, file.toURI(), new CloudGroupConfiguration(object));
         final var out = new SimpleCloudGroupImpl(object);
         this.groups.add(out);
@@ -105,19 +107,24 @@ public class GroupTerminalImpl implements IGroupTerminal {
         return out;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public void requestTransfer(ICloudGroup group) {
-        final File transfer = new File("temp//" + group.getObject().getName()).toPath().toFile();
+        final File transfer = new File("temp//" + group.getObject().getName() + ".zip").toPath().toFile();
         ZipHelper.zipFoldersAndFiles(
-                new File("groups//templates//" + group.getObject().getName()).toPath(),
+                new File( (group.getObject().isTemplate() ? "templates" : "statics") + "//" + group.getObject().getName()).toPath(),
                 transfer.toPath()
         );
-        final var node = RustCloud.getCloud().getOnlineNodeTerminal().getByName(group.getObject().getAllocatedNode());
-        if (node !=  null) {
-            node.dispatch(transfer);
-            node.dispatch(new PacketOutGroupTransfer(group.getObject().getName(), group.getObject().isTemplate()));
-            RustCloud.getCloud().getCloudConsole().send("the data from the §a" + group.getObject().getName() + " §rgroup is transmitted to §a" + group.getObject().getAllocatedNode() + "§r.");
-        }
+        Rust.getInstance().getAsynchronousExecutor().schedule(() -> {
+            final var node = RustCloud.getCloud().getOnlineNodeTerminal().getByName(group.getObject().getAllocatedNode());
+            if (node !=  null) {
+                node.dispatch(new PacketPauseCodec());
+                node.dispatch(transfer);
+                node.dispatch(new PacketOutGroupTransfer(group.getObject().getName(), group.getObject().isTemplate()));
+                RustCloud.getCloud().getCloudConsole().send("the data from the §a" + group.getObject().getName() + " §rgroup is transmitted to §a" + group.getObject().getAllocatedNode() + "§r.");
+            }
+            transfer.delete();
+        }, 500, TimeUnit.MILLISECONDS);
     }
 
     @Override

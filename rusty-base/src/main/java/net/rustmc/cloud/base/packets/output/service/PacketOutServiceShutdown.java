@@ -13,7 +13,7 @@ import net.rustmc.cloud.base.util.ByteBufHelper;
  * @since 16.12.2022
  */
 @Getter
-@PacketIdentifier(identifier = 'y')
+@PacketIdentifier(identifier = 'f')
 public class PacketOutServiceShutdown extends CommunicatePacket<PacketOutServiceShutdown> {
 
     private String name;

@@ -49,11 +49,7 @@ public class OnlineNodeImpl implements IOnlineNode {
 
     @Override
     public IOnlineNode dispatch(File file) {
-        try {
-            RustCloud.getCloud().getCommunicateChannel().dispatch(new ChunkedFile(file), this.channel.getUniqueID());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        RustCloud.getCloud().getCommunicateChannel().dispatch(file, this.channel.getUniqueID());
         return this;
     }
 

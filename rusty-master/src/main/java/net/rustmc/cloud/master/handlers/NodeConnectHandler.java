@@ -40,10 +40,11 @@ public class NodeConnectHandler {
                             RustCloud.getCloud().getOnlineNodeTerminal().open(node, new DefaultChannelImpl(channelHandlerContext.channel()));
                             RustCloud.getCloud().getCommunicateChannel().dispatch(new PacketOutHandshake(), channelHandlerContext.channel().id().asLongText());
                             RustCloud.getCloud().getCloudConsole().send("the §a" + node.configuration().getName() + " §rhas connected to the server.");
-                            if (income.getGroups().length != 0) {
-                                RustCloud.getCloud().getOnlineNodeTerminal().getByName(node.configuration().getName()).store(IOnlineNode.NodeRequest.REMOTE_GROUPS.name(), income.getGroups());
-                                RustCloud.getCloud().getCloudConsole().send("the node does §rcurrently have §a" + income.getGroups().length + " §rgroups stored.");
-                                for (ICloudGroup group : node.getAllocatedGroups()) {
+                            final var groups = node.getAllocatedGroups();
+                            if (groups.size() != 0) {
+                                RustCloud.getCloud().getOnlineNodeTerminal().getByName(node.configuration().getName()).store(IOnlineNode.NodeRequest.REMOTE_GROUPS.name(), groups);
+                                RustCloud.getCloud().getCloudConsole().send("the node does §rcurrently have §a" + groups.size() + " §rgroups stored.");
+                                for (ICloudGroup group : groups) {
                                     RustCloud.getCloud().getGroupTerminal().requestTransfer(group);
                                 }
                             } else RustCloud.getCloud().getCloudConsole().send("the node does §enot §rcurrently have any groups stored.");

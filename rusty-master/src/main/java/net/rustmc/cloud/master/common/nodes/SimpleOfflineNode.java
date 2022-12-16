@@ -9,6 +9,7 @@ import net.rustmc.cloud.master.nodes.IOfflineNode;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * This class belongs to the rusty-cloud project
@@ -22,7 +23,11 @@ public record SimpleOfflineNode(CloudNodeConfiguration configuration, File file)
         return new ArrayList<>(
                 RustCloud.getCloud()
                         .getGroupTerminal()
-                        .getCloudGroups()
+                        .getCloudGroups().stream().filter(group -> group.getObject()
+                                .getAllocatedNode()
+                                .equals(
+                                        SimpleOfflineNode.this.configuration.getName()
+                                )).toList()
         );
     }
 }

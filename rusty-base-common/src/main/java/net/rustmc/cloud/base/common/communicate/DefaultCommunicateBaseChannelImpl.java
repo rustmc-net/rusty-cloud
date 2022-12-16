@@ -1,15 +1,18 @@
 package net.rustmc.cloud.base.common.communicate;
 
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.*;
 import io.netty.handler.stream.ChunkedFile;
+import lombok.SneakyThrows;
 import net.rustmc.cloud.base.common.Rust;
 import net.rustmc.cloud.base.communicate.CommunicatePacket;
 import net.rustmc.cloud.base.communicate.ICommunicateBaseChannel;
 import net.rustmc.cloud.base.communicate.ICommunicateBaseHandlerPool;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.RandomAccessFile;
 import java.net.SocketAddress;
+import java.nio.channels.FileChannel;
 
 /**
  * This class belongs to the rusty-cloud project
@@ -91,14 +94,17 @@ public class DefaultCommunicateBaseChannelImpl implements ICommunicateBaseChanne
         this.core.writeAndFlush(o);
     }
 
-    @SuppressWarnings("DuplicatedCode")
+    @SneakyThrows
+    @SuppressWarnings({"DuplicatedCode", "resource"})
     @Override
-    public void dispatch(ChunkedFile chunkedFile, String uniqueID) {
+    public void dispatch(File file, String uniqueID) {
         if (this.isClient())
             throw new UnsupportedOperationException("Only the server can send to certain client packets.");
+        FileInputStream in = new FileInputStream(file);
+        FileRegion region = new DefaultFileRegion(in.getChannel(), 0, file.length());
         for (Channel channel : Rust.getInstance().getChannelFactory().getGroups().get(this.localID)) {
             if (channel.id().asLongText().equals(uniqueID)) {
-                channel.writeAndFlush(chunkedFile).addListener(new ChannelFutureListener() {
+                channel.writeAndFlush(region).addListener(new ChannelFutureListener() {
                     public void operationComplete(ChannelFuture channelFuture) {
                         if (!channelFuture.isSuccess()) {
                             channelFuture.cause().printStackTrace();

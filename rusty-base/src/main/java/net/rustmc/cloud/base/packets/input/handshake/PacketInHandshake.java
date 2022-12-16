@@ -14,19 +14,13 @@ import net.rustmc.cloud.base.util.ByteBufHelper;
  * @author Alexander Jilge
  * @since 25.10.2022
  */
-@PacketIdentifier(identifier = 'c')
+@PacketIdentifier(identifier = 'b')
 @Getter
 public class PacketInHandshake extends CommunicatePacket<PacketOutHandshake> {
 
-    private String[] groups = new String[0];
     private int nodeKey;
 
     public PacketInHandshake() {
-    }
-
-    public PacketInHandshake(String[] groups, int nodeKey) {
-        this.groups = groups;
-        this.nodeKey = nodeKey;
     }
 
     public PacketInHandshake(int nodeKey) {
@@ -36,13 +30,11 @@ public class PacketInHandshake extends CommunicatePacket<PacketOutHandshake> {
     @Override
     public void decode(ByteBuf buf) {
         this.nodeKey = buf.readInt();
-        this.groups = ByteBufHelper.readDynamicArray(buf);
     }
 
     @Override
     public void encode(ByteBuf buf) {
         buf.writeInt(nodeKey);
-        ByteBufHelper.writeDynamicArray(this.groups, buf);
     }
 
 }

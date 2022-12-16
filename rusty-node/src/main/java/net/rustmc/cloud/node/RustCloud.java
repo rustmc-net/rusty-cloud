@@ -44,6 +44,8 @@ public final class RustCloud {
     private final File proxyFile = new File("storages//proxy.jar");
     private final File groupsFile = new File("groups");
     private final File tempFile = new File("temp");
+    private final File templatesFile = new File("templates");
+    private final File staticsFile = new File("statics");
     private ICommunicateBaseChannel communicateBaseChannel;
     private final IOfflineGroupTerminal offlineGroupTerminal = new OfflineGroupTerminalImpl();
     private final IOnlineGroupPool onlineGroupPool = new OnlineGroupPoolImpl();
@@ -107,6 +109,8 @@ public final class RustCloud {
         FileHelper.create(this.storageFile);
         FileHelper.create(this.groupsFile);
         FileHelper.create(this.tempFile);
+        FileHelper.create(templatesFile);
+        FileHelper.create(staticsFile);
 
     }
 
@@ -126,11 +130,7 @@ public final class RustCloud {
 
             new PacketOutHandshakeHandler();
 
-            this.getCommunicateBaseChannel().dispatch(new PacketInHandshake(this.getOfflineGroupTerminal()
-                    .collectNames()
-                    .toArray(new String[0]),
-                    this.configuration.getNodeKey())
-            );
+            this.getCommunicateBaseChannel().dispatch(new PacketInHandshake(this.configuration.getNodeKey()));
 
         } catch (Exception ignored) {
         }

@@ -10,7 +10,7 @@ import net.rustmc.cloud.base.communicate.PacketIdentifier;
  * @author Alexander Jilge
  * @since 21.11.2022
  */
-@PacketIdentifier(identifier = 'm')
+@PacketIdentifier(identifier = 'a')
 public class PacketInDisconnect extends CommunicatePacket<PacketInDisconnect> {
 
     @Override

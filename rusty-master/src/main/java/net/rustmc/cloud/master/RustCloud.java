@@ -56,6 +56,8 @@ public final class RustCloud {
     private final File moduleFile = new File("modules");
     private final File groupFile = new File("groups");
     private final File tempFile = new File("temp");
+    private final File templatesFile = new File("templates");
+    private final File staticsFile = new File("statics");
     private final IInstanceLoader instanceLoader = new DefaultInstanceLoaderImpl();
     private final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     private final CloudBaseConfiguration baseCloudConfiguration = Rust.getInstance()
@@ -127,6 +129,8 @@ public final class RustCloud {
         FileHelper.create(moduleFile);
         FileHelper.create(tempFile);
         FileHelper.create(groupFile);
+        FileHelper.create(templatesFile);
+        FileHelper.create(staticsFile);
 
         if (this.nodeFile.listFiles() != null) {
             for (final var file : this.nodeFile.listFiles()) {

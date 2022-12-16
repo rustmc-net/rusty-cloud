@@ -1,6 +1,7 @@
 package net.rustmc.cloud.base.common.packets;
 
 import net.rustmc.cloud.base.common.Rust;
+import net.rustmc.cloud.base.packets.PacketPauseCodec;
 import net.rustmc.cloud.base.packets.input.handshake.PacketInDisconnect;
 import net.rustmc.cloud.base.packets.input.handshake.PacketInHandshake;
 import net.rustmc.cloud.base.packets.output.PacketOutGroupInfo;
@@ -32,7 +33,8 @@ public class ConstantPacketRegistryCluster {
                         PacketOutGroupStart.class,
                         PacketOutGroupTransfer.class,
                         PacketOutServiceShutdown.class,
-                        PacketOutServiceCommand.class
+                        PacketOutServiceCommand.class,
+                        PacketPauseCodec.class
                 );
     }
 
