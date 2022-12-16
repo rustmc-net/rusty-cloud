@@ -19,4 +19,9 @@ public class StaticGroupImpl extends Group {
 
     }
 
+    @Override
+    public String getPath() {
+        return "statics//" + this.cloudGroup.getName();
+    }
+
 }

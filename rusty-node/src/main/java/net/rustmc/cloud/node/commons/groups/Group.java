@@ -23,6 +23,8 @@ public abstract class Group implements IOnlineGroup {
     @Override
     public abstract void shutdown();
 
+    public abstract String getPath();
+
     @Override
     public SimpleCloudGroup getObject() {
         return this.cloudGroup;

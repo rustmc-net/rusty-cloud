@@ -19,4 +19,9 @@ public class TemplateGroupImpl extends Group {
 
     }
 
+    @Override
+    public String getPath() {
+        return "templates//" + this.cloudGroup.getName();
+    }
+
 }

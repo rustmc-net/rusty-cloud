@@ -41,6 +41,7 @@ public final class RustCloud {
     private final RustyNodeConfiguration configuration = Rust.getInstance().getConfigurationHandler().open("node", new File("node.json").toURI(), RustyNodeConfiguration.class);
     private final File storageFile = new File("storages");
     private final File groupsFile = new File("groups");
+    private final File tempFile = new File("temp");
     private ICommunicateBaseChannel communicateBaseChannel;
     private final IOfflineGroupTerminal offlineGroupTerminal = new OfflineGroupTerminalImpl();
     private final IOnlineGroupPool onlineGroupPool = new OnlineGroupPoolImpl();
@@ -103,6 +104,7 @@ public final class RustCloud {
 
         FileHelper.create(this.storageFile);
         FileHelper.create(this.groupsFile);
+        FileHelper.create(this.tempFile);
 
     }
 
