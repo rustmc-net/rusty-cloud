@@ -40,6 +40,8 @@ public final class RustCloud {
     private final CommandManager commandManager = new CommandManager();
     private final RustyNodeConfiguration configuration = Rust.getInstance().getConfigurationHandler().open("node", new File("node.json").toURI(), RustyNodeConfiguration.class);
     private final File storageFile = new File("storages");
+    private final File paperFile = new File("storages//runner.jar");
+    private final File proxyFile = new File("storages//proxy.jar");
     private final File groupsFile = new File("groups");
     private final File tempFile = new File("temp");
     private ICommunicateBaseChannel communicateBaseChannel;

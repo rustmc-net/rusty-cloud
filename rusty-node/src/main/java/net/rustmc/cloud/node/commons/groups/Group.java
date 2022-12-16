@@ -4,7 +4,9 @@ import net.rustmc.cloud.base.common.Rust;
 import net.rustmc.cloud.base.objects.SimpleCloudGroup;
 import net.rustmc.cloud.base.util.FileHelper;
 import net.rustmc.cloud.node.RustCloud;
+import net.rustmc.cloud.node.commons.service.DefaultOnlineServiceImpl;
 import net.rustmc.cloud.node.groups.IOnlineGroup;
+import net.rustmc.cloud.node.service.INativeOnlineService;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +22,7 @@ import java.util.LinkedList;
 public abstract class Group implements IOnlineGroup {
 
     protected final SimpleCloudGroup cloudGroup;
-    protected LinkedList<Process> tasks = new LinkedList<>();
+    protected LinkedList<INativeOnlineService> services = new LinkedList<>();
 
     public Group(SimpleCloudGroup cloudGroup) {
         this.cloudGroup = cloudGroup;
@@ -48,13 +50,18 @@ public abstract class Group implements IOnlineGroup {
                     }
                 }
             }
+            try {
+                FileHelper.copyFile(this.cloudGroup.isProxy() ? RustCloud.getCloud().getPaperFile().getPath() : RustCloud.getCloud().getProxyFile().getPath(), file.getAbsolutePath() + "//runner.jar");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             ProcessBuilder processBuilder;
             if (this.cloudGroup.isProxy()) {
-                processBuilder = new ProcessBuilder(("java -jar -Xms" + this.cloudGroup.getName() + "M -Xmx" + this.cloudGroup.getMemory() + "M proxy.jar").split(" "));
+                processBuilder = new ProcessBuilder(("java -jar -Xms" + this.cloudGroup.getName() + "M -Xmx" + this.cloudGroup.getMemory() + "M runner.jar").split(" "));
                 RustCloud.getCloud().getCloudConsole().send("starting §b" + this.cloudGroup.getName() + " §ron default minecraft port.");
             } else {
                 int port = searchPort();
-                processBuilder = new ProcessBuilder(("java -jar -Xms" + this.cloudGroup.getMemory() + "M -Xmx" + this.cloudGroup.getMemory() + "M -Dcom.mojang.eula.agree=true spigot.jar nogui --online-mode false --max-players " + this.cloudGroup.getMaxPlayersPer() + " --noconsole --port " + port).split(" "));
+                processBuilder = new ProcessBuilder(("java -jar -Xms" + this.cloudGroup.getMemory() + "M -Xmx" + this.cloudGroup.getMemory() + "M -Dcom.mojang.eula.agree=true runner.jar nogui --online-mode false --max-players " + this.cloudGroup.getMaxPlayersPer() + " --noconsole --port " + port).split(" "));
                 RustCloud.getCloud().getCloudConsole().send("Starting §b" + this.cloudGroup.getName() + " §ron port " + port + ".");
             }
             processBuilder.directory(file);
@@ -65,7 +72,7 @@ public abstract class Group implements IOnlineGroup {
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
-            this.tasks.addLast(process);
+            this.services.addLast(new DefaultOnlineServiceImpl(process, this, count));
         }
     }
 
