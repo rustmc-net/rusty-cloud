@@ -15,8 +15,10 @@ import net.rustmc.cloud.base.packets.input.handshake.PacketInHandshake;
 import net.rustmc.cloud.base.util.FileHelper;
 import net.rustmc.cloud.node.commands.CloseCommand;
 import net.rustmc.cloud.node.commons.groups.OfflineGroupTerminalImpl;
+import net.rustmc.cloud.node.commons.groups.OnlineGroupPoolImpl;
 import net.rustmc.cloud.node.configurations.RustyNodeConfiguration;
 import net.rustmc.cloud.node.groups.IOfflineGroupTerminal;
+import net.rustmc.cloud.node.groups.IOnlineGroupPool;
 import net.rustmc.cloud.node.handlers.PacketOutHandshakeHandler;
 
 import java.io.File;
@@ -39,8 +41,10 @@ public final class RustCloud {
     private final RustyNodeConfiguration configuration = Rust.getInstance().getConfigurationHandler().open("node", new File("node.json").toURI(), RustyNodeConfiguration.class);
     private final File storageFile = new File("storages");
     private final File groupsFile = new File("groups");
+    private final File tempFile = new File("temp");
     private ICommunicateBaseChannel communicateBaseChannel;
     private final IOfflineGroupTerminal offlineGroupTerminal = new OfflineGroupTerminalImpl();
+    private final IOnlineGroupPool onlineGroupPool = new OnlineGroupPoolImpl();
 
     public RustCloud() {
 
@@ -100,6 +104,7 @@ public final class RustCloud {
 
         FileHelper.create(this.storageFile);
         FileHelper.create(this.groupsFile);
+        FileHelper.create(this.tempFile);
 
     }
 

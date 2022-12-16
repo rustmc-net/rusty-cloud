@@ -2,6 +2,7 @@ package net.rustmc.cloud.master.groups;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * This class belongs to the rusty-cloud project
@@ -20,5 +21,7 @@ public interface IGroupTerminal {
     public ICloudGroup produce(String name, boolean proxy, int maxPlayersPer, int percent, int maxServers, int memory, String allocatedNode);
 
     public void requestTransfer(ICloudGroup group);
+
+    public List<ICloudGroup> getCloudGroups();
 
 }

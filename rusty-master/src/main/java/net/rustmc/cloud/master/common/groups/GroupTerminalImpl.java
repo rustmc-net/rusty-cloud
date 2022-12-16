@@ -101,6 +101,7 @@ public class GroupTerminalImpl implements IGroupTerminal {
         Rust.getInstance().getConfigurationHandler().open(name, file.toURI(), new CloudGroupConfiguration(object));
         final var out = new SimpleCloudGroupImpl(object);
         this.groups.add(out);
+        this.requestTransfer(out);
         return out;
     }
 
@@ -112,8 +113,16 @@ public class GroupTerminalImpl implements IGroupTerminal {
                 transfer.toPath()
         );
         final var node = RustCloud.getCloud().getOnlineNodeTerminal().getByName(group.getObject().getAllocatedNode());
-        if (node !=  null)
+        if (node !=  null) {
             node.dispatch(transfer);
+            node.dispatch(new PacketOutGroupTransfer(group.getObject().getName(), group.getObject().isTemplate()));
+            RustCloud.getCloud().getCloudConsole().send("the data from the §a" + group.getObject().getName() + " §rgroup is transmitted to §a" + group.getObject().getAllocatedNode() + "§r.");
+        }
+    }
+
+    @Override
+    public List<ICloudGroup> getCloudGroups() {
+        return this.groups;
     }
 
 }

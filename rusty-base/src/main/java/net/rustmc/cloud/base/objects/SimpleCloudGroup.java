@@ -38,6 +38,17 @@ public final class SimpleCloudGroup {
         this.allocatedNode = allocatedNode;
     }
 
+    public SimpleCloudGroup(String name, boolean proxy, int version, int maxPlayersPer, int percent, int maxServers, int minServers, int priority, String permission, int memory, String allocatedNode, boolean template) {
+        this.name = name;
+        this.proxy = proxy;
+        this.version = version;
+        this.maxPlayersPer = maxPlayersPer;
+        this.maxServers = maxServers;
+        this.memory = memory;
+        this.allocatedNode = allocatedNode;
+        this.template = template;
+    }
+
     @Override
     public String toString() {
         return "SimpleCloudGroup{" +
@@ -58,4 +69,7 @@ public final class SimpleCloudGroup {
         this.allocatedNode = allocatedNode;
     }
 
+    public void setTemplate(boolean template) {
+        this.template = template;
+    }
 }

@@ -10,8 +10,6 @@ import java.util.Collection;
  */
 public interface IOfflineGroupTerminal {
 
-    public Collection<IOfflineGroup> collect();
-
     public Collection<String> collectNames();
 
     public boolean contains(String name);

@@ -8,6 +8,7 @@ import net.rustmc.cloud.base.communicate.CommunicatePacket;
 import net.rustmc.cloud.base.packets.input.handshake.PacketInHandshake;
 import net.rustmc.cloud.base.packets.output.handshake.PacketOutHandshake;
 import net.rustmc.cloud.master.RustCloud;
+import net.rustmc.cloud.master.groups.ICloudGroup;
 import net.rustmc.cloud.master.nodes.IOnlineNode;
 
 import java.util.concurrent.TimeUnit;
@@ -42,6 +43,9 @@ public class NodeConnectHandler {
                             if (income.getGroups().length != 0) {
                                 RustCloud.getCloud().getOnlineNodeTerminal().getByName(node.configuration().getName()).store(IOnlineNode.NodeRequest.REMOTE_GROUPS.name(), income.getGroups());
                                 RustCloud.getCloud().getCloudConsole().send("the node does §rcurrently have §a" + income.getGroups().length + " §rgroups stored.");
+                                for (ICloudGroup group : node.getAllocatedGroups()) {
+                                    RustCloud.getCloud().getGroupTerminal().requestTransfer(group);
+                                }
                             } else RustCloud.getCloud().getCloudConsole().send("the node does §enot §rcurrently have any groups stored.");
                         }
                         timeout = true;

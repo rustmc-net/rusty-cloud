@@ -1,7 +1,6 @@
 package net.rustmc.cloud.node.commons.groups;
 
 import net.rustmc.cloud.node.RustCloud;
-import net.rustmc.cloud.node.groups.IOfflineGroup;
 import net.rustmc.cloud.node.groups.IOfflineGroupTerminal;
 
 import java.util.*;
@@ -13,11 +12,6 @@ import java.util.*;
  * @since 21.11.2022
  */
 public class OfflineGroupTerminalImpl implements IOfflineGroupTerminal {
-
-    @Override
-    public Collection<IOfflineGroup> collect() {
-        return null;
-    }
 
     @SuppressWarnings("DataFlowIssue")
     @Override

@@ -5,12 +5,14 @@ import net.rustmc.cloud.base.communicate.CommunicatePacket;
 import net.rustmc.cloud.base.communicate.ICommunicateChannel;
 import net.rustmc.cloud.master.RustCloud;
 import net.rustmc.cloud.master.configurations.CloudNodeConfiguration;
+import net.rustmc.cloud.master.groups.ICloudGroup;
 import net.rustmc.cloud.master.nodes.IOfflineNode;
 import net.rustmc.cloud.master.nodes.IOnlineNode;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * This class belongs to the rusty-cloud project
@@ -90,4 +92,10 @@ public class OnlineNodeImpl implements IOnlineNode {
     public CloudNodeConfiguration configuration() {
         return this.offlineNode.configuration();
     }
+
+    @Override
+    public List<ICloudGroup> getAllocatedGroups() {
+        return this.offlineNode.getAllocatedGroups();
+    }
+
 }
