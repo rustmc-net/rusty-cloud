@@ -35,6 +35,23 @@ public final class FileHelper {
         }
     }
 
+    public static void copyDir(File source, String destination) {
+        final var files = source.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    copyDir(file, destination + "//" + file.getName());
+                } else {
+                    try {
+                        copyFile(file.getPath(), destination + "//" + file.getName());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }
+    }
+
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static File create(final File file) {
         if (!file.exists()) {
